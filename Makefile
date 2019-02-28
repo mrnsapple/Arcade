@@ -8,7 +8,7 @@
 SRC 	=	my_puts.cpp
 
 
-OBJ	=	$(SRC:.c=.o)
+OBJ	=	$(SRC:.cpp=.o)
 
 NAME 	=	a.out
 
