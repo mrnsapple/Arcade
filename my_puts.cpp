@@ -17,13 +17,20 @@ void    myputchar(char c)
     write(1, &c, 1);
 }
 
-void  my_putstr(std::string str)
+extern "C" void  my_putstr(std::string str)
 {
     std::cout << str;
     //return (0);
 }
 
-void    *malloc(size_t size)
+/*void    *malloc(size_t size)
 {
     my_putstr("mallocstuf\n");
+}
+*/
+
+#include <iostream>
+
+extern "C" void hello() {
+    std::cout << "hello" << '\n';
 }

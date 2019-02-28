@@ -5,8 +5,8 @@
 ##
 ##
 
-SRC 	=	my_puts.cpp
-
+SRC 	=	my_puts.cpp		\
+			#lib1/lib1.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
@@ -15,7 +15,6 @@ NAME 	=	a.out
 RM	=	rm -f
 
 all:	$(NAME)
-
 
 $(NAME):	#$(OBJ)
 	g++ $(SRC) -c  -fpic
