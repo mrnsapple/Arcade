@@ -5,7 +5,7 @@
 ##
 ##
 
-SRC 	=	my_puts.c
+SRC 	=	my_puts.cpp
 
 
 OBJ	=	$(SRC:.c=.o)
@@ -18,9 +18,9 @@ all:	$(NAME)
 
 
 $(NAME):	#$(OBJ)
-	gcc $(SRC) -c  -fpic
-	gcc -shared -o liball.so *.o 
-	gcc -g -Wall -Werror -Wextra main.c -L. -ldl #-lall
+	g++ $(SRC) -c  -fpic
+	g++ -shared -o liball.so *.o 
+	g++ -g -Wall -Werror -Wextra main.cpp -L. -ldl #-lall
 	#gcc -g -Wall -Werror -o $(NAME) $(SRC)
 
 clean:
