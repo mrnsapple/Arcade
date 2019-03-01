@@ -29,5 +29,4 @@ extern "C" IDisplayModule *init() {
     return new Sfml;
 }
 
-
 #endif /* !SFML_HPP_ */

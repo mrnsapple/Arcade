@@ -14,23 +14,24 @@ NAME	=	arcade
 all	:	$(NAME)
 
 $(NAME)	:	$(OBJ)
-	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
+	@$(MAKE) core --no-print-directory
+	@$(MAKE) graphicals --no-print-directory
 
 core:
 	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
 
 games:
-	make -C games
+	make -C games --no-print-directory
 
 graphicals:
-	make -C lib
+	make -C lib --no-print-directory
 
 clean:
 	rm -rf $(NAME)
-	make -C lib clean
+	make -C lib clean --no-print-directory
 
 fclean:	clean
-	rm -rf $(OBJ) $(NAME) *.so *~ *# 
-	make -C lib fclean
+	rm -rf $(OBJ) *.so *~ *# 
+	make -C lib fclean --no-print-directory
 
 re:	fclean all
