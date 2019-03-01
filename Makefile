@@ -1,31 +1,36 @@
 ##
-## EPITECH PROJECT, 2017
-##
+## EPITECH PROJECT, 2019
+## OOP_arcade_2018
 ## File description:
-##
+## Makefile
 ##
 
-SRC 	=	my_puts.cpp		\
-			#lib1/lib1.cpp
+SRC =	arcade.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
-NAME 	=	a.out
+NAME	=	arcade
 
-RM	=	rm -f
+all	:	$(NAME)
 
-all:	$(NAME)
+$(NAME)	:	$(OBJ)
+	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
 
-$(NAME):	#$(OBJ)
-	g++ $(SRC) -c  -fpic
-	g++ -shared -o liball.so *.o 
-	g++ -g -Wall -Werror -Wextra main.cpp -L. -ldl #-lall
-	#gcc -g -Wall -Werror -o $(NAME) $(SRC)
+core:
+	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
+
+games:
+	make -C games
+
+graphicals:
+	make -C lib
 
 clean:
-	$(RM) $(NAME)
+	rm -rf $(NAME)
+	make -C lib clean
 
 fclean:	clean
-	rm -f $(OBJ) $(NAME) *.so *~ *# 
+	rm -rf $(OBJ) $(NAME) *.so *~ *# 
+	make -C lib fclean
 
 re:	fclean all
