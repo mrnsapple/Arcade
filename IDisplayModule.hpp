@@ -9,6 +9,7 @@
 #define IDISPLAYMODULE_HPP_
 
 #include <iostream>
+#include <string>
 
 class IDisplayModule {
 public:
