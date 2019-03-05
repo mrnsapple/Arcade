@@ -13,6 +13,8 @@
 #include <SFML/Window.hpp>
 #include "../../IDisplayModule.hpp"
 #include "TextObject.hpp"
+#include "dirent.h"
+#include <sstream>
 
 class Sfml : public IDisplayModule {
 public:
@@ -27,16 +29,17 @@ public:
     };
     std::string setUserName();
     void    handleEvents();
+    int countFiles(std::string path, float x, float y);
 
 protected:
     Scenarios   _scenario;
     sf::RenderWindow  *_win;
     sf::Event   _event;
-    TextObject  *_title;
     TextObject  *_enterName;
     std::string _userName;
     TextObject  *_inputText;
     TextObject  *welcome;
+    TextObject  *_scores;
 private:
 };
 
