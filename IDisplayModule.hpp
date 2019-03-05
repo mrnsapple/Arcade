@@ -16,6 +16,7 @@ public:
     virtual ~IDisplayModule() = default;
     virtual void    init() = 0;
     virtual void    stop() = 0;
+    virtual std::string setUserName() = 0;
 
 protected:
 private:

@@ -12,6 +12,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include "../../IDisplayModule.hpp"
+#include "TextObject.hpp"
 
 class Sfml : public IDisplayModule {
 public:
@@ -20,10 +21,22 @@ public:
 
     void    init();
     void    stop();
+    enum Scenarios {
+        USERINPUT,
+        MENU
+    };
+    std::string setUserName();
+    void    handleEvents();
 
 protected:
+    Scenarios   _scenario;
     sf::RenderWindow  *_win;
     sf::Event   _event;
+    TextObject  *_title;
+    TextObject  *_enterName;
+    std::string _userName;
+    TextObject  *_inputText;
+    TextObject  *welcome;
 private:
 };
 
