@@ -9,13 +9,12 @@
 
 Sfml::Sfml()
 {
-    // init();
     _win = new sf::RenderWindow({820, 580}, "Arcade", sf::Style::Default);
 }
 
 Sfml::~Sfml()
 {
-    // stop();
+
 }
 
 void    Sfml::init()

@@ -11,11 +11,11 @@ OBJ	=	$(SRC:.cpp=.o)
 
 NAME	=	lib_arcade_
 
-SFMLFLAGS	=	-lsfml-audio	\
+SFMLFLAGS	=	-lsfml-system	\
 				-lsfml-graphics	\
-				-lsfml-network	\
-				-lsfml-system	\
-				-lsfml-window
+				-lsfml-audio	\
+				-lsfml-window	\
+				-lsfml-network
 
 .cpp.o	:
 	g++ $(SRC) -c -fpic
