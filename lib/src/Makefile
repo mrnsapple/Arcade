@@ -7,14 +7,22 @@
 
 SRC	=	Sfml.cpp
 
-all	:
+OBJ	=	$(SRC:.cpp=.o)
+
+NAME	=	lib_arcade_
+
+.cpp.o	:
 	g++ $(SRC) -c -fpic
-	g++ -shared -o lib_arcade_sfml.so Sfml.o
+
+all	:	$(NAME)
+
+$(NAME)	:	$(OBJ)
+	g++ -shared -o ../$(NAME)sfml.so Sfml.o
 
 clean	:
-	rm -rf *.o
+	rm -rf $(OBJ)
 
 fclean	:	clean
-	rm -rf *.so
+	rm -rf ../*.so
 
 re	:	fclean all

@@ -11,7 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include "../IDisplayModule.hpp"
+#include "../../IDisplayModule.hpp"
 
 class Sfml : public IDisplayModule {
 public:

@@ -5,16 +5,24 @@
 ## Makefile
 ##
 
-SRC	=	game.cpp
+SRC	=	Game.cpp
 
-all	:
+OBJ	=	$(SRC:.cpp=.o)
+
+NAME	=	lib_arcade_
+
+.cpp.o	:
 	g++ $(SRC) -c -fpic
-	g++ -shared -o lib_arcade_game.so game.o
+
+all	:	$(NAME)
+
+$(NAME)	:	$(OBJ)
+	g++ -shared -o ../$(name)game.so Game.o
 
 clean	:
-	rm -rf *.o
+	rm -rf $(OBJ)
 
 fclean	:	clean
-	rm -rf *.so
+	rm -rf ../*.so
 
 re	:	fclean all

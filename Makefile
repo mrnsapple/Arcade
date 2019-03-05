@@ -24,14 +24,14 @@ games:
 	make -C games --no-print-directory
 
 graphicals:
-	make -C lib --no-print-directory
+	make -C lib/src --no-print-directory
 
 clean:
 	rm -rf $(NAME)
-	make -C lib clean --no-print-directory
+	make -C lib/src clean --no-print-directory
 
 fclean:	clean
 	rm -rf $(OBJ) *.so *~ *# 
-	make -C lib fclean --no-print-directory
+	make -C lib/src fclean --no-print-directory
 
 re:	fclean all
