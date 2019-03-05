@@ -21,7 +21,7 @@ core:
 	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
 
 games:
-	make -C games --no-print-directory
+	make -C games/src --no-print-directory
 
 graphicals:
 	make -C lib/src --no-print-directory

@@ -22,6 +22,5 @@ private:
 };
 
 typedef IDisplayModule  *init_t();
-typedef void    destroy_t();
 
 #endif /* !IDISPLAYMODULE_HPP_ */
