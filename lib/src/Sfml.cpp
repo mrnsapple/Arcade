@@ -9,20 +9,31 @@
 
 Sfml::Sfml()
 {
-    init();
+    // init();
+    _win = new sf::RenderWindow({820, 580}, "Arcade", sf::Style::Default);
 }
 
 Sfml::~Sfml()
 {
-    stop();
+    // stop();
 }
 
 void    Sfml::init()
 {
     std::cout << "SFML Library has been chosen" << std::endl;
+    while (_win->isOpen()) {
+        stop();
+        _win->clear();
+        _win->display();
+    }
 }
 
 void    Sfml::stop()
 {
-    std::cout << "SFML Library has been removed" << std::endl;
+    while (_win->pollEvent(_event)) {
+        if (_event.type == sf::Event::Closed) {
+            _win->close();
+            std::cout << "SFML Library has been removed" << std::endl;
+        }
+    }
 }

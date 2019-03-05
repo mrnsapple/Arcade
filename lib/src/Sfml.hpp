@@ -22,6 +22,8 @@ public:
     void    stop();
 
 protected:
+    sf::RenderWindow  *_win;
+    sf::Event   _event;
 private:
 };
 
