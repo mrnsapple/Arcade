@@ -15,8 +15,8 @@
 #include <vector>
 #include "dirent.h"
 #include "../../IDisplayModule.hpp"
-#include "TextObject.hpp"
-#include "RectObject.hpp"
+#include "../../TextObject.hpp"
+#include "../../RectObject.hpp"
 
 class Sfml : public IDisplayModule {
 public:

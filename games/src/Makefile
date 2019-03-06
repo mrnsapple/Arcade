@@ -5,11 +5,17 @@
 ## Makefile
 ##
 
-SRC	=	Game.cpp
+SRC	=	Nibbler.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
 NAME	=	lib_arcade_
+
+SFMLFLAGS	=	-lsfml-graphics	\
+				-lsfml-system	\
+				-lsfml-window	\
+				-lsfml-audio	\
+				-lsfml-network
 
 .cpp.o	:
 	g++ $(SRC) -c -fpic
@@ -17,7 +23,7 @@ NAME	=	lib_arcade_
 all	:	$(NAME)
 
 $(NAME)	:	$(OBJ)
-	g++ -shared -o ../$(name)game.so Game.o
+	g++ -shared -o ../$(NAME)nibbler.so Nibbler.o $(SFMLFLAGS)
 
 clean	:
 	rm -rf $(OBJ)

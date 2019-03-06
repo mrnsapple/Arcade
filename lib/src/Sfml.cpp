@@ -107,8 +107,9 @@ std::string Sfml::setUserName()
 {
     if (_scenario == USERINPUT) {
         if (_event.type == sf::Event::TextEntered) {
-            if (_event.text.unicode == 8)
+            if (_event.text.unicode == 8 ) {
                 _userName = _userName.substr(0, _userName.size() - 1);
+            }
             else
                 _userName += _event.text.unicode;
         }

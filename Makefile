@@ -15,6 +15,7 @@ all	:	$(NAME)
 
 $(NAME)	:	$(OBJ)
 	@$(MAKE) core --no-print-directory
+	# @make -C games/src --no-print-directory
 	@$(MAKE) graphicals --no-print-directory
 
 core:
@@ -28,10 +29,12 @@ graphicals:
 
 clean:
 	rm -rf $(NAME)
+	# make -C games/src clean --no-print-directory
 	make -C lib/src clean --no-print-directory
 
 fclean:	clean
-	rm -rf $(OBJ) *.so *~ *# 
+	rm -rf $(OBJ) *.so *~ *#
+	# make -C games/src fclean --no-print-directory
 	make -C lib/src fclean --no-print-directory
 
 re:	fclean all

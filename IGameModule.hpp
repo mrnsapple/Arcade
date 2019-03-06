@@ -14,6 +14,7 @@
 class IGameModule {
 public:
     virtual ~IGameModule() = default;
+    virtual void    init() = 0;
     virtual void    play() = 0;
 
 protected:
