@@ -19,6 +19,11 @@ Sfml::Sfml()
     _menu[3]->setText("Scores");
     _inputText = new TextObject(_menu[0]->text.getLocalBounds().width + 20, 25);
     _inputText->text.setFillColor(sf::Color::Cyan);
+    select = new RectObject(300, 100);
+    sf::Texture *arrowUp = new sf::Texture();
+    arrowUp->loadFromFile("./assets/arrowleft.png");
+    select->shape.setTexture(arrowUp);
+    select->shape.setOrigin(select->shape.getSize().x / 2, -select->shape.getGlobalBounds().height / 2);
 }
 
 Sfml::~Sfml()
@@ -84,8 +89,62 @@ void    Sfml::init()
             setLibGames();
             setLibFiles();
             _win->draw(_menu[3]->text);
+            _win->draw(select->shape);
+        }
+        if (_scenario == CHOOSEGAME) {
+            _win->clear(sf::Color::Blue);
+        }
+        if (_scenario == CHOOSELIB) {
+            _win->clear(sf::Color::Red);
+        }
+        if (_scenario == SCORES) {
+            _win->clear(sf::Color::Green);
         }
         _win->display();
+    }
+}
+
+void    Sfml::returnToMenu()
+{
+    if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Escape) {
+                _scenario = MENU;
+            }
+        }
+    }
+}
+
+void    Sfml::moveSelect()
+{
+    sf::Vector2f    pos = select->shape.getPosition();
+    if (_scenario == MENU) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            select->shape.setPosition(pos.x, pos.y + 75);
+            if (pos.y >= 250) 
+                select->shape.setPosition(pos.x, 100);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            select->shape.setPosition(pos.x, pos.y - 75);
+            if (pos.y <= 100)
+                select->shape.setPosition(pos.x, 250);
+        }        
+    }
+}
+
+void    Sfml::menuSelect()
+{
+    if (_scenario == MENU) {
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Space) {
+                if (select->shape.getPosition().y == 100)
+                    _scenario = CHOOSEGAME;
+                if (select->shape.getPosition().y == 175)
+                    _scenario = CHOOSELIB;
+                if (select->shape.getPosition().y == 250)
+                    _scenario = SCORES;
+            }
+        }
     }
 }
 
@@ -100,6 +159,9 @@ void    Sfml::handleEvents()
     while (_win->pollEvent(_event)) {
         setUserName();
         stop();
+        moveSelect();
+        menuSelect();
+        returnToMenu();
     }
 }
 

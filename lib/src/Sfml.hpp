@@ -27,13 +27,19 @@ public:
     void    stop();
     enum Scenarios {
         USERINPUT,
-        MENU
+        MENU,
+        CHOOSELIB,
+        CHOOSEGAME,
+        SCORES
     };
     std::string setUserName();
     void    handleEvents();
     int countFiles(std::string path);
     void    setLibGames();
     void    setLibFiles();
+    void    moveSelect();
+    void    menuSelect();
+    void    returnToMenu();
 
 protected:
     Scenarios   _scenario;
@@ -42,6 +48,8 @@ protected:
     std::string _userName;
     TextObject  *_inputText;
     std::vector<TextObject*> _menu;
+    RectObject  *select;
+
 private:
 };
 

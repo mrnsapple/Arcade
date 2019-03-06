@@ -15,8 +15,7 @@ public:
     sf::RectangleShape  shape;
     RectObject(float x, float y) {
         shape.setPosition(x, y);
-        shape.setSize({100, 50});
-        shape.setFillColor(sf::Color::Cyan);
+        shape.setSize({20, 20});
     }
 
 protected:
