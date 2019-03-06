@@ -11,10 +11,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <sstream>
+#include <vector>
+#include "dirent.h"
 #include "../../IDisplayModule.hpp"
 #include "TextObject.hpp"
-#include "dirent.h"
-#include <sstream>
+#include "RectObject.hpp"
 
 class Sfml : public IDisplayModule {
 public:
@@ -29,17 +31,17 @@ public:
     };
     std::string setUserName();
     void    handleEvents();
-    int countFiles(std::string path, float x, float y);
+    int countFiles(std::string path);
+    void    setLibGames();
+    void    setLibFiles();
 
 protected:
     Scenarios   _scenario;
     sf::RenderWindow  *_win;
     sf::Event   _event;
-    TextObject  *_enterName;
     std::string _userName;
     TextObject  *_inputText;
-    TextObject  *welcome;
-    TextObject  *_scores;
+    std::vector<TextObject*> _menu;
 private:
 };
 
