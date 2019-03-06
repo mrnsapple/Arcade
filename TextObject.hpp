@@ -21,12 +21,30 @@ public:
         text.setCharacterSize(22);
         text.setPosition(x, y);
         text.setFillColor(sf::Color::White);
+        highlighted = false;
+        timeFrame = 0;
     }
 
     void    setText(const sf::String &string) { text.setString(string); }
+    void    blink(sf::Color color = sf::Color::Red) {
+        text.setOutlineColor(color);
+        if (!highlighted && frame.getElapsedTime().asMilliseconds() >= 150) {
+            text.setOutlineThickness(2);
+            highlighted = true;
+            frame.restart();
+        }
+        if (highlighted && frame.getElapsedTime().asMilliseconds() >= 150) {
+            text.setOutlineThickness(0);
+            highlighted = false;
+            frame.restart();
+        }
+    }
 
 protected:
 private:
+    bool    highlighted;
+    float   timeFrame;
+    sf::Clock   frame;
 };
 
 #endif /* !TEXTOBJECT_HPP_ */

@@ -11,6 +11,7 @@ Sfml::Sfml()
 {
     _scenario = USERINPUT;
     _win = new sf::RenderWindow({820, 580}, "Arcade", sf::Style::Default);
+    _win->setFramerateLimit(60);
     _menu.push_back(new TextObject(5, 25));
     _menu[0]->setText("Enter your name");
     _menu.push_back(new TextObject(5, 100));
@@ -18,7 +19,7 @@ Sfml::Sfml()
     _menu.push_back(new TextObject(5, 250));
     _menu[3]->setText("Scores");
     _inputText = new TextObject(_menu[0]->text.getLocalBounds().width + 20, 25);
-    _inputText->text.setFillColor(sf::Color::Cyan);
+    _inputText->text.setFillColor(sf::Color::Red);
     select = new RectObject(300, 100);
     sf::Texture *arrowUp = new sf::Texture();
     arrowUp->loadFromFile("./assets/arrowleft.png");
@@ -75,6 +76,8 @@ void    Sfml::init()
         if (_scenario == USERINPUT) {
             _win->clear();
             _inputText->setText(_userName);
+            _menu[0]->blink();
+            // _inputText->blink(sf::Color::Green);
             _win->draw(_menu[0]->text);
             _win->draw(_inputText->text);
             setLibGames();
@@ -83,8 +86,9 @@ void    Sfml::init()
         }
         if (_scenario == MENU) {
             _win->clear();
+            _menu[0]->text.setOutlineThickness(0);
             _menu[0]->setText("Welcome " + _userName);
-            _menu[0]->text.setFillColor(sf::Color::Cyan);
+            _menu[0]->text.setFillColor(sf::Color::Red);
             _win->draw(_menu[0]->text);
             setLibGames();
             setLibFiles();
