@@ -24,6 +24,7 @@ public:
     ~Sfml();
 
     void    init();
+    void    start();
     void    stop();
     enum Scenarios {
         USERINPUT,
@@ -47,8 +48,10 @@ protected:
     sf::Event   _event;
     std::string _userName;
     TextObject  *_inputText;
-    std::vector<TextObject*> _menu;
+    std::vector<TextObject*>    _menu;
     RectObject  *select;
+    std::vector<std::string>    libName;
+    std::vector<TextObject*>    _libs;
 
 private:
 };

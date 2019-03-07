@@ -27,6 +27,7 @@ int main(int ac, char **av)
         init_t  *init_lib = (init_t*)dlsym(handle, "init");
         IDisplayModule  *display = init_lib();
         display->init();
+        display->start();
         dlclose(handle);
     } else {
         printUsage();
