@@ -33,6 +33,7 @@ public:
         CHOOSEGAME,
         SCORES
     };
+
     std::string setUserName();
     void    handleEvents();
     int countFiles(std::string path);
@@ -41,6 +42,21 @@ public:
     void    moveSelect();
     void    menuSelect();
     void    returnToMenu();
+    void    moveSelectLib();
+    std::vector<std::string>    getFilesName(std::string path);
+    class Menu {
+    public:
+        Menu() {
+            currentNum = 0;
+        }
+        int currentNum;
+        std::vector<std::string>    libName;
+        std::vector<TextObject*>    _libs;
+        void    removeHighlight() {
+            for (auto lib : _libs)
+                lib->text.setOutlineThickness(0);
+        }
+    };
 
 protected:
     Scenarios   _scenario;
@@ -50,8 +66,7 @@ protected:
     TextObject  *_inputText;
     std::vector<TextObject*>    _menu;
     RectObject  *select;
-    std::vector<std::string>    libName;
-    std::vector<TextObject*>    _libs;
+    Menu    *libMenu;
 
 private:
 };

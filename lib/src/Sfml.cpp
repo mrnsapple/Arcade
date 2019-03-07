@@ -35,16 +35,31 @@ void    Sfml::init()
     arrowUp->loadFromFile("./assets/arrowleft.png");
     select->shape.setTexture(arrowUp);
     select->shape.setOrigin(select->shape.getSize().x / 2, -select->shape.getGlobalBounds().height / 2);
+    libMenu = new Menu();
+    libMenu->libName = getFilesName("./lib");
     for (int i = 0; i < countFiles("./lib"); i++) {
-        _libs.push_back(new TextObject(5, 100 * (i + 1)));
-        _libs[i]->text.setPosition(5, 25 * (i + 1));
-        _libs[i]->setText(libName[i]);
+        libMenu->_libs.push_back(new TextObject(5, 25 * (i + 1)));
+        libMenu->_libs[i]->setText(libMenu->libName[i]);
     }
 }
 
 static bool endsWith(const std::string& str, const std::string& suffix)
 {
     return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+std::vector<std::string>    Sfml::getFilesName(std::string path)
+{
+    std::vector<std::string>    vec;
+    DIR *pdir = NULL;
+    dirent  *pent = NULL;
+    
+    pdir = opendir(path.c_str());
+    while (pent = readdir(pdir))
+        if (endsWith(pent->d_name, ".so"))
+            vec.push_back(pent->d_name);
+    closedir(pdir);
+    return vec;
 }
 
 int Sfml::countFiles(std::string path)
@@ -55,10 +70,8 @@ int Sfml::countFiles(std::string path)
     
     pdir = opendir(path.c_str());
     while (pent = readdir(pdir))
-        if (endsWith(pent->d_name, ".so")) {
+        if (endsWith(pent->d_name, ".so"))
             num++;
-            libName.push_back(pent->d_name);
-        }
     closedir(pdir);
     return num;
 }
@@ -111,7 +124,7 @@ void    Sfml::start()
         }
         if (_scenario == CHOOSELIB) {
             _win->clear();
-            for (auto lib : _libs)
+            for (auto lib : libMenu->_libs)
                 _win->draw(lib->text);
         }
         if (_scenario == SCORES) {
@@ -149,6 +162,21 @@ void    Sfml::moveSelect()
     }
 }
 
+void    Sfml::moveSelectLib()
+{
+    if (_scenario == CHOOSELIB) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            std::cout << libMenu->currentNum << std::endl;
+            libMenu->removeHighlight();
+            libMenu->_libs[libMenu->currentNum]->blink();
+            std::cout << "is highlited ->" << libMenu->_libs[libMenu->currentNum]->text.getOutlineThickness() << std::endl;
+            libMenu->currentNum++;
+            if (libMenu->currentNum > libMenu->_libs.size() - 1)
+                libMenu->currentNum = 0;
+        }
+    }
+}
+
 void    Sfml::menuSelect()
 {
     if (_scenario == MENU) {
@@ -177,6 +205,7 @@ void    Sfml::handleEvents()
         setUserName();
         stop();
         moveSelect();
+        moveSelectLib();
         menuSelect();
         returnToMenu();
     }

@@ -24,6 +24,7 @@ all	:	$(NAME)
 
 $(NAME)	:	$(OBJ)
 	g++ -shared -o ../$(NAME)sfml.so Sfml.o $(SFMLFLAGS)
+	touch ../$(NAME)dummy.so
 
 clean	:
 	rm -rf $(OBJ)
