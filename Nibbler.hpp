@@ -8,8 +8,8 @@
 #ifndef NIBBLER_HPP_
 #define NIBBLER_HPP_
 
-#include "../../IGameModule.hpp"
-#include "../../TextObject.hpp"
+#include "IGameModule.hpp"
+#include "TextObject.hpp"
 
 class Nibbler : public IGameModule {
 public:

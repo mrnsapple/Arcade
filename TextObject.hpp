@@ -16,7 +16,7 @@ public:
     sf::Font    font;
 
     TextObject(float x, float y) {
-        font.loadFromFile("./lib/src/font.ttf");
+        font.loadFromFile("./assets/font.ttf");
         text.setFont(font);
         text.setCharacterSize(22);
         text.setPosition(x, y);

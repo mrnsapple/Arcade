@@ -41,6 +41,12 @@ void    Sfml::init()
         libMenu->_libs.push_back(new TextObject(5, 25 * (i + 1)));
         libMenu->_libs[i]->setText(libMenu->libName[i]);
     }
+    libGame = new Menu();
+    libGame->libName = getFilesName("./games");
+    for (int i = 0; i < countFiles("./games"); i++) {
+        libGame->_libs.push_back(new TextObject(5, 25 * (i + 1)));
+        libGame->_libs[i]->setText(libGame->libName[i]);
+    }
 }
 
 static bool endsWith(const std::string& str, const std::string& suffix)
@@ -120,7 +126,9 @@ void    Sfml::start()
             _win->draw(select->shape);
         }
         if (_scenario == CHOOSEGAME) {
-            _win->clear(sf::Color::Blue);
+            _win->clear();
+            for (auto lib : libGame->_libs)
+                _win->draw(lib->text);
         }
         if (_scenario == CHOOSELIB) {
             _win->clear();
@@ -137,11 +145,8 @@ void    Sfml::start()
 void    Sfml::returnToMenu()
 {
     if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
-        if (_event.type == sf::Event::KeyPressed) {
-            if (_event.key.code == sf::Keyboard::Escape) {
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
                 _scenario = MENU;
-            }
-        }
     }
 }
 
@@ -162,33 +167,48 @@ void    Sfml::moveSelect()
     }
 }
 
-void    Sfml::moveSelectLib()
+void    Sfml::moveSelectLib(Sfml::Menu *lib, Sfml::Scenarios scenario)
 {
-    if (_scenario == CHOOSELIB) {
+    if (_scenario == scenario) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            std::cout << libMenu->currentNum << std::endl;
-            libMenu->removeHighlight();
-            libMenu->_libs[libMenu->currentNum]->blink();
-            std::cout << "is highlited ->" << libMenu->_libs[libMenu->currentNum]->text.getOutlineThickness() << std::endl;
-            libMenu->currentNum++;
-            if (libMenu->currentNum > libMenu->_libs.size() - 1)
-                libMenu->currentNum = 0;
+            lib->removeHighlight();
+            lib->currentNum++;
+            if (lib->currentNum > lib->_libs.size() - 1)
+                lib->currentNum = 0;
+            lib->_libs[lib->currentNum]->text.setOutlineColor(sf::Color::Red);
+            lib->_libs[lib->currentNum]->text.setOutlineThickness(2);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            lib->removeHighlight();
+            lib->currentNum--;
+            if (lib->currentNum < 0)
+                lib->currentNum = lib->_libs.size() - 1;
+            lib->_libs[lib->currentNum]->text.setOutlineColor(sf::Color::Red);
+            lib->_libs[lib->currentNum]->text.setOutlineThickness(2);
         }
     }
+}
+
+void    Sfml::selectLib()
+{
+    if (_scenario == CHOOSELIB) {
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
+            std::cout << (std::string)libMenu->_libs[libMenu->checkCurrentHighlighted()]->text.getString() << std::endl;
+        }
+    }
+    
 }
 
 void    Sfml::menuSelect()
 {
     if (_scenario == MENU) {
-        if (_event.type == sf::Event::KeyPressed) {
-            if (_event.key.code == sf::Keyboard::Space) {
-                if (select->shape.getPosition().y == 100)
-                    _scenario = CHOOSEGAME;
-                if (select->shape.getPosition().y == 175)
-                    _scenario = CHOOSELIB;
-                if (select->shape.getPosition().y == 250)
-                    _scenario = SCORES;
-            }
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
+            if (select->shape.getPosition().y == 100)
+                _scenario = CHOOSEGAME;
+            if (select->shape.getPosition().y == 175)
+                _scenario = CHOOSELIB;
+            if (select->shape.getPosition().y == 250)
+                _scenario = SCORES;
         }
     }
 }
@@ -205,8 +225,10 @@ void    Sfml::handleEvents()
         setUserName();
         stop();
         moveSelect();
-        moveSelectLib();
+        moveSelectLib(libMenu, CHOOSELIB);
+        moveSelectLib(libGame, CHOOSEGAME);
         menuSelect();
+        selectLib();
         returnToMenu();
     }
 }
@@ -215,7 +237,7 @@ std::string Sfml::setUserName()
 {
     if (_scenario == USERINPUT) {
         if (_event.type == sf::Event::TextEntered) {
-            if (_event.text.unicode == 8 )
+            if (_event.text.unicode == 8)
                 _userName = _userName.substr(0, _userName.size() - 1);
             else
                 _userName += _event.text.unicode;

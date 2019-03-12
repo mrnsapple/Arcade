@@ -21,6 +21,6 @@ protected:
 private:
 };
 
-typedef IGameModule *init_t();
+typedef IGameModule *init_g();
 
 #endif /* !IGAMEMODULE_HPP_ */

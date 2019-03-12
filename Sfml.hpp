@@ -14,9 +14,10 @@
 #include <sstream>
 #include <vector>
 #include "dirent.h"
-#include "../../IDisplayModule.hpp"
-#include "../../TextObject.hpp"
-#include "../../RectObject.hpp"
+#include "IDisplayModule.hpp"
+#include "TextObject.hpp"
+#include "RectObject.hpp"
+#include "IGameModule.hpp"
 
 class Sfml : public IDisplayModule {
 public:
@@ -33,17 +34,6 @@ public:
         CHOOSEGAME,
         SCORES
     };
-
-    std::string setUserName();
-    void    handleEvents();
-    int countFiles(std::string path);
-    void    setLibGames();
-    void    setLibFiles();
-    void    moveSelect();
-    void    menuSelect();
-    void    returnToMenu();
-    void    moveSelectLib();
-    std::vector<std::string>    getFilesName(std::string path);
     class Menu {
     public:
         Menu() {
@@ -52,11 +42,33 @@ public:
         int currentNum;
         std::vector<std::string>    libName;
         std::vector<TextObject*>    _libs;
+        int checkCurrentHighlighted() {
+            for (int i = 0; i < _libs.size(); i++)
+                if (_libs[i]->text.getOutlineThickness() == 2)
+                    return i;
+        }
         void    removeHighlight() {
             for (auto lib : _libs)
                 lib->text.setOutlineThickness(0);
         }
     };
+
+    std::string setUserName();
+    void    handleEvents();
+
+    int countFiles(std::string path);
+    std::vector<std::string>    getFilesName(std::string path);
+
+    void    setLibGames();
+    void    setLibFiles();
+    
+    void    moveSelect();
+    void    menuSelect();
+    
+    void    returnToMenu();
+    
+    void    moveSelectLib(Menu *lib, Scenarios);
+    void    selectLib();
 
 protected:
     Scenarios   _scenario;
@@ -67,6 +79,7 @@ protected:
     std::vector<TextObject*>    _menu;
     RectObject  *select;
     Menu    *libMenu;
+    Menu    *libGame;
 
 private:
 };
