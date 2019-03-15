@@ -22,7 +22,6 @@ public:
         text.setPosition(x, y);
         text.setFillColor(sf::Color::White);
         highlighted = false;
-        timeFrame = 0;
     }
 
     void    setText(const sf::String &string) { text.setString(string); }
@@ -44,7 +43,6 @@ public:
 protected:
 private:
     bool    highlighted;
-    float   timeFrame;
     sf::Clock   frame;
 };
 

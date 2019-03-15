@@ -32,7 +32,8 @@ public:
         MENU,
         CHOOSELIB,
         CHOOSEGAME,
-        SCORES
+        SCORES,
+        TRANSITION
     };
     class Menu {
     public:
@@ -68,7 +69,8 @@ public:
     void    returnToMenu();
     
     void    moveSelectLib(Menu *lib, Scenarios);
-    void    selectLib();
+    void    selectGame();
+    void    runTransition(Scenarios);
 
 protected:
     Scenarios   _scenario;

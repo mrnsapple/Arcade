@@ -59,7 +59,7 @@ std::vector<std::string>    Sfml::getFilesName(std::string path)
     std::vector<std::string>    vec;
     DIR *pdir = NULL;
     dirent  *pent = NULL;
-    
+
     pdir = opendir(path.c_str());
     while (pent = readdir(pdir))
         if (endsWith(pent->d_name, ".so"))
@@ -142,6 +142,22 @@ void    Sfml::start()
     }
 }
 
+void    Sfml::runTransition(Sfml::Scenarios scene)
+{
+    // TextObject  title(_win->getSize().x / 2 - 100, _win->getSize().y / 2 - 50);
+    _win->clear();
+    // title.setText("ARCADE...");
+    // title.text.setCharacterSize(40);
+    // title.blink();
+    // if (_frame.getElapsedTime().asMilliseconds() <= 2500) {
+        // std::cout << _frame.getElapsedTime().asMilliseconds() << std::endl;
+        // _win->draw(title.text);
+    // }
+    // if (_frame.getElapsedTime().asMilliseconds() > 2600) {
+        _scenario = scene;
+    // }
+}
+
 void    Sfml::returnToMenu()
 {
     if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
@@ -189,11 +205,11 @@ void    Sfml::moveSelectLib(Sfml::Menu *lib, Sfml::Scenarios scenario)
     }
 }
 
-void    Sfml::selectLib()
+void    Sfml::selectGame()
 {
-    if (_scenario == CHOOSELIB) {
+    if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
-            std::cout << (std::string)libMenu->_libs[libMenu->checkCurrentHighlighted()]->text.getString() << std::endl;
+            std::cout << (std::string)libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString() << std::endl;
         }
     }
     
@@ -204,7 +220,9 @@ void    Sfml::menuSelect()
     if (_scenario == MENU) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
             if (select->shape.getPosition().y == 100)
-                _scenario = CHOOSEGAME;
+                // _scenario = CHOOSEGAME;
+                // _scenario = TRANSITION;
+                runTransition(CHOOSEGAME);
             if (select->shape.getPosition().y == 175)
                 _scenario = CHOOSELIB;
             if (select->shape.getPosition().y == 250)
@@ -228,7 +246,7 @@ void    Sfml::handleEvents()
         moveSelectLib(libMenu, CHOOSELIB);
         moveSelectLib(libGame, CHOOSEGAME);
         menuSelect();
-        selectLib();
+        selectGame();
         returnToMenu();
     }
 }
