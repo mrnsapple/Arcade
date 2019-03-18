@@ -10,6 +10,7 @@
 
 #include <curses.h>
 #include "../IDisplayModule.hpp"
+#include "../IGameModule.hpp"
 #include <stdlib.h>
 #include <curses.h>
 #include <sys/types.h>
@@ -19,6 +20,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+
 class NCurses : public IDisplayModule {
 public:
     NCurses();
@@ -31,12 +33,16 @@ public:
     void    get_keypad(void);
     void    print_map(void);
     void    get_name();
+    void    get_game();
+
     std::string setUserName();
 
 protected:
 private:
     int _key_press;
     std::string _user_name;
+     IGameModule *_game;
+
 };
 
 extern "C" IDisplayModule *init() {

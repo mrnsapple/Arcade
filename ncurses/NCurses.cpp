@@ -6,8 +6,11 @@
 */
 
 #include "NCurses.hpp"
+#include <iostream>
+#include <string>
+#include <dlfcn.h>
 
-NCurses::NCurses() : _user_name("") , _key_press(0)
+NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL)
 {
 }
 
@@ -36,6 +39,19 @@ void    NCurses::print_map(void)
     
 }
 
+void       NCurses::get_game()
+{
+    void *handler = dlopen("../games/lib_arcade_nibbler.so", RTLD_LAZY);
+
+    if (!handler)
+       _game = NULL;
+    else {
+       init_g *init_game =   (init_g *)dlsym(handler, "init");
+        _game = init_game();
+    }   
+}
+
+
 void    NCurses::get_name()
 {
     std::string val;
@@ -55,7 +71,6 @@ void    NCurses::get_name()
     wprintw(stdscr, "Welcome ");
     wprintw(stdscr, _user_name.c_str());
     get_keypad();
-    stop();
 }
 
 void    NCurses::my_refresh()
@@ -71,7 +86,18 @@ void    NCurses::my_refresh()
 
 void    NCurses::start()
 {
-    get_name();
+    //get_name();
+        my_refresh();
+
+    get_game();
+  if (_game != NULL) {
+       wprintw(stdscr, "It's nil\n");
+     _game->play();
+  }
+    else
+        wprintw(stdscr, "It's null\n");
+    get_keypad();
+  
     for (int loop = 0; loop == 0;) {
         my_refresh();
         print_map();
@@ -88,7 +114,6 @@ void    NCurses::stop()
 	//refresh();
     exit (0);
 }
-
 std::string NCurses::setUserName()
 {
     return "Anon";
