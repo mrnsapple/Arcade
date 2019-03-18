@@ -7,7 +7,7 @@
 
 SRC =	arcade.cpp
 
-LIBSRC	=	Sfml.cpp OpenGL.cpp
+LIBSRC	=	Sfml.cpp OpenGL.cpp NCurses.cpp
 
 GAMESSRC	=	Nibbler.cpp
 
@@ -45,6 +45,7 @@ games	:	$(GAMESOBJ)
 graphicals	:	$(LIBOBJ)
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
 	g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
+	g++ -shared -o lib/lib_arcade_ncurses.so NCurses.o -lncurses
 
 clean:
 	rm -rf $(LIBOBJ)
