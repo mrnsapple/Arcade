@@ -7,7 +7,7 @@
 
 SRC =	arcade.cpp
 
-LIBSRC	=	Sfml.cpp OpenGL.cpp NCurses.cpp
+LIBSRC	=	Sfml.cpp OpenGL.cpp ncurses/NCurses.cpp
 
 GAMESSRC	=	Nibbler.cpp
 
@@ -55,7 +55,7 @@ clean:
 	rm -rf $(OBJ)
 
 fclean:	clean
-	rm -rf $(NAME) *~ *#
+	rm -rf $(NAME) *~ *# *.o
 	rm -rf lib/*.so
 	rm -rf games/*.so
 
