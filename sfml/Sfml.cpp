@@ -47,7 +47,6 @@ void    Sfml::init()
         libGame->_libs.push_back(new TextObject(5, 25 * (i + 1)));
         libGame->_libs[i]->setText(libGame->libName[i]);
     }
-    isMapLoaded = false;
 }
 
 static bool endsWith(const std::string& str, const std::string& suffix)
@@ -144,8 +143,11 @@ void    Sfml::start()
             game->init();
             loadMap();
             for (auto rect : arrayMap) {
+            // for (std::vector<RectObject*>::iterator rect = arrayMap.begin(); rect != arrayMap.end(); ++rect) {
+                // _win->draw((*rect)->shape);
                 _win->draw(rect->shape);
             }
+            arrayMap.clear();
         }
         _win->display();
     }
@@ -155,16 +157,16 @@ void    Sfml::loadMap()
 {
     map = game->get_map();
 
-    if (isMapLoaded == false) {
-        for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it)
+    if (arrayMap.empty()) {
+        for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it) {
             for (std::string::iterator c = it->begin(); c != it->end(); ++c) {
                 if (*c == '#')
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Red));
                 if (*c == ' ')
-                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Blue));
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::White));
             }
+        }
     }
-    isMapLoaded = true;
 }
 
 void    Sfml::runTransition(Sfml::Scenarios scene)
@@ -224,7 +226,7 @@ void    Sfml::selectGame()
     if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
             std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
-            std::cout << gameFile << std::endl;
+            // std::cout << gameFile << std::endl;
             void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
