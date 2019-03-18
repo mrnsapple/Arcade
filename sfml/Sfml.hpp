@@ -71,6 +71,7 @@ public:
     void    moveSelectLib(Menu *lib, Scenarios);
     void    selectGame();
     void    runTransition(Scenarios);
+    void    nextGraphLib();
 
 protected:
     Scenarios   _scenario;
