@@ -25,22 +25,28 @@ void    NCurses::init()
 	initscr();
 }
 
+void    NCurses::get_keypad_not_wait(void)
+{
+    noecho();
+    nodelay(stdscr, TRUE);
+	keypad(stdscr, TRUE);
+    _key_press = getch();
+}
+
 void NCurses::get_keypad(void)
 {
     noecho();
-	keypad(stdscr, TRUE);
+    keypad(stdscr, TRUE);
     _key_press = getch();
 }
 
 void    NCurses::print_map(void)
 {
-    _map = _game->get_map();
+    std::vector<std::string> _map = _game->get_map();
     for (std::string a : _map) {
         wprintw(stdscr, a.c_str());
         wprintw(stdscr, "\n");
-    
     }
-    
 }
 
 void       NCurses::get_game()
@@ -97,14 +103,15 @@ void    NCurses::start()
     get_game();
     if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
-        get_keypad();
+        stop();
     }
     get_keypad();
     for (int loop = 0; loop == 0;) {
         my_refresh();
         print_map();
-        get_keypad();
-        if (_key_press == KEY_UP)
+        //get_keypad_not_wait();
+        sleep(1);
+        if (_game->play() == false || _key_press == KEY_UP)
             loop = 1;
     }
    this->stop(); 

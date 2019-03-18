@@ -31,6 +31,8 @@ public:
     void    stop();
     void    my_refresh();
     void    get_keypad(void);
+    void    get_keypad_not_wait(void);
+
     void    print_map(void);
     void    get_name();
     void    get_game();
@@ -42,7 +44,6 @@ private:
     int _key_press;
     std::string _user_name;
      IGameModule *_game;
-    std::vector<std::string> _map;
 
 };
 
