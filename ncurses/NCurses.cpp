@@ -41,7 +41,7 @@ void    NCurses::print_map(void)
 
 void       NCurses::get_game()
 {
-    void *handler = dlopen("../games/lib_arcade_nibbler.so", RTLD_LAZY);
+    void *handler = dlopen("games/lib_arcade_nibbler.so", RTLD_LAZY);
 
     if (!handler)
        _game = NULL;

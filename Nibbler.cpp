@@ -6,7 +6,7 @@
 */
 
 #include "Nibbler.hpp"
-#include <curses.h>
+// #include <curses.h>
 
 
 Nibbler::Nibbler()
@@ -30,6 +30,6 @@ void    Nibbler::init()
 
 void    Nibbler::play()
 {
-    wprintw(stdscr, "In nibler\n");
+    // wprintw(stdscr, "In nibler\n");
     std::cout << "TIME TO PLAY" << std::endl;
 }
