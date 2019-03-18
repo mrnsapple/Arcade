@@ -95,7 +95,7 @@ void       NCurses::get_game()
     for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         wprintw(stdscr, "Welcome ");
         wprintw(stdscr, _user_name.c_str());
-        wprintw(stdscr, "\n\nAvailable games: nibbler\n\nChoose a game by writing it's name: ");
+        wprintw(stdscr, ".\n\nAvailable games:\n\tnibbler\n\nChoose a game by writing it's name: ");
         wprintw(stdscr, game_selected.c_str());
         get_keypad();
         my_refresh();
@@ -106,6 +106,12 @@ void       NCurses::get_game()
     if (game_selected.compare("nibbler") == 0)
         specify_game((char *)"games/lib_arcade_nibbler.so"); 
     else {
+        init_pair(1, COLOR_RED, COLOR_BLACK);
+	    attron(COLOR_PAIR(1));
+        wprintw(stdscr, game_selected.c_str());
+        wprintw(stdscr, " isn't a valid game name.\n\n");
+        init_pair(2, COLOR_WHITE, COLOR_BLACK);
+	    attron(COLOR_PAIR(2));
         get_game();
     }
     
