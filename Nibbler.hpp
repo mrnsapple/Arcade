@@ -17,7 +17,7 @@ public:
 
     void    init();
     void    play();
-    char *   test();
+    char    *test();
 
     // std::list<std::string>  getStartMap();    
 

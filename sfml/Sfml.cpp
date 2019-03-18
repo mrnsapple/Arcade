@@ -140,8 +140,11 @@ void    Sfml::start()
         }
         if (_scenario == GAMEMODE) {
             _win->clear();
-            game->init();
-            game->play();
+            // game->init();
+            // game->play();
+            TextObject  test(50,50);
+            test.setText((std::string)game->test());
+            _win->draw(test.text);
         }
         _win->display();
     }
