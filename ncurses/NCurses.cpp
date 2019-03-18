@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 #include <dlfcn.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
 
 NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL)
 {
@@ -32,6 +35,18 @@ void    NCurses::get_keypad_not_wait(void)
 	keypad(stdscr, TRUE);
     _key_press = getch();
 }
+void    NCurses::set_direc(void)
+{
+    if (_key_press == KEY_UP)
+        _game->set_dir('t');
+    if (_key_press == KEY_DOWN)
+        _game->set_dir('b');
+    if (_key_press == KEY_LEFT)
+        _game->set_dir('l'); 
+    if (_key_press == KEY_RIGHT)
+        _game->set_dir('r');
+    
+}
 
 void NCurses::get_keypad(void)
 {
@@ -50,17 +65,18 @@ void    NCurses::print_map(void)
         wprintw(stdscr, a.c_str());
         wprintw(stdscr, "\n");
     }
+    wprintw(stdscr, "Score: ");
+    wprintw(stdscr, (std::to_string(_game->get_size() - 4)).c_str());
     wprintw(stdscr, "\n");
-
-    for (std::string a : _number_map) {
+    /*for (std::string a : _number_map) {
         wprintw(stdscr, a.c_str());
         wprintw(stdscr, "\n");
-    }
+    }*/
 }
 
-void       NCurses::get_game()
+void    NCurses::specify_game(char *path_to_game)
 {
-    void *handler = dlopen("games/lib_arcade_nibbler.so", RTLD_LAZY);
+    void *handler = dlopen(path_to_game, RTLD_LAZY);
 
     if (!handler)
        _game = NULL;
@@ -69,6 +85,30 @@ void       NCurses::get_game()
         _game = init_game();
         _game->init();
     }   
+}
+
+void       NCurses::get_game()
+{
+    std::string game_selected = "";
+    std::string val;
+
+    for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
+        wprintw(stdscr, "Welcome ");
+        wprintw(stdscr, _user_name.c_str());
+        wprintw(stdscr, "\n\nAvailable games: nibbler\n\nChoose a game by writing it's name: ");
+        wprintw(stdscr, game_selected.c_str());
+        get_keypad();
+        my_refresh();
+        val = _key_press;
+        if (_key_press != '\n')
+            game_selected.append(val);
+    }
+    if (game_selected.compare("nibbler") == 0)
+        specify_game((char *)"games/lib_arcade_nibbler.so"); 
+    else {
+        get_game();
+    }
+    
 }
 
 
@@ -87,10 +127,7 @@ void    NCurses::get_name()
         wprintw(stdscr, "Enter your name: ");
         wprintw(stdscr, _user_name.c_str());
     }
-    my_refresh();
-    wprintw(stdscr, "Welcome ");
-    wprintw(stdscr, _user_name.c_str());
-    get_keypad();
+    
 }
 
 void    NCurses::my_refresh()
@@ -103,24 +140,29 @@ void    NCurses::my_refresh()
     //init_pair(1, COLOR_RED, COLOR_BLACK);
 	//attron(COLOR_PAIR(1));
 }
-
+void delay(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while (goal > clock());
+}
 void    NCurses::start()
 {
-    //get_name();
-    //my_refresh();
+    get_name();
+    my_refresh();
 
     get_game();
     if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
         stop();
     }
-    get_keypad();
     for (int loop = 0; loop == 0;) {
         my_refresh();
         print_map();
-        //get_keypad_not_wait();
+        //delay(500000);                        
+        get_keypad_not_wait();
+        set_direc();
         sleep(1);
-        if (_game->play() == false || _key_press == KEY_UP)
+        if (_game->play() == false)
             loop = 1;
     }
    this->stop(); 

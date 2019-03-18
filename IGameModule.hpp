@@ -21,9 +21,12 @@ public:
     virtual char *   test() = 0;
     virtual std::vector<std::string> get_map() = 0;
     virtual std::vector<std::string> get_number_map() = 0;
+    virtual void set_dir(char dir) = 0;
+    virtual void increase_numbers_map(int x, int y) = 0;
+    virtual     void    number_map_to_map() = 0;
+    virtual     int     get_size() = 0;
 
     // virtual std::list<std::string>  getStartMap() = 0;
-
 
 protected:
 private:

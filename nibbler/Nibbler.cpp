@@ -63,29 +63,44 @@ std::vector<std::string> Nibbler::get_number_map()
 
 
 void    Nibbler::move_top(int x, int y)
+{ 
+    increase_numbers_map(x, y - 1);
+    _number_map[y - 1][x] = '1';
+    number_map_to_map();
+}
+int     Nibbler::get_size(void)
 {
-    for (int i = y - 1; i <= y + 1 - _size; i++) {
-        _map[i][x] = _map[i + 1][x];
-    }
+    return _size;
 }
 
 void    Nibbler::move_bot(int x, int y)
 {
-    for (int i = y + 1; i >= y + 1 - _size; i--) {
-        _map[i][x] = _map[i - 1][x];
-    }
+    increase_numbers_map(x, y + 1);
+    _number_map[y + 1][x] = '1';
+    number_map_to_map();
 }
 
-void    Nibbler::move_left(int x, int y)
-{ 
+void    Nibbler::increase_numbers_map(int x, int y)
+{
+    int eat = 0;
+    
+    if (_number_map[y][x] == '$')
+        eat = 1;
     for (int y = 0; y < _number_map.size(); y++)
         for (int x = 0; x < (_number_map[y]).size(); x++) {
-            if (_number_map[y][x] == _size + '0')
+            if (_number_map[y][x] == _size + '0' && eat == 1) {
+                _size++;
+                _number_map[y][x] == _size + '0';
+            }
+            else if(_number_map[y][x] == _size + '0')
                 _number_map[y][x] = ' ';
             else if (_number_map[y][x] > '0')
                 _number_map[y][x] += 1;
         }
-    _number_map[y][x - 1] = '1';
+}
+
+void    Nibbler::number_map_to_map()
+{
     for (int y = 0; y < _number_map.size(); y++)
         for (int x = 0; x < (_number_map[y]).size(); x++) {
             if (_number_map[y][x] == '1')
@@ -97,38 +112,55 @@ void    Nibbler::move_left(int x, int y)
         }
 }
 
+void    Nibbler::move_left(int x, int y)
+{ 
+    increase_numbers_map(x - 1, y);
+    _number_map[y][x - 1] = '1';
+    number_map_to_map();
+}
+
+void Nibbler::set_dir(char dir)
+{
+    _dir = dir;
+}
+
 void    Nibbler::move_rigth(int x, int y)
 {
-    for (int i = x + 1; i >= x + 1 - _size; i--) {
-        _map[y][i] = _map[y][i -1];
-    }
-}
+ increase_numbers_map(x + 1, y);
+    _number_map[y][x + 1] = '1';
+    number_map_to_map();}
 
 bool    Nibbler::know_head(int x, int y)
 {
     if (_dir == 'l') {
-        if (_map[y][x - 1] != '#')
+        if (_map[y][x - 1] != '#' && _map[y][x - 1] != '>')
             move_left(x, y);
         else
-            return false;
+            return false;//else if (_map[y][x - 1] == '>')
+        //    return true;
+        
     }
     if (_dir == 'r') {
-        if (_map[y][x + 1] != '#')
+        if (_map[y][x + 1] != '#' && _map[y][x + 1] != '>')
             move_rigth(x, y);
         else
-            return false;
+            return false;  //else if (_map[y][x + 1] == '>')
+        //    return true;
+        
     }
     if (_dir == 'b') {
-        if (_map[y - 1][x] != '#')
+        if (_map[y + 1][x] != '#' && _map[y + 1][x] != '>')
             move_bot(x, y);
         else
-            return false;
+            return false;//else if (_map[y + 1][x] == '>')
+        //    return true;
     }
     if (_dir == 't') {
-        if (_map[y + 1][x] != '#')
+        if (_map[y - 1][x] != '#' && _map[y - 1][x] != '>')
             move_top(x, y);
         else
-            return false;
+            return false;//else if (_map[y - 1][x] == '>')
+        //    return true;
     } 
     return true; 
 }

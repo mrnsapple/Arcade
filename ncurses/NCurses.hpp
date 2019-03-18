@@ -36,7 +36,9 @@ public:
     void    print_map(void);
     void    get_name();
     void    get_game();
+    void    specify_game(char *path_to_game);
 
+    void    set_direc();
     std::string setUserName();
 
 protected:
