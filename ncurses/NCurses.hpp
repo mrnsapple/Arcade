@@ -17,7 +17,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
-
+#include <iostream>
+#include <string>
 class NCurses : public IDisplayModule {
 public:
     NCurses();
@@ -26,13 +27,16 @@ public:
     void    init();
     void    start();
     void    stop();
+    void    my_refresh();
     void    get_keypad(void);
     void    print_map(void);
+    void    get_name();
     std::string setUserName();
 
 protected:
 private:
     int _key_press;
+    std::string _user_name;
 };
 
 extern "C" IDisplayModule *init() {
