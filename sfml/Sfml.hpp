@@ -72,6 +72,7 @@ public:
     void    moveSelectLib(Menu *lib, Scenarios);
     void    selectGame();
     void    runTransition(Scenarios);
+    void    loadMap();
 
 protected:
     Scenarios   _scenario;
@@ -83,7 +84,10 @@ protected:
     RectObject  *select;
     Menu    *libMenu;
     Menu    *libGame;
-    IGameModule *game;    
+    IGameModule *game;
+    std::vector<std::string>    map;
+    std::vector<RectObject*> arrayMap;
+    bool    isMapLoaded;
 
 private:
 };

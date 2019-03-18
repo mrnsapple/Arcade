@@ -47,6 +47,7 @@ void    Sfml::init()
         libGame->_libs.push_back(new TextObject(5, 25 * (i + 1)));
         libGame->_libs[i]->setText(libGame->libName[i]);
     }
+    isMapLoaded = false;
 }
 
 static bool endsWith(const std::string& str, const std::string& suffix)
@@ -140,14 +141,30 @@ void    Sfml::start()
         }
         if (_scenario == GAMEMODE) {
             _win->clear();
-            // game->init();
-            // game->play();
-            TextObject  test(50,50);
-            test.setText((std::string)game->test());
-            _win->draw(test.text);
+            game->init();
+            loadMap();
+            for (auto rect : arrayMap) {
+                _win->draw(rect->shape);
+            }
         }
         _win->display();
     }
+}
+
+void    Sfml::loadMap()
+{
+    map = game->get_map();
+
+    if (isMapLoaded == false) {
+        for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it)
+            for (std::string::iterator c = it->begin(); c != it->end(); ++c) {
+                if (*c == '#')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Red));
+                if (*c == ' ')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Blue));
+            }
+    }
+    isMapLoaded = true;
 }
 
 void    Sfml::runTransition(Sfml::Scenarios scene)
@@ -209,8 +226,6 @@ void    Sfml::selectGame()
             std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
             std::cout << gameFile << std::endl;
             void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
-            if (!handle)
-                exit(84);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
             _scenario = GAMEMODE;
