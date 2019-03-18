@@ -9,7 +9,7 @@ SRC =	arcade.cpp
 
 LIBSRC	=	sfml/Sfml.cpp opengl/OpenGL.cpp ncurses/NCurses.cpp
 
-GAMESSRC	=	Nibbler.cpp
+GAMESSRC	=	nibbler/Nibbler.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 

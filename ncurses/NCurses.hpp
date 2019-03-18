@@ -42,6 +42,7 @@ private:
     int _key_press;
     std::string _user_name;
      IGameModule *_game;
+    std::vector<std::string> _map;
 
 };
 

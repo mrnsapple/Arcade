@@ -8,7 +8,7 @@
 #ifndef NIBBLER_HPP_
 #define NIBBLER_HPP_
 
-#include "IGameModule.hpp"
+#include "../IGameModule.hpp"
 
 class Nibbler : public IGameModule {
 public:
@@ -18,11 +18,12 @@ public:
     void    init();
     void    play();
     char    *test();
-
+    std::vector<std::string> get_map();
     // std::list<std::string>  getStartMap();    
 
 protected:
     bool    hasInit;
+    std::vector<std::string> _map;
 private:
 };
 

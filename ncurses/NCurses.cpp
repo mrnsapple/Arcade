@@ -20,7 +20,6 @@ NCurses::~NCurses()
 
 void    NCurses::init()
 {
-    printf("In init\n");
     if ((stdscr = initscr()) == NULL )
         	exit(84);
 	initscr();
@@ -35,7 +34,12 @@ void NCurses::get_keypad(void)
 
 void    NCurses::print_map(void)
 {
-    wprintw(stdscr, "ejejejejje\n");
+    _map = _game->get_map();
+    for (std::string a : _map) {
+        wprintw(stdscr, a.c_str());
+        wprintw(stdscr, "\n");
+    
+    }
     
 }
 
@@ -48,6 +52,7 @@ void       NCurses::get_game()
     else {
        init_g *init_game =   (init_g *)dlsym(handler, "init");
         _game = init_game();
+        _game->init();
     }   
 }
 
@@ -87,18 +92,14 @@ void    NCurses::my_refresh()
 void    NCurses::start()
 {
     //get_name();
-        my_refresh();
+    //my_refresh();
 
     get_game();
-     if (_game != NULL) {
-       wprintw(stdscr, "It's nil\n");
-       wprintw(stdscr, _game->test());
-    
-    }
-    else
+    if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
+        get_keypad();
+    }
     get_keypad();
-  
     for (int loop = 0; loop == 0;) {
         my_refresh();
         print_map();
