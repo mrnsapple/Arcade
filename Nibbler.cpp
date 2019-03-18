@@ -17,6 +17,10 @@ Nibbler::Nibbler()
 Nibbler::~Nibbler()
 {
 }
+    char *Nibbler::test()
+    {
+        return ((char *)"test\n");
+    }
 
 void    Nibbler::init()
 {

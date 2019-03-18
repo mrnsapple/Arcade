@@ -90,10 +90,11 @@ void    NCurses::start()
         my_refresh();
 
     get_game();
-  if (_game != NULL) {
+     if (_game != NULL) {
        wprintw(stdscr, "It's nil\n");
-     _game->play();
-  }
+       wprintw(stdscr, _game->test());
+    
+    }
     else
         wprintw(stdscr, "It's null\n");
     get_keypad();
