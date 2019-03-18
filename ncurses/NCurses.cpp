@@ -43,7 +43,16 @@ void NCurses::get_keypad(void)
 void    NCurses::print_map(void)
 {
     std::vector<std::string> _map = _game->get_map();
+    std::vector<std::string> _number_map = _game->get_number_map();
+    
     for (std::string a : _map) {
+    
+        wprintw(stdscr, a.c_str());
+        wprintw(stdscr, "\n");
+    }
+    wprintw(stdscr, "\n");
+
+    for (std::string a : _number_map) {
         wprintw(stdscr, a.c_str());
         wprintw(stdscr, "\n");
     }

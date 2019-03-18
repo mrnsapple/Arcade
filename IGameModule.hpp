@@ -20,6 +20,7 @@ public:
     virtual bool    play() = 0;
     virtual char *   test() = 0;
     virtual std::vector<std::string> get_map() = 0;
+    virtual std::vector<std::string> get_number_map() = 0;
 
     // virtual std::list<std::string>  getStartMap() = 0;
 

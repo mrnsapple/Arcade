@@ -26,6 +26,8 @@ public:
     void    move_left(int x, int y);
     void    move_rigth(int x, int y);
 
+    std::vector<std::string> get_number_map();
+
 protected:
     bool    hasInit;
     std::vector<std::string> _map;

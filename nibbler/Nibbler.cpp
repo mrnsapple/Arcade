@@ -33,10 +33,18 @@ void    Nibbler::init()
         while ( std::getline (myfile,line) ) {
             _map.push_back(line);
         }
-        //for (int i = 5; i < 8; i++)
-        //    _map[_map[0].size()/2][i] = '>';
-        //_map[_map[0].size()/2][4] = '<';
+        
         myfile.close();
+        for (std::string a : _map) {
+            _number_map.push_back(a);
+        }
+        for (int i = 5; i < 8; i++) {
+            _map[_map[0].size()/2][i] = '>';
+            _number_map[_map[0].size()/2][i] = i - 3 + '0';
+        }
+        _map[_map[0].size()/2][4] = '<';
+        _number_map[_map[0].size()/2][4] = 1 + '0';
+        
     }
     else
         _map.push_back("Not work\n");
@@ -45,6 +53,12 @@ void    Nibbler::init()
 std::vector<std::string> Nibbler::get_map()
 {
     return _map;
+}
+
+
+std::vector<std::string> Nibbler::get_number_map()
+{
+    return _number_map;
 }
 
 
@@ -64,9 +78,23 @@ void    Nibbler::move_bot(int x, int y)
 
 void    Nibbler::move_left(int x, int y)
 { 
-    for (int i = x - 1; i <= x - 1 + _size; i++) {
-        _map[y][i] = _map[y][i + 1];
-    }
+    for (int y = 0; y < _number_map.size(); y++)
+        for (int x = 0; x < (_number_map[y]).size(); x++) {
+            if (_number_map[y][x] == _size + '0')
+                _number_map[y][x] = ' ';
+            else if (_number_map[y][x] > '0')
+                _number_map[y][x] += 1;
+        }
+    _number_map[y][x - 1] = '1';
+    for (int y = 0; y < _number_map.size(); y++)
+        for (int x = 0; x < (_number_map[y]).size(); x++) {
+            if (_number_map[y][x] == '1')
+                _map[y][x] = '<';
+            else if (_number_map[y][x] > '1')
+                _map[y][x] = '>';
+            else
+                _map[y][x] = _number_map[y][x];     
+        }
 }
 
 void    Nibbler::move_rigth(int x, int y)
@@ -109,6 +137,8 @@ bool    Nibbler::play(void)
 {
     for (int y = 0; y < _map.size(); y++)
         for (int x = 0; x < (_map[y]).size(); x++) {
+            if (_map[y][x] == '<' && _number_map[y][x] != '1')
+                return false;
             if (_map[y][x] == '<')
                 return (know_head(x, y));
         }
