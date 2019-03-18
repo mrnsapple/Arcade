@@ -18,6 +18,7 @@
 #include "TextObject.hpp"
 #include "RectObject.hpp"
 #include "../IGameModule.hpp"
+#include <dlfcn.h>
 
 class Sfml : public IDisplayModule {
 public:
@@ -71,7 +72,6 @@ public:
     void    moveSelectLib(Menu *lib, Scenarios);
     void    selectGame();
     void    runTransition(Scenarios);
-    void    nextGraphLib();
 
 protected:
     Scenarios   _scenario;
@@ -83,7 +83,7 @@ protected:
     RectObject  *select;
     Menu    *libMenu;
     Menu    *libGame;
-    sf::Clock   offTime;
+    IGameModule *game;    
 
 private:
 };

@@ -199,7 +199,14 @@ void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
-            std::cout << (std::string)libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString() << std::endl;
+            std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
+            std::cout << gameFile << std::endl;
+            void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
+            if (!handle)
+                exit(84);
+            init_g  *init_game = (init_g*)dlsym(handle, "init");
+            game = init_game();
+            game->init();
         }
     }
     
