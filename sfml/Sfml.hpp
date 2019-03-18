@@ -34,7 +34,7 @@ public:
         CHOOSELIB,
         CHOOSEGAME,
         SCORES,
-        TRANSITION
+        GAMEMODE
     };
     class Menu {
     public:

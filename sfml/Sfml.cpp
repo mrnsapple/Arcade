@@ -138,7 +138,11 @@ void    Sfml::start()
         if (_scenario == SCORES) {
             _win->clear(sf::Color::Green);
         }
-        
+        if (_scenario == GAMEMODE) {
+            _win->clear();
+            game->init();
+            game->play();
+        }
         _win->display();
     }
 }
@@ -206,10 +210,9 @@ void    Sfml::selectGame()
                 exit(84);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
-            game->init();
+            _scenario = GAMEMODE;
         }
     }
-    
 }
 
 void    Sfml::menuSelect()
