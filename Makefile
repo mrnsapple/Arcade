@@ -40,9 +40,11 @@ core	:	$(OBJ)
 	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
 
 games	:	$(GAMESOBJ)
+	mkdir -p games
 	g++ -shared -o games/lib_arcade_nibbler.so Nibbler.o $(SFMLFLAGS)
 
 graphicals	:	$(LIBOBJ)
+	mkdir -p lib
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
 	g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
 	g++ -shared -o lib/lib_arcade_ncurses.so NCurses.o -lncurses
