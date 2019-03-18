@@ -17,6 +17,7 @@ public:
 
     void    init();
     void    play();
+    // std::list<std::string>  getStartMap();    
 
 protected:
     bool    hasInit;

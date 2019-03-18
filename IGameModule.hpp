@@ -10,12 +10,16 @@
 
 #include <iostream>
 #include <string>
+#include <list>
+#include <vector>
 
 class IGameModule {
 public:
     virtual ~IGameModule() = default;
     virtual void    init() = 0;
     virtual void    play() = 0;
+    // virtual std::list<std::string>  getStartMap() = 0;
+
 
 protected:
 private:
