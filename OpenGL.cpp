@@ -29,10 +29,6 @@ void    OpenGL::init()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     _win = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_OPENGL);
     _glContext = SDL_GL_CreateContext(_win);
-    // GLenum status = glewInit();
-    // if (status != GLEW_OK)
-    //     std::cerr << "It's an error my dude, GLEW failed to initialize! :(" << std::endl;
-    // isClosed = false;
 }
 
 void    OpenGL::start()
