@@ -8,7 +8,7 @@
 #ifndef OPENGL_HPP_
 #define OPENGL_HPP_
 
-#include "IDisplayModule.hpp"
+#include "../IDisplayModule.hpp"
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 

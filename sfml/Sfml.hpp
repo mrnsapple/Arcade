@@ -14,10 +14,10 @@
 #include <sstream>
 #include <vector>
 #include "dirent.h"
-#include "IDisplayModule.hpp"
+#include "../IDisplayModule.hpp"
 #include "TextObject.hpp"
 #include "RectObject.hpp"
-#include "IGameModule.hpp"
+#include "../IGameModule.hpp"
 
 class Sfml : public IDisplayModule {
 public:
@@ -82,6 +82,7 @@ protected:
     RectObject  *select;
     Menu    *libMenu;
     Menu    *libGame;
+    sf::Clock   offTime;
 
 private:
 };

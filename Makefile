@@ -7,7 +7,7 @@
 
 SRC =	arcade.cpp
 
-LIBSRC	=	Sfml.cpp OpenGL.cpp ncurses/NCurses.cpp
+LIBSRC	=	sfml/Sfml.cpp opengl/OpenGL.cpp ncurses/NCurses.cpp
 
 GAMESSRC	=	Nibbler.cpp
 

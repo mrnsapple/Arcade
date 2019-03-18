@@ -138,31 +138,21 @@ void    Sfml::start()
         if (_scenario == SCORES) {
             _win->clear(sf::Color::Green);
         }
+        
         _win->display();
     }
 }
 
 void    Sfml::runTransition(Sfml::Scenarios scene)
 {
-    // TextObject  title(_win->getSize().x / 2 - 100, _win->getSize().y / 2 - 50);
-    _win->clear();
-    // title.setText("ARCADE...");
-    // title.text.setCharacterSize(40);
-    // title.blink();
-    // if (_frame.getElapsedTime().asMilliseconds() <= 2500) {
-        // std::cout << _frame.getElapsedTime().asMilliseconds() << std::endl;
-        // _win->draw(title.text);
-    // }
-    // if (_frame.getElapsedTime().asMilliseconds() > 2600) {
-        _scenario = scene;
-    // }
+    _scenario = scene;
 }
 
 void    Sfml::returnToMenu()
 {
     if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
-                _scenario = MENU;
+            _scenario = MENU;
     }
 }
 
@@ -220,7 +210,7 @@ void    Sfml::menuSelect()
     if (_scenario == MENU) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
             if (select->shape.getPosition().y == 100)
-                runTransition(CHOOSEGAME);
+                _scenario = CHOOSEGAME;
             if (select->shape.getPosition().y == 175)
                 _scenario = CHOOSELIB;
             if (select->shape.getPosition().y == 250)

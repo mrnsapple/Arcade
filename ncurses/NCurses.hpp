@@ -9,7 +9,7 @@
 #define NCURSES_HPP_
 
 #include <curses.h>
-#include "IDisplayModule.hpp"
+#include "../IDisplayModule.hpp"
 #include <stdlib.h>
 #include <curses.h>
 #include <sys/types.h>

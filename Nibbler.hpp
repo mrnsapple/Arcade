@@ -9,7 +9,7 @@
 #define NIBBLER_HPP_
 
 #include "IGameModule.hpp"
-#include "TextObject.hpp"
+#include "sfml/TextObject.hpp"
 
 class Nibbler : public IGameModule {
 public:
