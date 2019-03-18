@@ -220,8 +220,6 @@ void    Sfml::menuSelect()
     if (_scenario == MENU) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
             if (select->shape.getPosition().y == 100)
-                // _scenario = CHOOSEGAME;
-                // _scenario = TRANSITION;
                 runTransition(CHOOSEGAME);
             if (select->shape.getPosition().y == 175)
                 _scenario = CHOOSELIB;

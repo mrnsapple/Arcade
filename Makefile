@@ -7,7 +7,7 @@
 
 SRC =	arcade.cpp
 
-LIBSRC	=	Sfml.cpp
+LIBSRC	=	Sfml.cpp OpenGL.cpp
 
 GAMESSRC	=	Nibbler.cpp
 
@@ -17,11 +17,9 @@ LIBOBJ	=	$(LIBSRC:.cpp=.o)
 
 GAMESOBJ	=	$(GAMESSRC:.cpp=.o)
 
-SFMLFLAGS	=	-lsfml-graphics	\
-				-lsfml-system	\
-				-lsfml-window	\
-				-lsfml-audio	\
-				-lsfml-network
+SFMLFLAGS	=	-lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -lsfml-network
+
+OPENGLFLAGS =	-lSDL2 -lGLEW -lGL
 
 NAME	=	arcade
 
@@ -46,6 +44,7 @@ games	:	$(GAMESOBJ)
 
 graphicals	:	$(LIBOBJ)
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
+	g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
 
 clean:
 	rm -rf $(LIBOBJ)
