@@ -175,6 +175,11 @@ void    Sfml::loadMap()
     for (auto rect : arrayMap) {
         _win->draw(rect->shape);
     }
+    TextObject  *score = new TextObject(5, 350);
+    std::stringstream   ss;
+    ss << (game->get_size() - 4);
+    score->setText("score : " + ss.str());
+    _win->draw(score->text);
     arrayMap.clear();
 }
 
@@ -247,7 +252,7 @@ void    Sfml::moveSelectLib(Sfml::Menu *lib, Sfml::Scenarios scenario)
 void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
             std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
             // std::cout << gameFile << std::endl;
             void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
