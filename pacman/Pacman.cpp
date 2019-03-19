@@ -24,22 +24,13 @@ char *Pacman::test()
 void    Pacman::init()
 {
     std::string line;
-    std::ifstream myfile ("pacman/map.txt");
+    std::ifstream myfile ("pacman/map_final.txt");
 
     if (myfile.is_open()) {
         while ( std::getline (myfile,line) ) {
             _map.push_back(line);
         }
         myfile.close();
-        for (std::string a : _map) {
-            _number_map.push_back(a);
-        }
-        for (int i = 5; i < 8; i++) {
-            _map[_map[0].size()/2][i] = '>';
-            _number_map[_map[0].size()/2][i] = i - 3 + '0';
-        }
-        _map[_map[0].size()/2][4] = '<';
-        _number_map[_map[0].size()/2][4] = 1 + '0';
     }
     else
         _map.push_back("Not work\n");

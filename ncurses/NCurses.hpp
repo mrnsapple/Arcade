@@ -34,6 +34,7 @@ public:
     void    get_keypad_not_wait(void);
 
     void    print_map(void);
+
     void    get_name();
     void    get_game();
     void    specify_game(char *path_to_game);
@@ -46,7 +47,7 @@ private:
     int _key_press;
     std::string _user_name;
      IGameModule *_game;
-
+    std::string _game_name;
 };
 
 extern "C" IDisplayModule *init() {

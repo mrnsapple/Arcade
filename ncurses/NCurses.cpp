@@ -57,8 +57,7 @@ void NCurses::get_keypad(void)
 void    NCurses::print_map(void)
 {
     std::vector<std::string> _map = _game->get_map();
-    std::vector<std::string> _number_map = _game->get_number_map();
-    
+    //std::vector<std::string> _number_map = _game->get_number_map();
     for (std::string a : _map) {
     
         wprintw(stdscr, a.c_str());
@@ -102,6 +101,7 @@ void       NCurses::get_game()
         if (_key_press != '\n')
             game_selected.append(val);
     }
+    _game_name = game_selected;
     if (game_selected.compare("nibbler") == 0)
         specify_game((char *)"games/lib_arcade_nibbler.so");
     else if (game_selected.compare("pacman") == 0)
@@ -115,9 +115,7 @@ void       NCurses::get_game()
 	    attron(COLOR_PAIR(2));
         get_game();
     }
-    
 }
-
 
 void    NCurses::get_name()
 {
@@ -157,21 +155,24 @@ void    NCurses::start()
 {
     get_name();
     my_refresh();
-
     get_game();
     if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
-        stop();
+       // stop();
     }
+    wprintw(stdscr, "after it's null\n");
+        get_keypad();
+
     for (int loop = 0; loop == 0;) {
         my_refresh();
+        //if (_game_name.compare("nibbler") == 0)
         print_map();
         //delay(500000);                        
         get_keypad_not_wait();
         set_direc();
         sleep(1);
-        if (_game->play() == false)
-            loop = 1;
+        //if (_game->play() == false)
+        //    loop = 1;
     }
    this->stop(); 
 }
@@ -182,6 +183,7 @@ void    NCurses::stop()
 	//refresh();
     exit(0);
 }
+
 std::string NCurses::setUserName()
 {
     return "Anon";
