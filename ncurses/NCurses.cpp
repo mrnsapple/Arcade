@@ -146,11 +146,13 @@ void    NCurses::my_refresh()
     //init_pair(1, COLOR_RED, COLOR_BLACK);
 	//attron(COLOR_PAIR(1));
 }
+
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
     while (goal > clock());
 }
+
 void    NCurses::start()
 {
     get_name();
