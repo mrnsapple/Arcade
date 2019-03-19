@@ -47,6 +47,7 @@ void    Sfml::init()
         libGame->_libs.push_back(new TextObject(5, 25 * (i + 1)));
         libGame->_libs[i]->setText(libGame->libName[i]);
     }
+    gameStatus = true;
 }
 
 static bool endsWith(const std::string& str, const std::string& suffix)
@@ -139,9 +140,13 @@ void    Sfml::start()
             _win->clear(sf::Color::Green);
         }
         if (_scenario == GAMEMODE) {
+            if (gameStatus == false) {
+                _win->close();
+            }
+            _win->setFramerateLimit(5);
             _win->clear();
             loadMap();
-            game->play();
+            gameStatus = game->play();
         }
         _win->display();
     }
@@ -171,7 +176,6 @@ void    Sfml::loadMap()
         _win->draw(rect->shape);
     }
     arrayMap.clear();
-    // sleep(1);
 }
 
 void    Sfml::set_direc()
