@@ -142,12 +142,8 @@ void    Sfml::start()
             _win->clear();
             game->init();
             loadMap();
-            for (auto rect : arrayMap) {
-            // for (std::vector<RectObject*>::iterator rect = arrayMap.begin(); rect != arrayMap.end(); ++rect) {
-                // _win->draw((*rect)->shape);
-                _win->draw(rect->shape);
-            }
-            arrayMap.clear();
+            set_direc();
+            game->play();
         }
         _win->display();
     }
@@ -155,18 +151,44 @@ void    Sfml::start()
 
 void    Sfml::loadMap()
 {
-    map = game->get_map();
+    std::vector<std::string>    map = game->get_map();
 
     if (arrayMap.empty()) {
         for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it) {
             for (std::string::iterator c = it->begin(); c != it->end(); ++c) {
                 if (*c == '#')
-                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Red));
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Blue));
                 if (*c == ' ')
-                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::White));
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Transparent));
+                if (*c == '$')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Yellow));
+                if (*c == '>')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Red));
+                if (*c == '<')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Cyan));
             }
         }
     }
+    for (auto rect : arrayMap) {
+        _win->draw(rect->shape);
+    }
+    arrayMap.clear();
+}
+
+void    Sfml::set_direc()
+{
+    // if (_scenario == GAMEMODE) {
+    if (_event.type == sf::Event::KeyPressed) {
+        if (_event.key.code == sf::Keyboard::Up)
+            game->set_dir('t');
+        if (_event.key.code == sf::Keyboard::Down)
+            game->set_dir('d');
+        if (_event.key.code == sf::Keyboard::Left)
+            game->set_dir('l');
+        if (_event.key.code == sf::Keyboard::Right)
+            game->set_dir('r');
+    }
+    // }
 }
 
 void    Sfml::runTransition(Sfml::Scenarios scene)
@@ -266,6 +288,7 @@ void    Sfml::handleEvents()
         menuSelect();
         selectGame();
         returnToMenu();
+
     }
 }
 

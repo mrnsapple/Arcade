@@ -73,6 +73,7 @@ public:
     void    selectGame();
     void    runTransition(Scenarios);
     void    loadMap();
+    void    set_direc();
 
 protected:
     Scenarios   _scenario;
@@ -85,7 +86,7 @@ protected:
     Menu    *libMenu;
     Menu    *libGame;
     IGameModule *game;
-    std::vector<std::string>    map;
+    // std::vector<std::string>    map;
     std::vector<RectObject*> arrayMap;
 
 private:
