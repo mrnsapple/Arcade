@@ -6,9 +6,6 @@
 */
 
 #include "OpenGL.hpp"
-#include <iostream>
-#include <stdlib.h>
-#include <GL/glu.h>
 
 OpenGL::OpenGL()
 {
