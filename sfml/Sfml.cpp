@@ -153,7 +153,11 @@ void    Sfml::loadMap()
 {
     std::vector<std::string>    map = game->get_map();
 
-    if (arrayMap.empty()) {
+
+    for (std::string str : map) {
+        std::cout << str << std::endl;
+    }
+    // if (arrayMap.empty()) {
         for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it) {
             for (std::string::iterator c = it->begin(); c != it->end(); ++c) {
                 if (*c == '#')
@@ -168,11 +172,11 @@ void    Sfml::loadMap()
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Cyan));
             }
         }
-    }
+    // }
     for (auto rect : arrayMap) {
         _win->draw(rect->shape);
     }
-    arrayMap.clear();
+    // arrayMap.clear();
 }
 
 void    Sfml::set_direc()

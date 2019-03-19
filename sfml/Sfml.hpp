@@ -19,6 +19,7 @@
 #include "RectObject.hpp"
 #include "../IGameModule.hpp"
 #include <dlfcn.h>
+#include <unistd.h>
 
 class Sfml : public IDisplayModule {
 public:
@@ -86,7 +87,6 @@ protected:
     Menu    *libMenu;
     Menu    *libGame;
     IGameModule *game;
-    // std::vector<std::string>    map;
     std::vector<RectObject*> arrayMap;
 
 private:
