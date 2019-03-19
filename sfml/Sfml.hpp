@@ -72,7 +72,6 @@ public:
     
     void    moveSelectLib(Menu *lib, Scenarios);
     void    selectGame();
-    void    runTransition(Scenarios);
     void    loadMap();
     void    set_direc();
 

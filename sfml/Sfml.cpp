@@ -204,11 +204,6 @@ void    Sfml::set_direc()
     }
 }
 
-void    Sfml::runTransition(Sfml::Scenarios scene)
-{
-    _scenario = scene;
-}
-
 void    Sfml::returnToMenu()
 {
     if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
@@ -261,7 +256,6 @@ void    Sfml::selectGame()
     if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
             std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
-            // std::cout << gameFile << std::endl;
             void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
@@ -294,6 +288,7 @@ void    Sfml::stop()
 void    Sfml::handleEvents()
 {
     while (_win->pollEvent(_event)) {
+        _win->setKeyRepeatEnabled(true);
         setUserName();
         stop();
         moveSelect();
