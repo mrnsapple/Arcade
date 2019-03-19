@@ -150,13 +150,13 @@ void    NCurses::my_refresh()
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
-    while (goal > clocrefreshk());
+    while (goal > clock());
 }
 
 void    NCurses::start()
 {
-    //get_name();
-    //my_refresh();
+    get_name();
+    my_refresh();
 
     get_game();
     if (_game == NULL) {
@@ -182,7 +182,6 @@ void    NCurses::stop()
 	//refresh();
     exit(0);
 }
-
 std::string NCurses::setUserName()
 {
     return "Anon";
