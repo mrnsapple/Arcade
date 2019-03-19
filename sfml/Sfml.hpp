@@ -88,6 +88,7 @@ protected:
     Menu    *libGame;
     IGameModule *game;
     std::vector<RectObject*> arrayMap;
+    sf::Clock   offTime;
 
 private:
 };

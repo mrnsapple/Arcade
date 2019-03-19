@@ -140,9 +140,7 @@ void    Sfml::start()
         }
         if (_scenario == GAMEMODE) {
             _win->clear();
-            game->init();
             loadMap();
-            set_direc();
             game->play();
         }
         _win->display();
@@ -153,11 +151,7 @@ void    Sfml::loadMap()
 {
     std::vector<std::string>    map = game->get_map();
 
-
-    for (std::string str : map) {
-        std::cout << str << std::endl;
-    }
-    // if (arrayMap.empty()) {
+    if (arrayMap.empty()) {
         for (std::vector<std::string>::iterator it = map.begin(); it != map.end(); ++it) {
             for (std::string::iterator c = it->begin(); c != it->end(); ++c) {
                 if (*c == '#')
@@ -172,27 +166,26 @@ void    Sfml::loadMap()
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Cyan));
             }
         }
-    // }
+    }
     for (auto rect : arrayMap) {
         _win->draw(rect->shape);
     }
-    // arrayMap.clear();
+    arrayMap.clear();
+    // sleep(1);
 }
 
 void    Sfml::set_direc()
 {
-    // if (_scenario == GAMEMODE) {
-    if (_event.type == sf::Event::KeyPressed) {
-        if (_event.key.code == sf::Keyboard::Up)
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::Up)
             game->set_dir('t');
-        if (_event.key.code == sf::Keyboard::Down)
-            game->set_dir('d');
-        if (_event.key.code == sf::Keyboard::Left)
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::Down)
+            game->set_dir('b');
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Left)
             game->set_dir('l');
-        if (_event.key.code == sf::Keyboard::Right)
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
             game->set_dir('r');
     }
-    // }
 }
 
 void    Sfml::runTransition(Sfml::Scenarios scene)
@@ -256,6 +249,7 @@ void    Sfml::selectGame()
             void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
+            game->init();
             _scenario = GAMEMODE;
         }
     }
@@ -292,7 +286,7 @@ void    Sfml::handleEvents()
         menuSelect();
         selectGame();
         returnToMenu();
-
+        set_direc();
     }
 }
 
