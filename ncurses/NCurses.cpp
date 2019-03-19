@@ -158,11 +158,9 @@ void    NCurses::start()
     get_game();
     if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
-       // stop();
+        stop();
     }
     wprintw(stdscr, "after it's null\n");
-        get_keypad();
-
     for (int loop = 0; loop == 0;) {
         my_refresh();
         //if (_game_name.compare("nibbler") == 0)
@@ -171,8 +169,8 @@ void    NCurses::start()
         get_keypad_not_wait();
         set_direc();
         sleep(1);
-        //if (_game->play() == false)
-        //    loop = 1;
+        if (_game->play() == false)
+           loop = 1;
     }
    this->stop(); 
 }

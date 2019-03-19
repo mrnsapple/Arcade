@@ -30,13 +30,14 @@ public:
     void    increase_numbers_map(int x, int y);
     void    number_map_to_map();
     std::vector<std::string> get_number_map();
-
+    void move_ghost();
 protected:
     bool    hasInit;
     std::vector<std::string> _map;
     std::vector<std::string> _number_map;
     char _dir;
     int _size;
+
 private:
 };
 

@@ -18,6 +18,8 @@ Nibbler::Nibbler()
 Nibbler::~Nibbler()
 {
 }
+void Nibbler::move_ghost()
+{}
 
 char *Nibbler::test()
 {

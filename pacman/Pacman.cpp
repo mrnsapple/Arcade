@@ -10,6 +10,9 @@
 
 Pacman::Pacman()
 {
+    hasInit = false;
+    _dir = 't';
+    _size = 4;
 }
 
 Pacman::~Pacman()
@@ -24,7 +27,7 @@ char *Pacman::test()
 void    Pacman::init()
 {
     std::string line;
-    std::ifstream myfile ("pacman/map_final.txt");
+    std::ifstream myfile ("pacman/map.txt");
 
     if (myfile.is_open()) {
         while ( std::getline (myfile,line) ) {
@@ -50,9 +53,11 @@ std::vector<std::string> Pacman::get_number_map()
 
 void    Pacman::move_top(int x, int y)
 { 
-    increase_numbers_map(x, y - 1);
-    _number_map[y - 1][x] = '1';
-    number_map_to_map();
+    if (_map[y - 1][x] == 'o')
+        _size++;
+    
+    _map[y - 1][x] = 'C';
+    _map[y][x] = ' ';
 }
 int     Pacman::get_size(void)
 {
@@ -61,28 +66,26 @@ int     Pacman::get_size(void)
 
 void    Pacman::move_bot(int x, int y)
 {
-    increase_numbers_map(x, y + 1);
-    _number_map[y + 1][x] = '1';
-    number_map_to_map();
-}
-
-void    Pacman::increase_numbers_map(int x, int y)
-{
-    int eat = 0;
+    if (_map[y + 1][x] == 'o')
+        _size++;
     
-    if (_number_map[y][x] == '$')
-        eat = 1;
-    for (int y = 0; y < _number_map.size(); y++)
-        for (int x = 0; x < (_number_map[y]).size(); x++) {
-            if (_number_map[y][x] == _size + '0' && eat == 1) {
-                _size++;
-                _number_map[y][x] == _size + '0';
+    _map[y + 1][x] = 'C';
+    _map[y][x] = ' ';
+}
+void Pacman::move_ghost()
+{}
+void    Pacman::increase_numbers_map(int x, int y) // move the goast
+{
+    int gost_pos_x;
+    int gost_pos_y;
+
+    for (int y = 0; y < _map.size(); y++)
+        for (int x = 0; x < (_map[y]).size(); x++)
+            if (_map[y][x] == '$') {
+              //  C_pos.push_bach(y);
+              //  C_pos.push_bach(x); 
             }
-            else if(_number_map[y][x] == _size + '0')
-                _number_map[y][x] = ' ';
-            else if (_number_map[y][x] > '0')
-                _number_map[y][x] += 1;
-        }
+         
 }
 
 void    Pacman::number_map_to_map()
@@ -100,9 +103,10 @@ void    Pacman::number_map_to_map()
 
 void    Pacman::move_left(int x, int y)
 { 
-    increase_numbers_map(x - 1, y);
-    _number_map[y][x - 1] = '1';
-    number_map_to_map();
+    if (_map[y][x - 1] == 'o')
+        _size++;
+    _map[y][x - 1] = 'C';
+    _map[y][x] = ' ';
 }
 
 void Pacman::set_dir(char dir)
@@ -112,41 +116,48 @@ void Pacman::set_dir(char dir)
 
 void    Pacman::move_rigth(int x, int y)
 {
- increase_numbers_map(x + 1, y);
-    _number_map[y][x + 1] = '1';
-    number_map_to_map();}
+    if (_map[y][x + 1] == 'o')
+        _size++;
+    
+    _map[y][x + 1] = 'C';
+    _map[y][x] = ' ';
+}
 
 bool    Pacman::know_head(int x, int y)
 {
-    if (_dir == 'l') {
-        if (_map[y][x - 1] != '#' && _map[y][x - 1] != '>')
+    increase_numbers_map(x, y);
+   if (_dir == 'l') {
+        if (_map[y][x - 1] != '#' && _map[y][x - 1] != '$')
             move_left(x, y);
+        else if (_map[y][x - 1] == '$')
+            return false;
         else
-            return false;//else if (_map[y][x - 1] == '>')
-        //    return true;
-        
+            return true;
     }
-    if (_dir == 'r') {
-        if (_map[y][x + 1] != '#' && _map[y][x + 1] != '>')
+   if (_dir == 'r') {
+        if (_map[y][x + 1] != '#' && _map[y][x + 1] != '$')
             move_rigth(x, y);
+        else if (_map[y][x + 1] == '$')
+            return false;
         else
-            return false;  //else if (_map[y][x + 1] == '>')
-        //    return true;
+            return true;
         
     }
     if (_dir == 'b') {
-        if (_map[y + 1][x] != '#' && _map[y + 1][x] != '>')
+        if (_map[y + 1][x] != '#' && _map[y + 1][x] != '$')
             move_bot(x, y);
+        else if (_map[y + 1][x] == '$')
+            return false;
         else
-            return false;//else if (_map[y + 1][x] == '>')
-        //    return true;
+            return true;
     }
     if (_dir == 't') {
-        if (_map[y - 1][x] != '#' && _map[y - 1][x] != '>')
+        if (_map[y - 1][x] != '#' && _map[y - 1][x] != '$')
             move_top(x, y);
+        else if (_map[y - 1][x] == '$')
+            return false;
         else
-            return false;//else if (_map[y - 1][x] == '>')
-        //    return true;
+            return true;
     } 
     return true; 
 }
@@ -155,9 +166,7 @@ bool    Pacman::play(void)
 {
     for (int y = 0; y < _map.size(); y++)
         for (int x = 0; x < (_map[y]).size(); x++) {
-            if (_map[y][x] == '<' && _number_map[y][x] != '1')
-                return false;
-            if (_map[y][x] == '<')
+            if (_map[y][x] == 'C')
                 return (know_head(x, y));
         }
     // wprintw(stdscr, "In nibler\n");
