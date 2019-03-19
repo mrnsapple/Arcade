@@ -21,7 +21,6 @@ void    Sfml::init()
 {
     _scenario = USERINPUT;
     _win = new sf::RenderWindow({820, 580}, "Arcade", sf::Style::Default);
-    _win->setFramerateLimit(60);
     _menu.push_back(new TextObject(5, 25));
     _menu[0]->setText("Enter your name: ");
     _menu.push_back(new TextObject(5, 100));
@@ -104,6 +103,7 @@ void    Sfml::setLibFiles()
 void    Sfml::start()
 {
     while (_win->isOpen()) {
+        _win->setFramerateLimit(60);
         handleEvents();
         if (_scenario == USERINPUT) {
             _win->clear();
@@ -194,6 +194,8 @@ void    Sfml::set_direc()
             game->set_dir('l');
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
             game->set_dir('r');
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
+            _scenario = CHOOSEGAME;
     }
 }
 

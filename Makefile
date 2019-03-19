@@ -7,7 +7,10 @@
 
 SRC =	arcade.cpp
 
-LIBSRC	=	sfml/Sfml.cpp opengl/OpenGL.cpp ncurses/NCurses.cpp ncurses/NCurses_pacman_only.cpp
+LIBSRC	=	sfml/Sfml.cpp	\
+			opengl/OpenGL.cpp	\
+			ncurses/NCurses.cpp	\
+			ncurses/NCurses_pacman_only.cpp
 
 GAMESSRC	=	nibbler/Nibbler.cpp	\
 				pacman/Pacman.cpp
@@ -18,11 +21,14 @@ LIBOBJ	=	$(LIBSRC:.cpp=.o)
 
 GAMESOBJ	=	$(GAMESSRC:.cpp=.o)
 
-SFMLFLAGS	=	-lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio -lsfml-network
+SFMLFLAGS	=	-lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio
 
 OPENGLFLAGS =	-lSDL2 -lGLEW -lGL
 
 NAME	=	arcade
+
+%.o	:	%.cpp
+	g++ $< -c -fpic
 
 all	:	$(NAME)
 
@@ -31,19 +37,13 @@ $(NAME)	:
 	@$(MAKE) games --no-print-directory
 	@$(MAKE) graphicals	--no-print-directory
 
-$(LIBSRC:.cpp=.o)	:
-	g++ $(LIBSRC) -c -fpic 
-
-$(GAMESSRC:.cpp=.o)	:
-	g++ $(GAMESSRC) -c -fpic
-
 core	:	$(OBJ)
 	g++ -g -Wall -Werror -Wextra -o $(NAME) $(SRC) -ldl
 
 games	:	$(GAMESOBJ)
 	mkdir -p games
-	g++ -shared -o games/lib_arcade_nibbler.so Nibbler.o $(SFMLFLAGS)
-	g++ -shared -o games/lib_arcade_pacman.so Pacman.o $(SFMLFLAGS)
+	g++ -shared -o games/lib_arcade_nibbler.so Nibbler.o 
+	g++ -shared -o games/lib_arcade_pacman.so Pacman.o
 
 graphicals	:	$(LIBOBJ)
 	mkdir -p lib
