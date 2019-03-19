@@ -44,8 +44,7 @@ void    NCurses::set_direc(void)
     if (_key_press == KEY_LEFT)
         _game->set_dir('l'); 
     if (_key_press == KEY_RIGHT)
-        _game->set_dir('r');
-    
+        _game->set_dir('r');   
 }
 
 void NCurses::get_keypad(void)
@@ -95,7 +94,7 @@ void       NCurses::get_game()
     for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         wprintw(stdscr, "Welcome ");
         wprintw(stdscr, _user_name.c_str());
-        wprintw(stdscr, ".\n\nAvailable games:\n\tnibbler\n\nChoose a game by writing it's name: ");
+        wprintw(stdscr, ".\n\nAvailable games:\n\tnibbler\n\tpacman\n\nChoose a game by writing it's name: ");
         wprintw(stdscr, game_selected.c_str());
         get_keypad();
         my_refresh();
@@ -104,7 +103,9 @@ void       NCurses::get_game()
             game_selected.append(val);
     }
     if (game_selected.compare("nibbler") == 0)
-        specify_game((char *)"games/lib_arcade_nibbler.so"); 
+        specify_game((char *)"games/lib_arcade_nibbler.so");
+    else if (game_selected.compare("pacman") == 0)
+        specify_game((char *)"games/lib_arcade_pacman.so"); 
     else {
         init_pair(1, COLOR_RED, COLOR_BLACK);
 	    attron(COLOR_PAIR(1));
@@ -133,7 +134,6 @@ void    NCurses::get_name()
         wprintw(stdscr, "Enter your name: ");
         wprintw(stdscr, _user_name.c_str());
     }
-    
 }
 
 void    NCurses::my_refresh()
@@ -150,13 +150,13 @@ void    NCurses::my_refresh()
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
-    while (goal > clock());
+    while (goal > clocrefreshk());
 }
 
 void    NCurses::start()
 {
-    get_name();
-    my_refresh();
+    //get_name();
+    //my_refresh();
 
     get_game();
     if (_game == NULL) {
@@ -180,8 +180,9 @@ void    NCurses::stop()
 {
     endwin();
 	//refresh();
-    exit (0);
+    exit(0);
 }
+
 std::string NCurses::setUserName()
 {
     return "Anon";

@@ -8,13 +8,40 @@
 #ifndef PACMAN_HPP_
     #define PACMAN_HPP_
 
-class Pacman {
-	public:
-		Pacman();
-		~Pacman();
+#include "../IGameModule.hpp"
 
-	protected:
-	private:
+class Pacman : public IGameModule {
+public:
+    Pacman();
+    ~Pacman();
+
+    void    init();
+    bool    play();
+    char    *test();
+    std::vector<std::string> get_map();
+    bool    know_head(int x, int y);
+    // std::list<std::string>  getStartMap();    
+    void    move_top(int x, int y);
+    void    move_bot(int x, int y);
+    void    move_left(int x, int y);
+    void    move_rigth(int x, int y);
+    void    set_dir(char dir);
+    int     get_size();
+    void    increase_numbers_map(int x, int y);
+    void    number_map_to_map();
+    std::vector<std::string> get_number_map();
+
+protected:
+    bool    hasInit;
+    std::vector<std::string> _map;
+    std::vector<std::string> _number_map;
+    char _dir;
+    int _size;
+private:
 };
 
-#endif /* !PACMAN_HPP_ */
+extern "C" IGameModule *init() {
+    return new Pacman;
+}
+
+#endif
