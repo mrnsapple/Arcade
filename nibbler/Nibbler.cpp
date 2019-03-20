@@ -18,8 +18,10 @@ Nibbler::Nibbler()
 Nibbler::~Nibbler()
 {
 }
-void Nibbler::move_ghost()
-{}
+
+bool Nibbler::move_ghost(int gost_y, int gost_x, int y, int x)
+{
+}
 
 char *Nibbler::test()
 {

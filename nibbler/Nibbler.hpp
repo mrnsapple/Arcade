@@ -30,7 +30,7 @@ public:
     void    increase_numbers_map(int x, int y);
     void    number_map_to_map();
     std::vector<std::string> get_number_map();
-    void move_ghost();
+    bool move_ghost(int gost_y, int gost_x, int y, int x);
 
 protected:
     bool    hasInit;
