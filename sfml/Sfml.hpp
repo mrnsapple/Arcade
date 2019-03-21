@@ -20,6 +20,7 @@
 #include "../IGameModule.hpp"
 #include <dlfcn.h>
 #include <unistd.h>
+#include <fstream>
 
 class Sfml : public IDisplayModule {
 public:

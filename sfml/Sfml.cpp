@@ -137,10 +137,31 @@ void    Sfml::start()
                 _win->draw(lib->text);
         }
         if (_scenario == SCORES) {
-            _win->clear(sf::Color::Green);
+            _win->clear();
+            std::ifstream file("scores.txt");
+            std::string str;
+            std::vector<TextObject*>    score;
+            TextObject  title(5, 0);
+            title.setText("Last 10");
+            if (file.is_open()) {
+                for (int i = 0; std::getline(file, str); i++) {
+                    score.push_back(new TextObject(5, 25 * (i + 1)));
+                    score[i]->setText(str);
+                }
+                file.close();
+            }
+            _win->draw(title.text);
+            for (auto obj : score) {
+                _win->draw(obj->text);
+            }
         }
         if (_scenario == GAMEMODE) {
             if (gameStatus == false) {
+                std::ofstream   file("scores.txt", std::fstream::app);
+                if (file.is_open()) {
+                    file << _userName << " " << (game->get_size() - 4) << "\n";
+                    file.close();
+                }
                 _win->close();
             }
             _win->setFramerateLimit(5);
