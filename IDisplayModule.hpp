@@ -19,6 +19,7 @@ public:
     virtual void    stop() = 0;
     virtual std::string setUserName() = 0;
     virtual void    NextLib() = 0;
+    virtual void    PrevLib() = 0;
 
 protected:
 private:

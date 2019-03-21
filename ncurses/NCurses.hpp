@@ -30,6 +30,7 @@ public:
     void    start();
     void    stop();
     void    NextLib();
+    void    PrevLib();
 
     void    my_refresh();
     void    get_keypad(void);

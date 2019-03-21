@@ -31,6 +31,7 @@ public:
     void    start();
     void    stop();
     void    NextLib();
+    void    PrevLib();
 
     enum Scenarios {
         USERINPUT,
