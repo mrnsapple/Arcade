@@ -26,6 +26,11 @@ void    OpenGL::NextLib()
     
 }
 
+void    OpenGL::PrevLib()
+{
+
+}
+
 void    OpenGL::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);

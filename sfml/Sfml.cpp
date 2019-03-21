@@ -41,6 +41,26 @@ void    Sfml::NextLib()
     }
 }
 
+void    Sfml::PrevLib()
+{
+    if (_scenario != USERINPUT) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::J) {
+            auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
+            int num = std::distance(libMenu->libName.begin(), it);
+            num -= 1;
+            if (num < 0)
+                num = libMenu->libName.size() - 1;
+            std::string lib = "lib/" + libMenu->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_t  *init_lib = (init_t*)dlsym(handle, "init");
+            IDisplayModule  *display = init_lib();
+            display->init();
+            _win->close();
+            display->start();            
+        }
+     }
+}
+
 void    Sfml::init()
 {
     _win = new sf::RenderWindow({820, 580}, "SFML - Arcade", sf::Style::Default);
@@ -340,6 +360,7 @@ void    Sfml::handleEvents()
         returnToMenu();
         set_direc();
         NextLib();
+        PrevLib();
     }
 }
 

@@ -23,6 +23,11 @@ NCurses::~NCurses()
 
 void    NCurses::NextLib()
 {
+
+}
+
+void    NCurses::PrevLib()
+{
     
 }
 

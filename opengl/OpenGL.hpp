@@ -21,6 +21,7 @@ public:
     void    start();
     void    stop();
     void    NextLib();
+    void    PrevLib();
 
     std::string setUserName();
 

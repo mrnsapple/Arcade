@@ -22,6 +22,7 @@ public:
     virtual void    required_actions() = 0;
     virtual void    game_loop() = 0;
     virtual void    initialize_values() = 0;
+    virtual void    PrevLib() = 0;
 
 protected:
 private:
