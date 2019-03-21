@@ -17,6 +17,10 @@ Sfml::~Sfml()
 
 }
 
+void    required_actions()
+{}
+
+
 void    Sfml::NextLib()
 {
     if (_scenario != USERINPUT) {

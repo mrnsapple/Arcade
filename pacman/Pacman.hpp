@@ -31,7 +31,7 @@ public:
     void    number_map_to_map();
     std::vector<std::string> get_number_map();
     bool move_ghost(int gost_y, int gost_x, int y, int x);
-
+    void    initialize_values();
 protected:
     bool    hasInit;
     std::vector<std::string> _map;

@@ -28,27 +28,35 @@ char *Nibbler::test()
     return ((char *)"test\n");
 }
 
+void    Nibbler::initialize_values()
+{
+    // INITIALIZE VAR
+    _map.clear();
+    _number_map.clear();
+     hasInit = false;
+    _dir = 'l';
+    _size = 4;
+    // END INITIALIZE VAR
+}
+
 void    Nibbler::init()
 {
     std::string line;
     std::ifstream myfile ("nibbler/map.txt");
-
+    
+    initialize_values();
     if (myfile.is_open()) {
-        while ( std::getline (myfile,line) ) {
+        while ( std::getline (myfile,line) )
             _map.push_back(line);
-        }
-        
         myfile.close();
-        for (std::string a : _map) {
+        for (std::string a : _map)
             _number_map.push_back(a);
-        }
         for (int i = 5; i < 8; i++) {
             _map[_map[0].size()/2][i] = '>';
             _number_map[_map[0].size()/2][i] = i - 3 + '0';
         }
         _map[_map[0].size()/2][4] = '<';
-        _number_map[_map[0].size()/2][4] = 1 + '0';
-        
+        _number_map[_map[0].size()/2][4] = 1 + '0';    
     }
     else
         _map.push_back("Not work\n");

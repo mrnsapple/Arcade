@@ -55,6 +55,8 @@ void    NCurses::set_direc(void)
 void NCurses::get_keypad(void)
 {
     noecho();
+    nodelay(stdscr, FALSE);
+
     keypad(stdscr, TRUE);
     _key_press = getch();
 }
@@ -156,6 +158,23 @@ void delay(unsigned int mseconds)
     while (goal > clock());
 }
 
+void    NCurses::game_loop()
+{
+    for (int loop = 0; loop == 0;) {
+        my_refresh();
+        //if (_game_name.compare("nibbler") == 0)
+        print_map();
+        wprintw(stdscr, "key:press:%d, %3d, %c\n",_key_press, _key_press, _key_press);
+        //delay(500000);                        
+        get_keypad_not_wait();
+        required_actions();
+        set_direc();
+        sleep(1);
+        if (_game->play() == false)
+           loop = 1;
+    }
+}
+
 void    NCurses::start()
 {
     get_name();
@@ -164,30 +183,46 @@ void    NCurses::start()
     if (_game == NULL) {
         wprintw(stdscr, "It's null\n");
         stop();
+        exit (84);
     }
-    wprintw(stdscr, "after it's null\n");
-    for (int loop = 0; loop == 0;) {
-        my_refresh();
-        //if (_game_name.compare("nibbler") == 0)
-        print_map();
-        //delay(500000);                        
-        get_keypad_not_wait();
-        set_direc();
-        sleep(1);
-        if (_game->play() == false)
-           loop = 1;
-    }
+    game_loop();
+    
    this->stop(); 
+   exit (0);
 }
 
 void    NCurses::stop()
 {
     endwin();
 	//refresh();
-    exit(0);
 }
 
 std::string NCurses::setUserName()
 {
     return "Anon";
+}
+
+void    NCurses::required_actions()
+{
+    if (_key_press == 27) {// ESQ, exit
+        this->stop();
+        exit (0);
+    }
+    if (_key_press == 10) {// Enter, restart the game
+        _game->init();
+        this->game_loop();
+    }   
+    if (_key_press == 'p') {
+        _game->initialize_values();
+        initialize_values();
+        this->start();
+    }
+}
+
+void NCurses::initialize_values()
+{
+    _key_press = 0;
+    _user_name = "";
+    _game = NULL;
+    _game_name = "";
 }

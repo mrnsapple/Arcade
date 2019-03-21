@@ -8,9 +8,9 @@
 SRC =	arcade.cpp
 
 LIBSRC	=	sfml/Sfml.cpp	\
-			opengl/OpenGL.cpp	\
 			ncurses/NCurses.cpp	\
 			ncurses/NCurses_pacman_only.cpp
+#opengl/OpenGL.cpp	\
 
 GAMESSRC	=	nibbler/Nibbler.cpp	\
 				pacman/Pacman.cpp
@@ -48,7 +48,7 @@ games	:	$(GAMESOBJ)
 graphicals	:	$(LIBOBJ)
 	mkdir -p lib
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
-	g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
+	#g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
 	g++ -shared -o lib/lib_arcade_ncurses.so NCurses.o NCurses_pacman_only.o -lncurses
 
 clean:

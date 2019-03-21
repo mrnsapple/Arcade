@@ -40,6 +40,9 @@ public:
     void    get_name();
     void    get_game();
     void    specify_game(char *path_to_game);
+    void    required_actions();
+    void    game_loop();
+    void    initialize_values();
 
     void    set_direc();
     std::string setUserName();

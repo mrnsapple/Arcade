@@ -26,6 +26,7 @@ public:
     virtual     void    number_map_to_map() = 0;
     virtual     int     get_size() = 0;
     virtual     bool move_ghost(int gost_y, int gost_x, int y, int x) = 0;
+    virtual void    initialize_values() = 0;
 
     // virtual std::list<std::string>  getStartMap() = 0;
 

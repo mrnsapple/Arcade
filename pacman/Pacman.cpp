@@ -24,11 +24,23 @@ char *Pacman::test()
     return ((char *)"test\n");
 }
 
+void    Pacman::initialize_values()
+{
+    // INITIALIZE VAR
+    _map.clear();
+    _number_map.clear();
+     hasInit = false;
+    _dir = 't';
+    _size = 4;
+    // END INITIALIZE VAR
+}
+
 void    Pacman::init()
 {
     std::string line;
     std::ifstream myfile ("pacman/map.txt");
-
+    
+    initialize_values();
     if (myfile.is_open()) {
         while ( std::getline (myfile,line) ) {
             _map.push_back(line);
