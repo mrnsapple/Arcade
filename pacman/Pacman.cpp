@@ -6,7 +6,6 @@
 */
 
 #include "Pacman.hpp"
-#include "../list.hpp"
 
 Pacman::Pacman()
 {

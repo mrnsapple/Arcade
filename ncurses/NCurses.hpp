@@ -31,6 +31,7 @@ public:
     void    stop();
     void    NextLib();
     void    PrevLib();
+    void    NextGame();
 
     void    my_refresh();
     void    get_keypad(void);

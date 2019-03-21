@@ -22,6 +22,7 @@ void    Sfml::required_actions()
     NextLib();
     PrevLib();
     restartGame();
+    NextGame();
 }
 
 void    Sfml::restartGame()
@@ -29,6 +30,17 @@ void    Sfml::restartGame()
     if (_scenario == GAMEMODE) {
         if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::R)
             game->init();
+    }
+}
+
+void    Sfml::NextGame()
+{
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::U) {
+            for (auto lib : libGame->libName) {
+                std::cout << lib << std::endl;
+            }
+        }
     }
 }
 

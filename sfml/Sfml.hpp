@@ -11,16 +11,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <sstream>
-#include <vector>
-#include "dirent.h"
 #include "../IDisplayModule.hpp"
 #include "TextObject.hpp"
 #include "RectObject.hpp"
 #include "../IGameModule.hpp"
-#include <dlfcn.h>
-#include <unistd.h>
-#include <fstream>
 
 class Sfml : public IDisplayModule {
 public:
@@ -35,6 +29,7 @@ public:
     void    required_actions();
     void    game_loop();
     void    initialize_values() {}
+    void    NextGame();
 
     enum Scenarios {
         USERINPUT,

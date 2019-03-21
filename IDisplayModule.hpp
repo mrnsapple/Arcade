@@ -10,6 +10,12 @@
 
 #include <iostream>
 #include <string>
+#include <dlfcn.h>
+#include <unistd.h>
+#include <fstream>
+#include <dirent.h>
+#include <sstream>
+#include <vector>
 
 class IDisplayModule {
 public:
@@ -23,6 +29,7 @@ public:
     virtual void    game_loop() = 0;
     virtual void    initialize_values() = 0;
     virtual void    PrevLib() = 0;
+    virtual void    NextGame() = 0;
 
 protected:
 private:
