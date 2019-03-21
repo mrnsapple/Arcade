@@ -79,7 +79,7 @@ public:
     void    loadMap();
     void    set_direc();
     void    required_actions();
-    void    game_loop(){}
+    void    game_loop();
     void    initialize_values() {}
 
 protected:
