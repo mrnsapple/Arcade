@@ -241,7 +241,6 @@ void    Sfml::game_loop()
     }
 }
 
-
 void    Sfml::loadMap()
 {
     std::vector<std::string>    map = game->get_map();
