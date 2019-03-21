@@ -32,6 +32,9 @@ public:
     void    stop();
     void    NextLib();
     void    PrevLib();
+    void    required_actions();
+    void    game_loop();
+    void    initialize_values() {}
 
     enum Scenarios {
         USERINPUT,
@@ -78,9 +81,7 @@ public:
     void    selectGame();
     void    loadMap();
     void    set_direc();
-    void    required_actions();
-    void    game_loop();
-    void    initialize_values() {}
+    void    restartGame();
 
 protected:
     Scenarios   _scenario;
