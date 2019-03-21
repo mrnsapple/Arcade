@@ -29,6 +29,8 @@ public:
     void    init();
     void    start();
     void    stop();
+    void    NextLib();
+
     void    my_refresh();
     void    get_keypad(void);
     void    get_keypad_not_wait(void);

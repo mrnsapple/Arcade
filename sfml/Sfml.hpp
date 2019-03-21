@@ -30,6 +30,8 @@ public:
     void    init();
     void    start();
     void    stop();
+    void    NextLib();
+
     enum Scenarios {
         USERINPUT,
         MENU,

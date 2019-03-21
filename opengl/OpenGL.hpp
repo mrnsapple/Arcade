@@ -20,6 +20,8 @@ public:
     void    init();
     void    start();
     void    stop();
+    void    NextLib();
+
     std::string setUserName();
 
 protected:

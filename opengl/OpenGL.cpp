@@ -21,6 +21,11 @@ OpenGL::~OpenGL()
     SDL_Quit();
 }
 
+void    OpenGL::NextLib()
+{
+    
+}
+
 void    OpenGL::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -30,7 +35,7 @@ void    OpenGL::init()
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 64);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    _win = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_OPENGL);
+    _win = SDL_CreateWindow("OpenGL - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_OPENGL);
     _glContext = SDL_GL_CreateContext(_win);
 }
 

@@ -7,7 +7,7 @@
 
 #include "Sfml.hpp"
 
-Sfml::Sfml()
+Sfml::Sfml() : _scenario(USERINPUT)
 {
 
 }
@@ -17,10 +17,29 @@ Sfml::~Sfml()
 
 }
 
+void    Sfml::NextLib()
+{
+    if (_scenario != USERINPUT) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::L) {
+            auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
+            int num = std::distance(libMenu->libName.begin(), it);
+            num += 1;
+            if (num > libMenu->libName.size() - 1)
+                num = 0;
+            std::string lib = "lib/" + libMenu->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_t  *init_lib = (init_t*)dlsym(handle, "init");
+            IDisplayModule  *display = init_lib();
+            display->init();
+            _win->close();
+            display->start();
+        }
+    }
+}
+
 void    Sfml::init()
 {
-    _scenario = USERINPUT;
-    _win = new sf::RenderWindow({820, 580}, "Arcade", sf::Style::Default);
+    _win = new sf::RenderWindow({820, 580}, "SFML - Arcade", sf::Style::Default);
     _menu.push_back(new TextObject(5, 25));
     _menu[0]->setText("Enter your name: ");
     _menu.push_back(new TextObject(5, 100));
@@ -111,9 +130,6 @@ void    Sfml::start()
             _menu[0]->blink();
             _win->draw(_menu[0]->text);
             _win->draw(_inputText->text);
-            setLibGames();
-            setLibFiles();
-            _win->draw(_menu[3]->text);
         }
         if (_scenario == MENU) {
             _win->clear();
@@ -309,7 +325,7 @@ void    Sfml::stop()
 void    Sfml::handleEvents()
 {
     while (_win->pollEvent(_event)) {
-        _win->setKeyRepeatEnabled(true);
+        _win->setKeyRepeatEnabled(false);
         setUserName();
         stop();
         moveSelect();
@@ -319,6 +335,7 @@ void    Sfml::handleEvents()
         selectGame();
         returnToMenu();
         set_direc();
+        NextLib();
     }
 }
 

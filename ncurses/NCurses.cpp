@@ -21,6 +21,11 @@ NCurses::~NCurses()
 {
 }
 
+void    NCurses::NextLib()
+{
+    
+}
+
 void    NCurses::init()
 {
     if ((stdscr = initscr()) == NULL )
