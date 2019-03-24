@@ -6,7 +6,6 @@
 */
 
 #include "Nibbler.hpp"
-#include "../list.hpp"
 
 Nibbler::Nibbler()
 {

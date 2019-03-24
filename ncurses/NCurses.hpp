@@ -21,6 +21,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <string.h>
 
 class NCurses : public IDisplayModule {
 public:
@@ -32,6 +33,7 @@ public:
     void    stop();
     void    NextLib();
     void    PrevLib();
+    void    NextGame();
 
     void    my_refresh();
     void    get_keypad(void);
@@ -58,6 +60,8 @@ private:
     std::vector<std::string> _available_game_names;
     std::vector<std::string> _available_game_libraries;
     std::map<std::string, std::string> _available_game;
+
+    int _prev_library;
 
 };
 

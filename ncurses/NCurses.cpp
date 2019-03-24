@@ -13,7 +13,7 @@
 #include<stdlib.h>
 #include<time.h>
 
-NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL)
+NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL), _prev_library(-1)
 {
     _available_game["pacman"] = "games/lib_arcade_pacman.so";
     _available_game["nibbler"] = "games/lib_arcade_nibbler.so";
@@ -106,10 +106,11 @@ void    NCurses::specify_game(char *path_to_game)
 
 void       NCurses::get_game()
 {
+
     std::string game_selected = "";
     std::string val;
     int count = 0;
-    char    *my_current_game;
+    std::string my_current_game = "";
 
     for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         wprintw(stdscr, "Welcome ");
@@ -124,18 +125,15 @@ void       NCurses::get_game()
     }
     _game_name = game_selected;
     for (std::string a : _available_game_names) {
-        if (_game_name.compare(a) == 0); {
+        if (strcmp(a.c_str(), _game_name.c_str()) == 0) {//a.compare(_game_name) == 0); {
             my_current_game = _available_game[a];
-            specify_game(my_current_game);
-
+            specify_game((char *)my_current_game.c_str());
+            _prev_library = count;      
+            break;
         }
         count++;
     }
-    if (game_selected.compare("nibbler") == 0)
-        specify_game((char *)"games/lib_arcade_nibbler.so");
-    else if (game_selected.compare("pacman") == 0)
-        specify_game((char *)"games/lib_arcade_pacman.so"); 
-    else {
+    if (my_current_game.compare("") == 0) {
         init_pair(1, COLOR_RED, COLOR_BLACK);
 	    attron(COLOR_PAIR(1));
         wprintw(stdscr, game_selected.c_str());
@@ -144,6 +142,7 @@ void       NCurses::get_game()
 	    attron(COLOR_PAIR(2));
         get_game();
     }
+    
 }
 
 void    NCurses::get_name()
@@ -172,6 +171,10 @@ void    NCurses::my_refresh()
 	attron(COLOR_PAIR(2));
     //init_pair(1, COLOR_RED, COLOR_BLACK);
 	//attron(COLOR_PAIR(1));
+}
+
+void    NCurses::NextGame()
+{
 }
 
 void delay(unsigned int mseconds)

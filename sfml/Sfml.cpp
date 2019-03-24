@@ -17,9 +17,32 @@ Sfml::~Sfml()
 
 }
 
-void    required_actions()
-{}
+void    Sfml::required_actions()
+{
+    NextLib();
+    PrevLib();
+    restartGame();
+    NextGame();
+}
 
+void    Sfml::restartGame()
+{
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::R)
+            game->init();
+    }
+}
+
+void    Sfml::NextGame()
+{
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::U) {
+            for (auto lib : libGame->libName) {
+                std::cout << lib << std::endl;
+            }
+        }
+    }
+}
 
 void    Sfml::NextLib()
 {
@@ -195,21 +218,26 @@ void    Sfml::start()
                 _win->draw(obj->text);
             }
         }
-        if (_scenario == GAMEMODE) {
-            if (gameStatus == false) {
-                std::ofstream   file("scores.txt", std::fstream::app);
-                if (file.is_open()) {
-                    file << _userName << " " << (game->get_size() - 4) << "\n";
-                    file.close();
-                }
-                _win->close();
-            }
-            _win->setFramerateLimit(5);
-            _win->clear();
-            loadMap();
-            gameStatus = game->play();
-        }
+        game_loop();
         _win->display();
+    }
+}
+
+void    Sfml::game_loop()
+{
+    if (_scenario == GAMEMODE) {
+        if (gameStatus == false) {
+            std::ofstream   file("scores.txt", std::fstream::app);
+            if (file.is_open()) {
+                file << _userName << " " << (game->get_size() - 4) << "\n";
+                file.close();
+            }
+            _win->close();
+        }
+        _win->setFramerateLimit(5);
+        _win->clear();
+        loadMap();
+        gameStatus = game->play();
     }
 }
 
@@ -359,8 +387,7 @@ void    Sfml::handleEvents()
         selectGame();
         returnToMenu();
         set_direc();
-        NextLib();
-        PrevLib();
+        required_actions();
     }
 }
 
@@ -378,7 +405,3 @@ std::string Sfml::setUserName()
     }
     return _userName;
 }
-
-void    Sfml::game_loop(){}
-
-void    Sfml::initialize_values() {}
