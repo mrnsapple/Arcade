@@ -34,7 +34,6 @@ public:
     void    initialize_values();
 
 protected:
-    bool    hasInit;
     std::vector<std::string> _map;
     std::vector<std::string> _number_map;
     char _dir;

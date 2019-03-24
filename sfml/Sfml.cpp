@@ -378,3 +378,7 @@ std::string Sfml::setUserName()
     }
     return _userName;
 }
+
+void    Sfml::game_loop(){}
+
+void    Sfml::initialize_values() {}

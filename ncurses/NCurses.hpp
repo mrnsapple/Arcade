@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+#include <map>
 
 class NCurses : public IDisplayModule {
 public:
@@ -54,6 +55,10 @@ private:
     std::string _user_name;
      IGameModule *_game;
     std::string _game_name;
+    std::vector<std::string> _available_game_names;
+    std::vector<std::string> _available_game_libraries;
+    std::map<std::string, std::string> _available_game;
+
 };
 
 extern "C" IDisplayModule *init() {

@@ -10,7 +10,6 @@
 
 Nibbler::Nibbler()
 {
-    hasInit = false;
     _dir = 'l';
     _size = 4;
 }
@@ -33,7 +32,6 @@ void    Nibbler::initialize_values()
     // INITIALIZE VAR
     _map.clear();
     _number_map.clear();
-     hasInit = false;
     _dir = 'l';
     _size = 4;
     // END INITIALIZE VAR

@@ -15,6 +15,13 @@
 
 NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL)
 {
+    _available_game["pacman"] = "games/lib_arcade_pacman.so";
+    _available_game["nibbler"] = "games/lib_arcade_nibbler.so";
+    _available_game_names.push_back("pacman");
+    _available_game_names.push_back("nibbler");
+    _available_game_libraries.push_back("games/lib_arcade_pacman.so");
+    _available_game_libraries.push_back("games/lib_arcade_nibbler.so");
+
 }
 
 NCurses::~NCurses()
@@ -101,6 +108,8 @@ void       NCurses::get_game()
 {
     std::string game_selected = "";
     std::string val;
+    int count = 0;
+    char    *my_current_game;
 
     for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         wprintw(stdscr, "Welcome ");
@@ -114,6 +123,14 @@ void       NCurses::get_game()
             game_selected.append(val);
     }
     _game_name = game_selected;
+    for (std::string a : _available_game_names) {
+        if (_game_name.compare(a) == 0); {
+            my_current_game = _available_game[a];
+            specify_game(my_current_game);
+
+        }
+        count++;
+    }
     if (game_selected.compare("nibbler") == 0)
         specify_game((char *)"games/lib_arcade_nibbler.so");
     else if (game_selected.compare("pacman") == 0)
