@@ -9,6 +9,7 @@
 #include <string>
 #include <dlfcn.h>
 #include "IDisplayModule.hpp"
+#include <string.h>
 
 void    printUsage()
 {
@@ -16,11 +17,13 @@ void    printUsage()
     std::cout << "\t   ./arcade lib" << std::endl << std::endl;
     std::cout << "DESCRIPTION" << std::endl;
     std::cout << "\t   lib\tgraphical dynamic library (e.j. lib_arcade_sfml.so)" << std::endl;
-    std::cout << "In ncurses:\n\t Esq key->exit game\n\tEnter key->restart_game\n\tp key->go back to menu\n";
+    std::cout << "In ncurses:\n\t Esq key->exit game\n\tEnter key->restart_game\n\tp key->go back to menu\n\tz key->prev game\n\tx key->next game\n\ta key->prev graphic lib\n\ts key->next graphic lib\n";
 }
 
 int main(int ac, char **av)
 {
+    std::string graph_lib;
+
     if (ac == 2) {
         void    *handle = dlopen(av[1], RTLD_LAZY);
         if (!handle) {
@@ -31,7 +34,13 @@ int main(int ac, char **av)
         IDisplayModule  *display = init_lib();
         display->init();
         display->start();
+        graph_lib = display->get_graph_lib();
         dlclose(handle);
+        printf("lib:%s\n", graph_lib.c_str());
+        if (strcmp(graph_lib.c_str(), "") != 0) {
+            av[1] = (char *)graph_lib.c_str();
+            return (main(ac, av));
+        }
     } else {
         printUsage();
         return 84;

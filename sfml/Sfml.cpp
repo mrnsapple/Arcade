@@ -17,12 +17,13 @@ Sfml::~Sfml()
 
 }
 
-void    Sfml::required_actions()
+bool    Sfml::required_actions()
 {
     NextLib();
     PrevLib();
     restartGame();
     NextGame();
+    return true;
 }
 
 void    Sfml::restartGame()
@@ -404,4 +405,9 @@ std::string Sfml::setUserName()
             _scenario = MENU;
     }
     return _userName;
+}
+
+std::string Sfml::get_graph_lib()
+{
+    return "";
 }

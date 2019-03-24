@@ -26,10 +26,11 @@ public:
     void    stop();
     void    NextLib();
     void    PrevLib();
-    void    required_actions();
+    bool    required_actions();
     void    game_loop();
     void    initialize_values() {}
     void    NextGame();
+    std::string get_graph_lib();
 
     enum Scenarios {
         USERINPUT,

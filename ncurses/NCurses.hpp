@@ -43,11 +43,12 @@ public:
 
     void    get_name();
     void    get_game();
+    void    inside_get_game();
     void    specify_game(char *path_to_game);
-    void    required_actions();
+    bool    required_actions();
     void    game_loop();
     void    initialize_values();
-
+    std::string get_graph_lib();
     void    set_direc();
     std::string setUserName();
 
@@ -58,8 +59,8 @@ private:
      IGameModule *_game;
     std::string _game_name;
     std::vector<std::string> _available_game_names;
-    std::vector<std::string> _available_game_libraries;
     std::map<std::string, std::string> _available_game;
+    std::string _graphic_lib;
 
     int _prev_library;
 
