@@ -51,6 +51,8 @@ public:
     std::string get_graph_lib();
     void    set_direc();
     std::string setUserName();
+    void    print_print_info(int pos, const char *content);
+
 
 protected:
 private:
@@ -61,7 +63,7 @@ private:
     std::vector<std::string> _available_game_names;
     std::map<std::string, std::string> _available_game;
     std::string _graphic_lib;
-
+    std::vector<std::string> _print_info;
     int _prev_library;
 
 };

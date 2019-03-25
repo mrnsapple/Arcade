@@ -20,11 +20,29 @@ NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL), _prev_library(
     //
     _available_game_names.push_back("pacman");
     _available_game_names.push_back("nibbler");
+    //
+    _print_info.push_back("Enter your name: ");
+    _print_info.push_back("\n\nAvailable games:\n\tnibbler\n\tpacman\n\nChoose a game by writing it's name: ");
+    _print_info.push_back("\n\nAvailable libraries:\n\tncurses\n\tsfml\n\nChoose a library by writing it's name: ");
+
 }
 
 NCurses::~NCurses()
 {
 }
+
+void    NCurses::print_print_info(int pos, const char *content)
+{
+    unsigned int count = 0;
+
+    for (std::string a : _print_info) {
+        wprintw(stdscr, a.c_str());
+        if (count == pos)
+            wprintw(stdscr, content);
+        count++;
+    }
+}
+
 
 void    NCurses::NextLib()
 {
@@ -159,7 +177,8 @@ void    NCurses::get_name()
     std::string val;
 
     my_refresh();
-    wprintw(stdscr, "Enter your name: ");
+    print_print_info(-1, "");
+    //wprintw(stdscr, "Enter your name: ");
     for (_user_name = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         get_keypad();
         my_refresh();
@@ -170,8 +189,9 @@ void    NCurses::get_name()
         }
         if (_key_press != '\n')
             _user_name.append(val);
-        wprintw(stdscr, "Enter your name: ");
-        wprintw(stdscr, _user_name.c_str());
+        print_print_info(0, _user_name.c_str());
+        //wprintw(stdscr, "Enter your name: ");
+       // wprintw(stdscr, _user_name.c_str());
     }
 }
 
@@ -201,7 +221,7 @@ void    NCurses::game_loop()
     for (int loop = 0; loop == 0;) {
         my_refresh();
         print_map();
-        wprintw(stdscr, "key:press:%d, %3d, %c\n",_key_press, _key_press, _key_press);
+        //wprintw(stdscr, "key:press:%d, %3d, %c\n",_key_press, _key_press, _key_press);
         //delay(500000);                        
         get_keypad_not_wait();
         set_direc();
@@ -265,11 +285,13 @@ bool    NCurses::required_actions()
             _game_name = "nibbler";
         inside_get_game();
     }
-    if (_key_press == 'a' || _key_press == 's') { // Change game
+    if (_key_press == 'j' || _key_press == 'l') { // Change game
         if (strcmp(_graphic_lib.c_str(), "lib/lib_arcade_ncurses.so") == 0)
             _graphic_lib = "lib/lib_arcade_sfml.so";
         else if (strcmp(_graphic_lib.c_str(), "lib/lib_arcade_sfml.so") == 0)
             _graphic_lib = "lib/lib_arcade_ncurses.so";
+        else
+            _graphic_lib = "lib/lib_arcade_sfml.so";
         return false;
     }
     return true;

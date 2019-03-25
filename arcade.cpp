@@ -17,7 +17,7 @@ void    printUsage()
     std::cout << "\t   ./arcade lib" << std::endl << std::endl;
     std::cout << "DESCRIPTION" << std::endl;
     std::cout << "\t   lib\tgraphical dynamic library (e.j. lib_arcade_sfml.so)" << std::endl;
-    std::cout << "In ncurses:\n\t Esq key->exit game\n\tEnter key->restart_game\n\tp key->go back to menu\n\tz key->prev game\n\tx key->next game\n\ta key->prev graphic lib\n\ts key->next graphic lib\n";
+    std::cout << "In ncurses:\n\t Esq key->exit game\n\tEnter key->restart_game\n\tp key->go back to menu\n\tz key->prev game\n\tx key->next game\n\tj key->prev graphic lib\n\tl key->next graphic lib\n";
 }
 
 int main(int ac, char **av)
@@ -43,7 +43,7 @@ int main(int ac, char **av)
         }
     } else {
         printUsage();
-        return 84;
+        //return 84;
     }
     return 0;
 }
