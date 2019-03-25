@@ -92,6 +92,7 @@ protected:
     IGameModule *game;
     std::vector<RectObject*> arrayMap;
     bool    gameStatus;
+    std::string graphLib;
 
 private:
 };
