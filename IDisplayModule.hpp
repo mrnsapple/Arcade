@@ -23,12 +23,9 @@ public:
     virtual void    init() = 0;
     virtual void    start() = 0;
     virtual void    stop() = 0;
-    virtual void    NextLib() = 0;
     virtual bool    required_actions() = 0;
     virtual void    game_loop() = 0;
     virtual void    initialize_values() = 0;
-    virtual void    PrevLib() = 0;
-    virtual void    NextGame() = 0;
     virtual std::string get_graph_lib() = 0;
 
 protected:

@@ -43,17 +43,6 @@ void    NCurses::print_print_info(int pos, const char *content)
     }
 }
 
-
-void    NCurses::NextLib()
-{
-
-}
-
-void    NCurses::PrevLib()
-{
-    
-}
-
 void    NCurses::init()
 {
     if ((stdscr = initscr()) == NULL )
@@ -204,10 +193,6 @@ void    NCurses::my_refresh()
 	attron(COLOR_PAIR(2));
     //init_pair(1, COLOR_RED, COLOR_BLACK);
 	//attron(COLOR_PAIR(1));
-}
-
-void    NCurses::NextGame()
-{
 }
 
 void delay(unsigned int mseconds)
