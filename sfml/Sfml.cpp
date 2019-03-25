@@ -73,7 +73,7 @@ void    Sfml::PrevGame()
 
 void    Sfml::NextLib()
 {
-    if (_scenario == GAMEMODE) {
+    if (_scenario != USERINPUT) {
         if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::L) {
             auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
             int num = std::distance(libMenu->libName.begin(), it);
@@ -89,7 +89,7 @@ void    Sfml::NextLib()
 
 void    Sfml::PrevLib()
 {
-    if (_scenario == GAMEMODE) {
+    if (_scenario != USERINPUT) {
         if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::J) {
             auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
             int num = std::distance(libMenu->libName.begin(), it);
@@ -111,6 +111,8 @@ void    Sfml::init()
     _menu.push_back(new TextObject(5, 100));
     _menu.push_back(new TextObject(5, 175));
     _menu.push_back(new TextObject(5, 250));
+    _menu[1]->setText("libraries in \"./games\"");
+    _menu[2]->setText("libraries in \"./lib\"");
     _menu[3]->setText("Scores");
     _inputText = new TextObject(_menu[0]->text.getLocalBounds().width, 25);
     _inputText->text.setFillColor(sf::Color::Red);
@@ -167,24 +169,6 @@ int Sfml::countFiles(std::string path)
     return num;
 }
 
-void    Sfml::setLibGames()
-{
-    std::stringstream   ss;
-
-    ss << countFiles("./games");
-    _menu[1]->setText(ss.str() + " libraries in " + "\"./games\"");
-    _win->draw(_menu[1]->text);
-}
-
-void    Sfml::setLibFiles()
-{
-    std::stringstream   ss;
-
-    ss << countFiles("./lib");
-    _menu[2]->setText(ss.str() + " libraries in " + "\"./lib\"");
-    _win->draw(_menu[2]->text);
-}
-
 void    Sfml::start()
 {
     while (_win->isOpen()) {
@@ -202,10 +186,8 @@ void    Sfml::start()
             _menu[0]->text.setOutlineThickness(0);
             _menu[0]->setText("Welcome " + _userName);
             _menu[0]->text.setFillColor(sf::Color::Red);
-            _win->draw(_menu[0]->text);
-            setLibGames();
-            setLibFiles();
-            _win->draw(_menu[3]->text);
+            for (auto obj : _menu)
+                _win->draw(obj->text);
             _win->draw(select->shape);
         }
         if (_scenario == CHOOSEGAME) {
@@ -240,6 +222,7 @@ void    Sfml::start()
         game_loop();
         _win->display();
     }
+    std::cout << "dooo" << std::endl;
 }
 
 void    Sfml::game_loop()

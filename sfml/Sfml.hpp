@@ -66,9 +66,6 @@ public:
     int countFiles(std::string path);
     std::vector<std::string>    getFilesName(std::string path);
 
-    void    setLibGames();
-    void    setLibFiles();
-    
     void    moveSelect();
     void    menuSelect();
     
