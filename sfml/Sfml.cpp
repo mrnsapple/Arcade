@@ -7,14 +7,12 @@
 
 #include "Sfml.hpp"
 
-Sfml::Sfml() : _scenario(USERINPUT), graphLib("lib/lib_arcade_sfml.so")
+Sfml::Sfml() : _scenario(USERINPUT), graphLib("")
 {
-
 }
 
 Sfml::~Sfml()
 {
-
 }
 
 bool    Sfml::required_actions()
@@ -55,15 +53,8 @@ void    Sfml::NextLib()
             if (num > libMenu->libName.size() - 1)
                 num = 0;
             std::string lib = "lib/" + libMenu->libName[num];
-           /*void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
-            init_t  *init_lib = (init_t*)dlsym(handle, "init");
-            IDisplayModule  *display = init_lib();
-            display->init();
-            */
-           graphLib = lib;
-
+            graphLib = lib;
             _win->close();
-            //display->start();
         }
     }
 }
@@ -78,13 +69,8 @@ void    Sfml::PrevLib()
             if (num < 0)
                 num = libMenu->libName.size() - 1;
             std::string lib = "lib/" + libMenu->libName[num];
-            // void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
-            // init_t  *init_lib = (init_t*)dlsym(handle, "init");
-            // IDisplayModule  *display = init_lib();
-            // display->init();
             graphLib = lib;
             _win->close();
-            // display->start();            
         }
      }
 }
