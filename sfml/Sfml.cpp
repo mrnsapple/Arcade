@@ -7,7 +7,7 @@
 
 #include "Sfml.hpp"
 
-Sfml::Sfml() : _scenario(USERINPUT), graphLib("")
+Sfml::Sfml() : _scenario(USERINPUT), graphLib(""), _gameLib("")
 {
 }
 
@@ -35,10 +35,18 @@ void    Sfml::restartGame()
 void    Sfml::NextGame()
 {
     if (_scenario == GAMEMODE) {
-        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::U) {
-            for (auto lib : libGame->libName) {
-                std::cout << lib << std::endl;
-            }
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::X) {
+            auto it = std::find(libGame->libName.begin(), libGame->libName.end(), _gameLib);
+            int num = std::distance(libGame->libName.begin(), it);
+            num += 1;
+            if (num > libGame->libName.size() - 1)
+                num = 0;
+            std::string lib = "games/" + libGame->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_g  *init_game = (init_g*)dlsym(handle, "init");
+            game = init_game();
+            _gameLib = lib.substr(lib.find("/") + 1);
+            game->init();
         }
     }
 }
@@ -335,11 +343,12 @@ void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
-            std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
-            void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
+            std::string lib = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
             game->init();
+            _gameLib = lib.substr(lib.find("/") + 1);
             _scenario = GAMEMODE;
         }
     }

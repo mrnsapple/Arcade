@@ -93,6 +93,7 @@ protected:
     std::vector<RectObject*> arrayMap;
     bool    gameStatus;
     std::string graphLib;
+    std::string _gameLib;
 
 private:
 };
