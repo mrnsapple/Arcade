@@ -34,8 +34,11 @@ int main(int ac, char **av)
         IDisplayModule  *display = init_lib();
         display->init();
         display->start();
+        printf("libess\n");
+
         graph_lib = display->get_graph_lib();
         dlclose(handle);
+        printf("libe\n");
         printf("lib:%s\n", graph_lib.c_str());
         if (strcmp(graph_lib.c_str(), "") != 0) {
             av[1] = (char *)graph_lib.c_str();

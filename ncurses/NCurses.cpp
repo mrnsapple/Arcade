@@ -20,7 +20,6 @@ NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL), _prev_library(
     //
     _available_game_names.push_back("pacman");
     _available_game_names.push_back("nibbler");
-    
     //
     _print_info.push_back("Enter your name: ");
     _print_info.push_back("\n\nAvailable libraries:\n\tncurses\n\tsfml\nChoose a library by writing it's name: ");
@@ -186,7 +185,7 @@ bool    NCurses::get_lib()
         _graphic_lib = "lib/lib_arcade_sfml.so";
         return false;
     }
-    if (strcmp(lib.c_str(), "ncurses") == 0) {
+    else if (strcmp(lib.c_str(), "ncurses") == 0) {
         _graphic_lib = "lib/lib_arcade_ncurses.so";
         return true;
     }
@@ -198,7 +197,7 @@ bool    NCurses::get_lib()
         wprintw(stdscr, " isn't a valid lib name.\n\n");
         init_pair(2, COLOR_WHITE, COLOR_BLACK);
 	    attron(COLOR_PAIR(2));
-        get_lib();
+        return (get_lib());
     }
     return true;
 }
@@ -274,9 +273,9 @@ void    NCurses::start()
             exit (84);
         }
         game_loop();
+        this->stop(); 
     }    
-    this->stop(); 
-   //exit (0);
+    endwin();
 }
 
 void    NCurses::stop()
@@ -343,8 +342,10 @@ std::string    NCurses::print_score()
     std::string result = "";
     
     if (file.is_open()) {
+        if (std::getline(file, str))
+            result = str;
         for (int i = 0; std::getline(file, str); i++) {
-            result = result + str + "\n";
+            result = result + ", " + str;
         }
         file.close();
     }
