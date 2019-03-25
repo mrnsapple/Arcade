@@ -11,6 +11,7 @@
 #include "../IDisplayModule.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include "TextSDL.hpp"
 
 class Sdl : public IDisplayModule {
 	public:
@@ -35,6 +36,8 @@ class Sdl : public IDisplayModule {
         SDL_Color color;
         SDL_Surface *surface;
         SDL_Texture *texture;
+
+        TextSDL *intro;
     
 	private:
 };
