@@ -169,57 +169,65 @@ int Sfml::countFiles(std::string path)
     return num;
 }
 
- IGameModule *     Sfml::start(IGameModule *game)
+IGameModule*     Sfml::start(IGameModule *_game)
 {
+    // int loop = 0;
     while (_win->isOpen()) {
         _win->setFramerateLimit(60);
         handleEvents();
-        if (_scenario == USERINPUT) {
-            _win->clear();
-            _inputText->setText(_userName);
-            _menu[0]->blink();
-            _win->draw(_menu[0]->text);
-            _win->draw(_inputText->text);
-        }
-        if (_scenario == MENU) {
-            _win->clear();
-            _menu[0]->text.setOutlineThickness(0);
-            _menu[0]->setText("Welcome " + _userName);
-            _menu[0]->text.setFillColor(sf::Color::Red);
-            for (auto obj : _menu)
-                _win->draw(obj->text);
-            _win->draw(select->shape);
-        }
-        if (_scenario == CHOOSEGAME) {
-            _win->clear();
-            for (auto lib : libGame->_libs)
-                _win->draw(lib->text);
-        }
-        if (_scenario == CHOOSELIB) {
-            _win->clear();
-            for (auto lib : libMenu->_libs)
-                _win->draw(lib->text);
-        }
-        if (_scenario == SCORES) {
-            _win->clear();
-            std::ifstream file("scores.txt");
-            std::string str;
-            std::vector<TextObject*>    score;
-            TextObject  title(5, 0);
-            title.setText("Last 10");
-            if (file.is_open()) {
-                for (int i = 0; std::getline(file, str); i++) {
-                    score.push_back(new TextObject(5, 25 * (i + 1)));
-                    score[i]->setText(str);
+        if (_game == NULL) {
+            if (_scenario == USERINPUT) {
+                _win->clear();
+                _inputText->setText(_userName);
+                _menu[0]->blink();
+                _win->draw(_menu[0]->text);
+                _win->draw(_inputText->text);
+            }
+            if (_scenario == MENU) {
+                _win->clear();
+                _menu[0]->text.setOutlineThickness(0);
+                _menu[0]->setText("Welcome " + _userName);
+                _menu[0]->text.setFillColor(sf::Color::Red);
+                for (auto obj : _menu)
+                    _win->draw(obj->text);
+                _win->draw(select->shape);
+            }
+            if (_scenario == CHOOSEGAME) {
+                _win->clear();
+                for (auto lib : libGame->_libs)
+                    _win->draw(lib->text);
+            }
+            if (_scenario == CHOOSELIB) {
+                _win->clear();
+                for (auto lib : libMenu->_libs)
+                    _win->draw(lib->text);
+            }
+            if (_scenario == SCORES) {
+                _win->clear();
+                std::ifstream file("scores.txt");
+                std::string str;
+                std::vector<TextObject*>    score;
+                TextObject  title(5, 0);
+                title.setText("Last 10");
+                if (file.is_open()) {
+                    for (int i = 0; std::getline(file, str); i++) {
+                        score.push_back(new TextObject(5, 25 * (i + 1)));
+                        score[i]->setText(str);
+                    }
+                    file.close();
                 }
-                file.close();
+                _win->draw(title.text);
+                for (auto obj : score) {
+                    _win->draw(obj->text);
+                }
             }
-            _win->draw(title.text);
-            for (auto obj : score) {
-                _win->draw(obj->text);
-            }
+            game_loop();
         }
-        game_loop();
+        if (_game != NULL) {
+            game = _game;
+            _scenario = GAMEMODE;
+            game_loop();
+        }
         _win->display();
     }
     return game;  
@@ -239,7 +247,9 @@ void    Sfml::game_loop()
         _win->setFramerateLimit(5);
         _win->clear();
         loadMap();
+        game->set_game_time(loop);
         gameStatus = game->play();
+        loop++;
     }
 }
 
@@ -272,10 +282,15 @@ void    Sfml::loadMap()
         _win->draw(rect->shape);
     }
     TextObject  *score = new TextObject(5, 350);
+    TextObject  *time = new TextObject(5, 450);
     std::stringstream   ss;
     ss << (game->get_size() - 4);
     score->setText("score : " + ss.str());
+    std::stringstream   dd;
+    dd << loop;
+    time->setText("time : " + dd.str());
     _win->draw(score->text);
+    _win->draw(time->text);
     arrayMap.clear();
 }
 
