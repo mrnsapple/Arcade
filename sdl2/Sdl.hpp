@@ -10,7 +10,7 @@
 
 #include "../IDisplayModule.hpp"
 #include <SDL2/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 class Sdl : public IDisplayModule {
 	public:

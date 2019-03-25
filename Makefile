@@ -48,7 +48,7 @@ games	:	$(GAMESOBJ)
 graphicals	:	$(LIBOBJ)
 	mkdir -p lib
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
-	g++ -shared -o lib/lib_arcade_sdl2.so Sdl.o -lSDL2
+	g++ -shared -o lib/lib_arcade_sdl2.so Sdl.o -lSDL2 -lSDL2_ttf
 	g++ -shared -o lib/lib_arcade_ncurses.so NCurses.o NCurses_pacman_only.o -lncurses
 
 clean:
