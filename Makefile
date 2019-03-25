@@ -9,8 +9,8 @@ SRC =	arcade.cpp
 
 LIBSRC	=	sfml/Sfml.cpp	\
 			ncurses/NCurses.cpp	\
-			ncurses/NCurses_pacman_only.cpp
-			sdl2/Sdl.cpp	\
+			ncurses/NCurses_pacman_only.cpp	\
+			sdl2/Sdl.cpp
 
 GAMESSRC	=	nibbler/Nibbler.cpp	\
 				pacman/Pacman.cpp
