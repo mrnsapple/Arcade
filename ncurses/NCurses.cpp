@@ -262,19 +262,21 @@ void    NCurses::game_loop()
     }
 }
 
-IGameModule *    NCurses::start(IGameModule *game)
+IGameModule     *NCurses::start(IGameModule *game)
 {
     if (game == NULL) {
         //get_name();
         //my_refresh();
-        if (get_lib() != false) {
-            get_game();
-            if (_game == NULL) {
-                stop();
-                exit (84);
-            }
+        if (get_lib() == false)
+            return NULL;
+        get_game();
+        if (_game == NULL) {
+            stop();
+            exit (84);
         }
-    }            
+    }
+    else 
+        _game = game;       
     game_loop();
     this->stop(); 
     //}    
