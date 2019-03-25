@@ -21,6 +21,14 @@ void    Sdl::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     _win = SDL_CreateWindow("Sdl - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_ALLOW_HIGHDPI);
+    TTF_Init();
+    renderer = SDL_CreateRenderer(_win, -1, 0);
+    font = TTF_OpenFont("./assets/font.ttf", 25);
+    color = { 255, 255, 255};
+    surface = TTF_RenderText_Solid(font, "Hello nibber", color);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_RenderCopy(renderer, texture,NULL,NULL);
+    SDL_RenderPresent(renderer);
 }
 
 void    Sdl::start()
@@ -29,12 +37,17 @@ void    Sdl::start()
          while (SDL_PollEvent(&_event)) {
             stop();
         }
-    }    
+    }
+    //menu con nombre, libreria y juego    
 }
 
 void    Sdl::stop()
 {
     if (_event.type == SDL_QUIT)
+        TTF_Quit();
+        TTF_CloseFont(font);
+        SDL_DestroyTexture(texture);
+        SDL_FreeSurface(surface);
         isClosed = true;
 }
 
