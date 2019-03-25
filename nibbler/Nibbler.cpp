@@ -89,6 +89,22 @@ void    Nibbler::move_bot(int x, int y)
     number_map_to_map();
 }
 
+std::vector<std::string> move_number_map(std::vector<std::string> _number_map)
+{
+    int random_val_x;
+    int random_val_y;
+
+    srand(time(0)); 
+    random_val_y = rand() % _number_map.size() - 1;
+    srand(time(0) + 300); 
+    random_val_x = rand() % (_number_map[0]).size() - 1;
+    if (_number_map[random_val_y][random_val_x] == ' ')
+        _number_map[random_val_y][random_val_x] = '$';
+    else
+        return (move_number_map(_number_map));
+    return _number_map;
+}
+
 void    Nibbler::increase_numbers_map(int x, int y)
 {
     int eat = 0;
@@ -106,6 +122,8 @@ void    Nibbler::increase_numbers_map(int x, int y)
             else if (_number_map[y][x] > '0')
                 _number_map[y][x] += 1;
         }
+    if (eat == 1)
+        _number_map = move_number_map(_number_map);
 }
 
 void    Nibbler::number_map_to_map()
@@ -186,4 +204,9 @@ bool    Nibbler::play(void)
     // wprintw(stdscr, "In nibler\n");
     std::cout << "TIME TO PLAY" << std::endl;
     return true;
+}
+
+void    Nibbler::set_game_time(int time)
+{
+    _game_time = time;
 }

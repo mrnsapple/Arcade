@@ -120,13 +120,20 @@ void    Pacman::increase_numbers_map(int x, int y) // move the goast
     bool    delete_q = true;
     int num_ghosts = 0;
     int num_ques = 0;
+
+    for (int gost_y = 0; (_game_time > 4 && _game_time < 9) && gost_y < _map.size(); gost_y++)
+        for (int gost_x = 0; gost_x < (_map[gost_y]).size(); gost_x++)
+            if (_map[gost_y][gost_x] == '$' && _map[gost_y - 1][gost_x] == ' ')
+                _map[gost_y - 1][gost_x] = 'q'; 
+
     // ADD q in new ghost pos
-    for (int gost_y = 0; gost_y < _map.size(); gost_y++)
+    for (int gost_y = 0; (_game_time >= 9 ) && gost_y < _map.size(); gost_y++)
         for (int gost_x = 0; gost_x < (_map[gost_y]).size(); gost_x++)
             if (delete_q  && _map[gost_y][gost_x] == '$')
                 delete_q = move_ghost(gost_y, gost_x, y, x);
+    
     // COUNT num q are same as $
-    for (int gost_y = 0; !delete_q && gost_y < _map.size(); gost_y++)
+    for (int gost_y = 0; _game_time > 4 && !delete_q && gost_y < _map.size(); gost_y++)
         for (int gost_x = 0; gost_x < (_map[gost_y]).size(); gost_x++) {
             if (_map[gost_y][gost_x] == 'q')
                 num_ques++;
@@ -134,7 +141,7 @@ void    Pacman::increase_numbers_map(int x, int y) // move the goast
                 num_ghosts++;
         }
     // Move ghost in q pos
-    for (int y = 0; y < _map.size(); y++)
+    for (int y = 0; _game_time > 4 && y < _map.size(); y++)
         for (int x = 0; x < (_map[y]).size(); x++) {
             if (num_ghosts == num_ques && _map[y][x] == '$')
                 _map[y][x] = ' ';
@@ -143,7 +150,7 @@ void    Pacman::increase_numbers_map(int x, int y) // move the goast
             if (num_ghosts != num_ques && _map[y][x] == 'q')
                 _map[y][x] = ' ';
       
-        }
+        }  
 }
 
 void    Pacman::number_map_to_map()
@@ -229,4 +236,9 @@ bool    Pacman::play(void)
     // wprintw(stdscr, "In nibler\n");
     std::cout << "TIME TO PLAY" << std::endl;
     return true;
+}
+
+void    Pacman::set_game_time(int time)
+{
+    _game_time = time;
 }

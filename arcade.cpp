@@ -11,6 +11,8 @@
 #include "IDisplayModule.hpp"
 #include <string.h>
 
+IGameModule *game = NULL;
+
 void    printUsage()
 {
     std::cout << "USAGE" << std::endl;
@@ -33,12 +35,9 @@ int main(int ac, char **av)
         init_t  *init_lib = (init_t*)dlsym(handle, "init");
         IDisplayModule  *display = init_lib();
         display->init();
-        display->start();
-        printf("libess\n");
-
+        game = display->start(game);
         graph_lib = display->get_graph_lib();
         dlclose(handle);
-        printf("libe\n");
         printf("lib:%s\n", graph_lib.c_str());
         if (strcmp(graph_lib.c_str(), "") != 0) {
             av[1] = (char *)graph_lib.c_str();

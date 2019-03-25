@@ -10,14 +10,13 @@
 
 #include "../IDisplayModule.hpp"
 #include <SDL2/SDL.h>
-
 class Sdl : public IDisplayModule {
 	public:
 		Sdl();
 		~Sdl();
 
         void init();
-        void start();
+        IGameModule *   start(IGameModule *game);
         void stop();
         bool required_actions();
         void game_loop();

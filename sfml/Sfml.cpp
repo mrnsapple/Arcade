@@ -157,7 +157,7 @@ void    Sfml::setLibFiles()
     _win->draw(_menu[2]->text);
 }
 
-void    Sfml::start()
+ IGameModule *     Sfml::start(IGameModule *game)
 {
     while (_win->isOpen()) {
         _win->setFramerateLimit(60);
@@ -212,6 +212,7 @@ void    Sfml::start()
         game_loop();
         _win->display();
     }
+    return game;  
 }
 
 void    Sfml::game_loop()

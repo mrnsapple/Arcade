@@ -29,7 +29,7 @@ public:
     ~NCurses();
 
     void    init();
-    void    start();
+     IGameModule *    start(IGameModule *game);
     void    stop();
     void    NextLib();
     void    PrevLib();

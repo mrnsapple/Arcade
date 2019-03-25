@@ -20,10 +20,11 @@ Sdl::~Sdl()
 void    Sdl::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
+    //SDL_WM_SetCaption("SDL Test", "SDL Test");
     _win = SDL_CreateWindow("Sdl - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_ALLOW_HIGHDPI);
 }
 
-void    Sdl::start()
+IGameModule *      Sdl::start(IGameModule *game)
 {
     while (isClosed != true) {
          while (SDL_PollEvent(&_event)) {

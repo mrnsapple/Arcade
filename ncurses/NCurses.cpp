@@ -148,8 +148,8 @@ void       NCurses::get_game()
         my_refresh();
         val = _key_press;
         if (_key_press == 27) {// ESQ, exit
-        this->stop();
-        exit (0);
+            this->stop();
+            exit (0);
         }
         if (_key_press == 263)
             _game_name = _game_name.substr(0, _game_name.size()-1);
@@ -243,39 +243,43 @@ void delay(unsigned int mseconds)
 
 void    NCurses::game_loop()
 {
-    for (int loop = 0; loop == 0;) {
+    for (int loop = 1; loop >= 0; loop++) {
         my_refresh();
         print_map();
+        wprintw(stdscr,"Time : %d\n", loop);
         //wprintw(stdscr, "key:press:%d, %3d, %c\n",_key_press, _key_press, _key_press);
         //delay(500000);                        
         get_keypad_not_wait();
         set_direc();
         sleep(1);
+        _game->set_game_time(loop);
         if (required_actions() == false)
-           loop = 1;
+           loop = -2;
         if(_game->play() == false ) {
-            loop = 1;
+            loop = -2;
             _graphic_lib = "";
-        }
-        
+        }   
     }
 }
 
-void    NCurses::start()
+IGameModule *    NCurses::start(IGameModule *game)
 {
-    get_name();
-    my_refresh();
-    if (get_lib() != false) {
-        get_game();
-        if (_game == NULL) {
-            wprintw(stdscr, "It's null\n");
-            stop();
-            exit (84);
+    if (game == NULL) {
+        //get_name();
+        //my_refresh();
+        if (get_lib() != false) {
+            get_game();
+            if (_game == NULL) {
+                stop();
+                exit (84);
+            }
         }
-        game_loop();
-        this->stop(); 
-    }    
-    endwin();
+    }            
+    game_loop();
+    this->stop(); 
+    //}    
+    //endwin();
+    return _game;
 }
 
 void    NCurses::stop()
@@ -301,7 +305,7 @@ bool    NCurses::required_actions()
     if (_key_press == 'p') {// Go to menu
         _game->initialize_values();
         initialize_values();
-        this->start();
+        this->start(_game);
     }
     if (_key_press == 'z' || _key_press == 'x') { // Change game
         if (strcmp(_game_name.c_str(), "nibbler") == 0)

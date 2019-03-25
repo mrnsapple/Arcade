@@ -16,12 +16,13 @@
 #include <dirent.h>
 #include <sstream>
 #include <vector>
+#include "IGameModule.hpp"
 
 class IDisplayModule {
 public:
     virtual ~IDisplayModule() = default;
     virtual void    init() = 0;
-    virtual void    start() = 0;
+    virtual    IGameModule *  start(IGameModule *game) = 0;
     virtual void    stop() = 0;
     virtual bool    required_actions() = 0;
     virtual void    game_loop() = 0;

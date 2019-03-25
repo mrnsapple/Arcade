@@ -32,12 +32,13 @@ public:
     std::vector<std::string> get_number_map();
     bool move_ghost(int gost_y, int gost_x, int y, int x);
     void    initialize_values();
-
+    void    set_game_time(int time);
 protected:
     std::vector<std::string> _map;
     std::vector<std::string> _number_map;
     char _dir;
     int _size;
+    unsigned int _game_time;
 private:
 };
 
