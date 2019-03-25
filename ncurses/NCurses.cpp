@@ -243,7 +243,7 @@ void delay(unsigned int mseconds)
 
 void    NCurses::game_loop()
 {
-    for (int loop = 1; loop >= 0; loop++) {
+    for (loop = loop; loop >= 0; loop++) {
         my_refresh();
         print_map();
         wprintw(stdscr,"Time : %d\n", loop);

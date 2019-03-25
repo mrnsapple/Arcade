@@ -18,6 +18,8 @@
 #include <vector>
 #include "IGameModule.hpp"
 
+int loop = 0;
+
 class IDisplayModule {
 public:
     virtual ~IDisplayModule() = default;
