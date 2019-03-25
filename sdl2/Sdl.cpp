@@ -21,7 +21,6 @@ void    Sdl::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     _win = SDL_CreateWindow("Sdl - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_ALLOW_HIGHDPI);
-    // TTF_Init();
     TTF_Init();
     renderer = SDL_CreateRenderer(_win, -1, 0);
     font = TTF_OpenFont("./assets/font.ttf", 25);
