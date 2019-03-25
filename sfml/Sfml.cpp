@@ -73,7 +73,7 @@ void    Sfml::PrevGame()
 
 void    Sfml::NextLib()
 {
-    if (_scenario != USERINPUT) {
+    if (_scenario == GAMEMODE) {
         if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::L) {
             auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
             int num = std::distance(libMenu->libName.begin(), it);
@@ -89,7 +89,7 @@ void    Sfml::NextLib()
 
 void    Sfml::PrevLib()
 {
-    if (_scenario != USERINPUT) {
+    if (_scenario == GAMEMODE) {
         if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::J) {
             auto it = std::find(libMenu->libName.begin(), libMenu->libName.end(), "lib_arcade_sfml.so");
             int num = std::distance(libMenu->libName.begin(), it);
