@@ -21,6 +21,7 @@ bool    Sfml::required_actions()
     PrevLib();
     restartGame();
     NextGame();
+    PrevGame();
     return true;
 }
 
@@ -47,6 +48,25 @@ void    Sfml::NextGame()
             game = init_game();
             _gameLib = lib.substr(lib.find("/") + 1);
             game->init();
+        }
+    }
+}
+
+void    Sfml::PrevGame()
+{
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::Z) {
+            auto it = std::find(libGame->libName.begin(), libGame->libName.end(), _gameLib);
+            int num = std::distance(libGame->libName.begin(), it);
+            num -= 1;
+            if (num < 0)           
+                num = libGame->libName.size() - 1;
+            std::string lib = "games/" + libGame->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_g  *init_game = (init_g*)dlsym(handle, "init");
+            game = init_game();
+            _gameLib = lib.substr(lib.find("/") + 1);
+            game->init();            
         }
     }
 }

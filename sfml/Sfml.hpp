@@ -30,6 +30,7 @@ public:
     void    game_loop();
     void    initialize_values() {}
     void    NextGame();
+    void    PrevGame();
     std::string get_graph_lib();
 
     enum Scenarios {
