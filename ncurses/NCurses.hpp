@@ -42,6 +42,7 @@ public:
     void    print_map(void);
 
     void    get_name();
+    bool    get_lib();
     void    get_game();
     void    inside_get_game();
     void    specify_game(char *path_to_game);
@@ -52,6 +53,8 @@ public:
     void    set_direc();
     std::string setUserName();
     void    print_print_info(int pos, const char *content);
+
+    std::string print_score();
 
 
 protected:

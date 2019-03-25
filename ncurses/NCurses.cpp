@@ -20,10 +20,13 @@ NCurses::NCurses() : _user_name("") , _key_press(0), _game(NULL), _prev_library(
     //
     _available_game_names.push_back("pacman");
     _available_game_names.push_back("nibbler");
+    
     //
     _print_info.push_back("Enter your name: ");
-    _print_info.push_back("\n\nAvailable games:\n\tnibbler\n\tpacman\n\nChoose a game by writing it's name: ");
-    _print_info.push_back("\n\nAvailable libraries:\n\tncurses\n\tsfml\n\nChoose a library by writing it's name: ");
+    _print_info.push_back("\n\nAvailable libraries:\n\tncurses\n\tsfml\nChoose a library by writing it's name: ");
+    _print_info.push_back("\n\nAvailable games:\n\tnibbler\n\tpacman\nChoose a game by writing it's name: ");
+    _print_info.push_back("\n\nScore : \n");
+    _print_info.push_back(print_score());
 
 }
 
@@ -149,14 +152,10 @@ void    NCurses::inside_get_game()
 void       NCurses::get_game()
 {
 
-    std::string game_selected = "";
     std::string val;
 
-    for (game_selected = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
-        wprintw(stdscr, "Welcome ");
-        wprintw(stdscr, _user_name.c_str());
-        wprintw(stdscr, ".\n\nAvailable games:\n\tnibbler\n\tpacman\n\nChoose a game by writing it's name: ");
-        wprintw(stdscr, game_selected.c_str());
+    for (_game_name = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
+        print_print_info(2, _game_name.c_str());
         get_keypad();
         my_refresh();
         val = _key_press;
@@ -164,12 +163,55 @@ void       NCurses::get_game()
         this->stop();
         exit (0);
         }
-        if (_key_press != '\n')
-            game_selected.append(val);
+        if (_key_press == 263)
+            _game_name = _game_name.substr(0, _game_name.size()-1);
+        else if (_key_press != '\n')
+            _game_name.append(val);
     }
-    _game_name = game_selected;
     inside_get_game();
     
+}
+
+bool    NCurses::get_lib()
+{
+    std::string val;
+    std::string lib;
+
+    _print_info[0] = "Welcome " + _user_name;
+    for (lib = "", _key_press = 0; _key_press != '\n';) {
+        print_print_info(1, lib.c_str());
+        get_keypad();
+        my_refresh();
+        val = _key_press;
+        if (_key_press == 27) {// ESQ, exit
+           this->stop();
+            exit (0);
+        }
+        if (_key_press == 263)
+            lib = lib.substr(0, lib.size()-1);
+        else if (_key_press != '\n')
+            lib.append(val);
+    }
+    ////////////
+    if (strcmp(lib.c_str(), "sfml") == 0) {
+        _graphic_lib = "lib/lib_arcade_sfml.so";
+        return false;
+    }
+    if (strcmp(lib.c_str(), "ncurses") == 0) {
+        _graphic_lib = "lib/lib_arcade_ncurses.so";
+        return true;
+    }
+    else {
+        my_refresh();
+        init_pair(1, COLOR_RED, COLOR_BLACK);
+	    attron(COLOR_PAIR(1));
+        wprintw(stdscr, lib.c_str());
+        wprintw(stdscr, " isn't a valid lib name.\n\n");
+        init_pair(2, COLOR_WHITE, COLOR_BLACK);
+	    attron(COLOR_PAIR(2));
+        get_lib();
+    }
+    return true;
 }
 
 void    NCurses::get_name()
@@ -178,7 +220,6 @@ void    NCurses::get_name()
 
     my_refresh();
     print_print_info(-1, "");
-    //wprintw(stdscr, "Enter your name: ");
     for (_user_name = "", _key_press = 0; _key_press != '\n';) {// _user_name = _user_name + _key_press)
         get_keypad();
         my_refresh();
@@ -187,11 +228,11 @@ void    NCurses::get_name()
            this->stop();
             exit (0);
         }
-        if (_key_press != '\n')
+        if (_key_press == 263)
+            _user_name = _user_name.substr(0, _user_name.size()-1);
+        else if (_key_press != '\n')
             _user_name.append(val);
         print_print_info(0, _user_name.c_str());
-        //wprintw(stdscr, "Enter your name: ");
-       // wprintw(stdscr, _user_name.c_str());
     }
 }
 
@@ -240,22 +281,27 @@ void    NCurses::start()
 {
     get_name();
     my_refresh();
-    get_game();
-    if (_game == NULL) {
-        wprintw(stdscr, "It's null\n");
-        stop();
-        exit (84);
-    }
-    game_loop();
-    
-   this->stop(); 
+    if (get_lib() != false) {
+        get_game();
+        if (_game == NULL) {
+            wprintw(stdscr, "It's null\n");
+            stop();
+            exit (84);
+        }
+        game_loop();
+    }    
+    this->stop(); 
    //exit (0);
 }
 
 void    NCurses::stop()
 {
+     std::ofstream   file("scores.txt", std::fstream::app);
+    if (file.is_open()) {
+        file << _user_name << " " << (_game->get_size() - 4) << "\n";
+        file.close();
+    }
     endwin();
-	//refresh();
 }
 
 std::string NCurses::setUserName()
@@ -308,4 +354,19 @@ void NCurses::initialize_values()
 std::string NCurses::get_graph_lib()
 {
     return _graphic_lib;
+}
+
+std::string    NCurses::print_score()
+{
+    std::ifstream file("scores.txt");
+    std::string str;
+    std::string result = "";
+    
+    if (file.is_open()) {
+        for (int i = 0; std::getline(file, str); i++) {
+            result = result + str + "\n";
+        }
+        file.close();
+    }
+    return result;
 }
