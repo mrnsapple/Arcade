@@ -13,7 +13,12 @@ Sdl::Sdl()
 
 Sdl::~Sdl()
 {
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(_win);
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -25,15 +30,20 @@ void    Sdl::init()
     renderer = SDL_CreateRenderer(_win, -1, 0);
     font = TTF_OpenFont("./assets/font.ttf", 25);
     color = { 255, 255, 255};
-    surface = TTF_RenderText_Solid(font, "Hello nibber", color);
+    surface = TTF_RenderText_Solid(font, "Hello SDL2", color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_RenderCopy(renderer, texture,NULL,NULL);
-    SDL_RenderPresent(renderer);
 }
 
 void    Sdl::start()
 {
+    int texW = 0;
+    int texH = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+    SDL_Rect dstrect = { 0, 0, texW, texH };
+    
     while (isClosed != true) {
+        SDL_RenderCopy(renderer, texture,NULL,&dstrect);
+        SDL_RenderPresent(renderer);
          while (SDL_PollEvent(&_event)) {
             stop();
         }
@@ -44,10 +54,6 @@ void    Sdl::start()
 void    Sdl::stop()
 {
     if (_event.type == SDL_QUIT)
-        TTF_Quit();
-        TTF_CloseFont(font);
-        SDL_DestroyTexture(texture);
-        SDL_FreeSurface(surface);
         isClosed = true;
 }
 
