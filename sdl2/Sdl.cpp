@@ -55,5 +55,6 @@ void    Sdl::initialize_values()
 
 std::string Sdl::get_graph_lib()
 {
-    return "Yes";
+    return "";
 }
+
