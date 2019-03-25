@@ -7,7 +7,7 @@
 
 #include "Sfml.hpp"
 
-Sfml::Sfml() : _scenario(USERINPUT), graphLib("")
+Sfml::Sfml() : _scenario(USERINPUT), graphLib(""), _gameLib("")
 {
 }
 
@@ -21,6 +21,7 @@ bool    Sfml::required_actions()
     PrevLib();
     restartGame();
     NextGame();
+    PrevGame();
     return true;
 }
 
@@ -35,10 +36,37 @@ void    Sfml::restartGame()
 void    Sfml::NextGame()
 {
     if (_scenario == GAMEMODE) {
-        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::U) {
-            for (auto lib : libGame->libName) {
-                std::cout << lib << std::endl;
-            }
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::X) {
+            auto it = std::find(libGame->libName.begin(), libGame->libName.end(), _gameLib);
+            int num = std::distance(libGame->libName.begin(), it);
+            num += 1;
+            if (num > libGame->libName.size() - 1)
+                num = 0;
+            std::string lib = "games/" + libGame->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_g  *init_game = (init_g*)dlsym(handle, "init");
+            game = init_game();
+            _gameLib = lib.substr(lib.find("/") + 1);
+            game->init();
+        }
+    }
+}
+
+void    Sfml::PrevGame()
+{
+    if (_scenario == GAMEMODE) {
+        if (_event.type == sf::Event::KeyPressed &&_event.key.code == sf::Keyboard::Z) {
+            auto it = std::find(libGame->libName.begin(), libGame->libName.end(), _gameLib);
+            int num = std::distance(libGame->libName.begin(), it);
+            num -= 1;
+            if (num < 0)           
+                num = libGame->libName.size() - 1;
+            std::string lib = "games/" + libGame->libName[num];
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+            init_g  *init_game = (init_g*)dlsym(handle, "init");
+            game = init_game();
+            _gameLib = lib.substr(lib.find("/") + 1);
+            game->init();            
         }
     }
 }
@@ -83,6 +111,8 @@ void    Sfml::init()
     _menu.push_back(new TextObject(5, 100));
     _menu.push_back(new TextObject(5, 175));
     _menu.push_back(new TextObject(5, 250));
+    _menu[1]->setText("libraries in \"./games\"");
+    _menu[2]->setText("libraries in \"./lib\"");
     _menu[3]->setText("Scores");
     _inputText = new TextObject(_menu[0]->text.getLocalBounds().width, 25);
     _inputText->text.setFillColor(sf::Color::Red);
@@ -139,24 +169,6 @@ int Sfml::countFiles(std::string path)
     return num;
 }
 
-void    Sfml::setLibGames()
-{
-    std::stringstream   ss;
-
-    ss << countFiles("./games");
-    _menu[1]->setText(ss.str() + " libraries in " + "\"./games\"");
-    _win->draw(_menu[1]->text);
-}
-
-void    Sfml::setLibFiles()
-{
-    std::stringstream   ss;
-
-    ss << countFiles("./lib");
-    _menu[2]->setText(ss.str() + " libraries in " + "\"./lib\"");
-    _win->draw(_menu[2]->text);
-}
-
  IGameModule *     Sfml::start(IGameModule *game)
 {
     while (_win->isOpen()) {
@@ -174,10 +186,8 @@ void    Sfml::setLibFiles()
             _menu[0]->text.setOutlineThickness(0);
             _menu[0]->setText("Welcome " + _userName);
             _menu[0]->text.setFillColor(sf::Color::Red);
-            _win->draw(_menu[0]->text);
-            setLibGames();
-            setLibFiles();
-            _win->draw(_menu[3]->text);
+            for (auto obj : _menu)
+                _win->draw(obj->text);
             _win->draw(select->shape);
         }
         if (_scenario == CHOOSEGAME) {
@@ -336,11 +346,12 @@ void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
-            std::string gameFile = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
-            void    *handle = dlopen(gameFile.c_str(), RTLD_LAZY);
+            std::string lib = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
+            void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
             game->init();
+            _gameLib = lib.substr(lib.find("/") + 1);
             _scenario = GAMEMODE;
         }
     }

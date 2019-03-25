@@ -30,6 +30,7 @@ public:
     void    game_loop();
     void    initialize_values() {}
     void    NextGame();
+    void    PrevGame();
     std::string get_graph_lib();
 
     enum Scenarios {
@@ -65,9 +66,6 @@ public:
     int countFiles(std::string path);
     std::vector<std::string>    getFilesName(std::string path);
 
-    void    setLibGames();
-    void    setLibFiles();
-    
     void    moveSelect();
     void    menuSelect();
     
@@ -93,6 +91,7 @@ protected:
     std::vector<RectObject*> arrayMap;
     bool    gameStatus;
     std::string graphLib;
+    std::string _gameLib;
 
 private:
 };

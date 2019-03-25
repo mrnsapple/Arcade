@@ -10,6 +10,8 @@
 
 #include "../IDisplayModule.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 class Sdl : public IDisplayModule {
 	public:
 		Sdl();
@@ -23,10 +25,17 @@ class Sdl : public IDisplayModule {
         void initialize_values();
         std::string get_graph_lib();
 
+        
 	protected:
         SDL_Window *_win;
         bool isClosed;
         SDL_Event _event;
+        SDL_Renderer *renderer;
+        TTF_Font *font;
+        SDL_Color color;
+        SDL_Surface *surface;
+        SDL_Texture *texture;
+    
 	private:
 };
 
