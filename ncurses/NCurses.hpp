@@ -51,7 +51,6 @@ public:
     void    initialize_values();
     std::string get_graph_lib();
     void    set_direc();
-    std::string setUserName();
     void    print_print_info(int pos, const char *content);
 
     std::string print_score();

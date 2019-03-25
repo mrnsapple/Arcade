@@ -9,8 +9,8 @@ SRC =	arcade.cpp
 
 LIBSRC	=	sfml/Sfml.cpp	\
 			ncurses/NCurses.cpp	\
-			ncurses/NCurses_pacman_only.cpp
-#opengl/OpenGL.cpp	\
+			ncurses/NCurses_pacman_only.cpp	\
+			sdl2/Sdl.cpp
 
 GAMESSRC	=	nibbler/Nibbler.cpp	\
 				pacman/Pacman.cpp
@@ -23,7 +23,7 @@ GAMESOBJ	=	$(GAMESSRC:.cpp=.o)
 
 SFMLFLAGS	=	-lsfml-graphics -lsfml-system -lsfml-window -lsfml-audio
 
-OPENGLFLAGS =	-lSDL2 -lGLEW -lGL
+# OPENGLFLAGS =	-lSDL2 -lGLEW -lGL
 
 NAME	=	arcade
 
@@ -48,7 +48,7 @@ games	:	$(GAMESOBJ)
 graphicals	:	$(LIBOBJ)
 	mkdir -p lib
 	g++ -shared -o lib/lib_arcade_sfml.so Sfml.o $(SFMLFLAGS)
-	#g++ -shared -o lib/lib_arcade_opengl.so OpenGL.o $(OPENGLFLAGS)
+	g++ -shared -o lib/lib_arcade_sdl2.so Sdl.o -lSDL2
 	g++ -shared -o lib/lib_arcade_ncurses.so NCurses.o NCurses_pacman_only.o -lncurses
 
 clean:

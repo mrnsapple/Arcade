@@ -46,17 +46,6 @@ void    NCurses::print_print_info(int pos, const char *content)
     }
 }
 
-
-void    NCurses::NextLib()
-{
-
-}
-
-void    NCurses::PrevLib()
-{
-    
-}
-
 void    NCurses::init()
 {
     if ((stdscr = initscr()) == NULL )
@@ -247,10 +236,6 @@ void    NCurses::my_refresh()
 	//attron(COLOR_PAIR(1));
 }
 
-void    NCurses::NextGame()
-{
-}
-
 void delay(unsigned int mseconds)
 {
     clock_t goal = mseconds + clock();
@@ -302,11 +287,6 @@ void    NCurses::stop()
         file.close();
     }
     endwin();
-}
-
-std::string NCurses::setUserName()
-{
-    return "Anon";
 }
 
 bool    NCurses::required_actions()
