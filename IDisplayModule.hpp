@@ -23,7 +23,6 @@ public:
     virtual void    init() = 0;
     virtual void    start() = 0;
     virtual void    stop() = 0;
-    virtual std::string setUserName() = 0;
     virtual void    NextLib() = 0;
     virtual bool    required_actions() = 0;
     virtual void    game_loop() = 0;

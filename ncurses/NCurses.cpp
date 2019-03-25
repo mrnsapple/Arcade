@@ -258,11 +258,6 @@ void    NCurses::stop()
 	//refresh();
 }
 
-std::string NCurses::setUserName()
-{
-    return "Anon";
-}
-
 bool    NCurses::required_actions()
 {
     if (_key_press == 27) {// ESQ, exit
