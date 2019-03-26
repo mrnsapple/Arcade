@@ -18,6 +18,12 @@ class Sdl : public IDisplayModule {
 		Sdl();
 		~Sdl();
 
+        enum scene {
+            USERINPUT,
+            CHOOSELIB,
+            CHOOSEGAME
+        };
+
         void init();
         IGameModule *   start(IGameModule *game);
         void stop();
@@ -26,18 +32,22 @@ class Sdl : public IDisplayModule {
         void initialize_values();
         std::string get_graph_lib();
 
+        void    handleTextInput();
+        void    handleKeyboardEvent();
+        void    clear(SDL_Color color);
         
 	protected:
         SDL_Window *_win;
         bool isClosed;
         SDL_Event _event;
-        SDL_Renderer *renderer;
-        TTF_Font *font;
-        SDL_Color color;
-        SDL_Surface *surface;
-        SDL_Texture *texture;
 
-        TextSDL *intro;
+        SDL_Renderer    *_render;
+
+        TextSDL *_intro;
+        TextSDL *_textInput;
+        TextSDL *_libchoose;
+        TextSDL *_gamechoose;
+        scene   _scene;
     
 	private:
 };

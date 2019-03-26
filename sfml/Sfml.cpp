@@ -22,6 +22,7 @@ bool    Sfml::required_actions()
     restartGame();
     NextGame();
     PrevGame();
+    set_direc();
     return true;
 }
 
@@ -171,7 +172,6 @@ int Sfml::countFiles(std::string path)
 
 IGameModule*     Sfml::start(IGameModule *_game)
 {
-    // int loop = 0;
     while (_win->isOpen()) {
         _win->setFramerateLimit(60);
         handleEvents();
@@ -360,7 +360,7 @@ void    Sfml::moveSelectLib(Sfml::Menu *lib, Sfml::Scenarios scenario)
 void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return) {
             std::string lib = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
             void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
@@ -375,7 +375,7 @@ void    Sfml::selectGame()
 void    Sfml::menuSelect()
 {
     if (_scenario == MENU) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return) {
             if (select->shape.getPosition().y == 100)
                 _scenario = CHOOSEGAME;
             if (select->shape.getPosition().y == 175)
@@ -396,15 +396,14 @@ void    Sfml::handleEvents()
 {
     while (_win->pollEvent(_event)) {
         _win->setKeyRepeatEnabled(false);
+        selectGame();
+        menuSelect();
         setUserName();
         stop();
         moveSelect();
         moveSelectLib(libMenu, CHOOSELIB);
         moveSelectLib(libGame, CHOOSEGAME);
-        menuSelect();
-        selectGame();
         returnToMenu();
-        set_direc();
         required_actions();
     }
 }
@@ -412,13 +411,16 @@ void    Sfml::handleEvents()
 std::string Sfml::setUserName()
 {
     if (_scenario == USERINPUT) {
-        if (_event.type == sf::Event::TextEntered) {
+        if (_event.type == sf::Event::TextEntered && _event.text.unicode != 13) {
             if (_event.text.unicode == 8)
                 _userName = _userName.substr(0, _userName.size() - 1);
-            else
+            else 
                 _userName += _event.text.unicode;
         }
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return)
+        // if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return)
+            // if (_event.type == sf::Event::KeyReleased)
+            // sleep(0);
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return)
             _scenario = MENU;
     }
     return _userName;

@@ -14,22 +14,23 @@
 
 class TextSDL {
 public:
-    SDL_Renderer    *render;
     TTF_Font    *font;
-    SDL_Color   color;
+    SDL_Color   _color;
     SDL_Surface *surface;
     SDL_Texture *texture;
     SDL_Rect    dstrect;
 
-    TextSDL(SDL_Window *_win) {
+    TextSDL(SDL_Window *_win, SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render) {
         TTF_Init();
-        render = SDL_CreateRenderer(_win, -1, 0);
         font = TTF_OpenFont("./assets/font.ttf", 25);
-        color = {255, 0, 0};
+        _color = color;
+        setText(str, render);
+        setPosition(rect.x, rect.y);
+        setSize(rect.w, rect.h);
     }
     
-    void    setText(std::string str) {
-        surface = TTF_RenderText_Solid(font, str.c_str(), color);
+    void    setText(std::string str, SDL_Renderer *render) {
+        surface = TTF_RenderText_Solid(font, str.c_str(), _color);
         texture = SDL_CreateTextureFromSurface(render, surface);
     }
 
@@ -44,7 +45,7 @@ public:
         dstrect.y = posY;
     }
     
-    void    draw() {
+    void    draw(SDL_Renderer *render) {
         SDL_RenderCopy(render, texture, NULL, &dstrect);
         SDL_RenderPresent(render);
     }
@@ -52,7 +53,6 @@ public:
         SDL_DestroyTexture(texture);
         SDL_FreeSurface(surface);
         TTF_CloseFont(font);
-        SDL_DestroyRenderer(render);
         TTF_Quit();
     }
 
