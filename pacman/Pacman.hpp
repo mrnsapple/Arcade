@@ -27,12 +27,13 @@ public:
     void    move_rigth(int x, int y);
     void    set_dir(char dir);
     int     get_size();
-    void    increase_numbers_map(int x, int y);
+    void    increase_numbers_map(int x, int y, char dol);
     void    number_map_to_map();
     std::vector<std::string> get_number_map();
     bool move_ghost(int gost_y, int gost_x, int y, int x);
     void    initialize_values();
     void    set_game_time(int time);
+    void    time_to_eat_stuff();
 
 protected:
     bool    hasInit;
@@ -41,6 +42,7 @@ protected:
     char _dir;
     int _size;
     int _game_time;
+    int _time_to_eat;
 
 private:
 };

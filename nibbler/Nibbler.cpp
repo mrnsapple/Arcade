@@ -73,7 +73,7 @@ std::vector<std::string> Nibbler::get_number_map()
 
 void    Nibbler::move_top(int x, int y)
 { 
-    increase_numbers_map(x, y - 1);
+    increase_numbers_map(x, y - 1, '$');
     _number_map[y - 1][x] = '1';
     number_map_to_map();
 }
@@ -84,7 +84,7 @@ int     Nibbler::get_size(void)
 
 void    Nibbler::move_bot(int x, int y)
 {
-    increase_numbers_map(x, y + 1);
+    increase_numbers_map(x, y + 1, '$');
     _number_map[y + 1][x] = '1';
     number_map_to_map();
 }
@@ -105,7 +105,7 @@ std::vector<std::string> move_number_map(std::vector<std::string> _number_map)
     return _number_map;
 }
 
-void    Nibbler::increase_numbers_map(int x, int y)
+void    Nibbler::increase_numbers_map(int x, int y, char dol)
 {
     int eat = 0;
     
@@ -141,7 +141,7 @@ void    Nibbler::number_map_to_map()
 
 void    Nibbler::move_left(int x, int y)
 { 
-    increase_numbers_map(x - 1, y);
+    increase_numbers_map(x - 1, y, '$');
     _number_map[y][x - 1] = '1';
     number_map_to_map();
 }
@@ -153,7 +153,7 @@ void Nibbler::set_dir(char dir)
 
 void    Nibbler::move_rigth(int x, int y)
 {
- increase_numbers_map(x + 1, y);
+    increase_numbers_map(x + 1, y, '$');
     _number_map[y][x + 1] = '1';
     number_map_to_map();}
 

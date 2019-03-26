@@ -267,8 +267,8 @@ IGameModule     *NCurses::start(IGameModule *game)
     if (game == NULL) {
         //get_name();
         //my_refresh();
-        if (get_lib() == false)
-            return NULL;
+        //if (get_lib() == false)
+        //    return NULL;
         get_game();
         if (_game == NULL) {
             stop();

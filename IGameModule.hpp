@@ -23,7 +23,7 @@ public:
     virtual std::vector<std::string> get_map() = 0;
     virtual std::vector<std::string> get_number_map() = 0;
     virtual void set_dir(char dir) = 0;
-    virtual void increase_numbers_map(int x, int y) = 0;
+    virtual void increase_numbers_map(int x, int y, char dol) = 0;
     virtual     void    number_map_to_map() = 0;
     virtual     int     get_size() = 0;
     virtual     bool move_ghost(int gost_y, int gost_x, int y, int x) = 0;

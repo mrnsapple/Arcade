@@ -27,7 +27,7 @@ public:
     void    move_rigth(int x, int y);
     void    set_dir(char dir);
     int     get_size();
-    void    increase_numbers_map(int x, int y);
+    void    increase_numbers_map(int x, int y, char dol);
     void    number_map_to_map();
     std::vector<std::string> get_number_map();
     bool move_ghost(int gost_y, int gost_x, int y, int x);

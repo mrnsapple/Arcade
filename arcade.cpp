@@ -38,7 +38,7 @@ int main(int ac, char **av)
         game = display->start(game);
         graph_lib = display->get_graph_lib();
         dlclose(handle);
-        printf("lib:%s\n", graph_lib.c_str());
+        //printf("lib:%s\n", graph_lib.c_str());
         if (strcmp(graph_lib.c_str(), "") != 0) {
             av[1] = (char *)graph_lib.c_str();
             return (main(ac, av));
