@@ -7,7 +7,7 @@
 
 #include "Sdl.hpp"
 
-Sdl::Sdl() : _scene(USERINPUT)
+Sdl::Sdl() : _scene(USERINPUT), _text("")
 {
 }
 
@@ -24,7 +24,7 @@ void    Sdl::init()
     _win = SDL_CreateWindow("Sdl - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_ALLOW_HIGHDPI);
     _render = SDL_CreateRenderer(_win, -1, 0);
     _intro = new TextSDL(_win, {255, 0, 0}, "Welcome ", {0, 0, 0, 0}, _render);
-    _textInput = new TextSDL(_win, {255, 0, 0}, " [INPUT HERE] ", {100, 0, 0, 0}, _render);
+    _textInput = new TextSDL(_win, {255, 0, 0}, "        ", {100, 0, 0, 0}, _render);
     _libchoose = new TextSDL(_win, {255, 255, 255}, "Choose a graphical Library : ", {0, 50, 0, 0}, _render);
     _gamechoose = new TextSDL(_win, {255, 255, 255}, "Choose a game : ", {0, 100, 0, 0}, _render);
 }
@@ -48,6 +48,7 @@ IGameModule*      Sdl::start(IGameModule *game)
         if (_scene == CHOOSEGAME) {
             _gamechoose->draw(_render);
         }
+        SDL_RenderPresent(_render);
     }
 }
 
@@ -61,12 +62,8 @@ void    Sdl::handleTextInput()
 {
     if (_scene == USERINPUT)
         if (_event.type == SDL_TEXTINPUT) {
-            std::cout << "Text Input -> " << _event.text.text << std::endl;
-            // text += _event.text.text;
-            // std::cout << "Total Text " << text << std::endl;
-            // SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
-            // SDL_RenderClear(intro->render);
-            _textInput->setText("dooo", _render);
+            _text += _event.text.text;
+            _textInput = new TextSDL(_win, {255,0,0}, _text, {100, 0, 0, 0}, _render);
         }
 }
 

@@ -41,6 +41,8 @@ class Sdl : public IDisplayModule {
         bool isClosed;
         SDL_Event _event;
 
+        std::string _text;
+
         SDL_Renderer    *_render;
 
         TextSDL *_intro;

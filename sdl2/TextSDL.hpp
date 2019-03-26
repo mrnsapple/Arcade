@@ -19,6 +19,7 @@ public:
     SDL_Surface *surface;
     SDL_Texture *texture;
     SDL_Rect    dstrect;
+    std::string _str;
 
     TextSDL(SDL_Window *_win, SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render) {
         TTF_Init();
@@ -30,7 +31,8 @@ public:
     }
     
     void    setText(std::string str, SDL_Renderer *render) {
-        surface = TTF_RenderText_Solid(font, str.c_str(), _color);
+        _str = str;
+        surface = TTF_RenderText_Solid(font, _str.c_str(), _color);
         texture = SDL_CreateTextureFromSurface(render, surface);
     }
 
@@ -47,8 +49,15 @@ public:
     
     void    draw(SDL_Renderer *render) {
         SDL_RenderCopy(render, texture, NULL, &dstrect);
-        SDL_RenderPresent(render);
     }
+
+    void    update(SDL_Renderer *render, std::string str = "") {
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
+        surface = TTF_RenderText_Solid(font, str.c_str(), _color);
+        texture = SDL_CreateTextureFromSurface(render, surface);
+    }
+
     ~TextSDL() {
         SDL_DestroyTexture(texture);
         SDL_FreeSurface(surface);
