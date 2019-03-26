@@ -22,6 +22,7 @@ bool    Sfml::required_actions()
     restartGame();
     NextGame();
     PrevGame();
+    set_direc();
     return true;
 }
 
@@ -169,57 +170,64 @@ int Sfml::countFiles(std::string path)
     return num;
 }
 
- IGameModule *     Sfml::start(IGameModule *game)
+IGameModule*     Sfml::start(IGameModule *_game)
 {
     while (_win->isOpen()) {
         _win->setFramerateLimit(60);
         handleEvents();
-        if (_scenario == USERINPUT) {
-            _win->clear();
-            _inputText->setText(_userName);
-            _menu[0]->blink();
-            _win->draw(_menu[0]->text);
-            _win->draw(_inputText->text);
-        }
-        if (_scenario == MENU) {
-            _win->clear();
-            _menu[0]->text.setOutlineThickness(0);
-            _menu[0]->setText("Welcome " + _userName);
-            _menu[0]->text.setFillColor(sf::Color::Red);
-            for (auto obj : _menu)
-                _win->draw(obj->text);
-            _win->draw(select->shape);
-        }
-        if (_scenario == CHOOSEGAME) {
-            _win->clear();
-            for (auto lib : libGame->_libs)
-                _win->draw(lib->text);
-        }
-        if (_scenario == CHOOSELIB) {
-            _win->clear();
-            for (auto lib : libMenu->_libs)
-                _win->draw(lib->text);
-        }
-        if (_scenario == SCORES) {
-            _win->clear();
-            std::ifstream file("scores.txt");
-            std::string str;
-            std::vector<TextObject*>    score;
-            TextObject  title(5, 0);
-            title.setText("Last 10");
-            if (file.is_open()) {
-                for (int i = 0; std::getline(file, str); i++) {
-                    score.push_back(new TextObject(5, 25 * (i + 1)));
-                    score[i]->setText(str);
+        if (_game == NULL) {
+            if (_scenario == USERINPUT) {
+                _win->clear();
+                _inputText->setText(_userName);
+                _menu[0]->blink();
+                _win->draw(_menu[0]->text);
+                _win->draw(_inputText->text);
+            }
+            if (_scenario == MENU) {
+                _win->clear();
+                _menu[0]->text.setOutlineThickness(0);
+                _menu[0]->setText("Welcome " + _userName);
+                _menu[0]->text.setFillColor(sf::Color::Red);
+                for (auto obj : _menu)
+                    _win->draw(obj->text);
+                _win->draw(select->shape);
+            }
+            if (_scenario == CHOOSEGAME) {
+                _win->clear();
+                for (auto lib : libGame->_libs)
+                    _win->draw(lib->text);
+            }
+            if (_scenario == CHOOSELIB) {
+                _win->clear();
+                for (auto lib : libMenu->_libs)
+                    _win->draw(lib->text);
+            }
+            if (_scenario == SCORES) {
+                _win->clear();
+                std::ifstream file("scores.txt");
+                std::string str;
+                std::vector<TextObject*>    score;
+                TextObject  title(5, 0);
+                title.setText("Last 10");
+                if (file.is_open()) {
+                    for (int i = 0; std::getline(file, str); i++) {
+                        score.push_back(new TextObject(5, 25 * (i + 1)));
+                        score[i]->setText(str);
+                    }
+                    file.close();
                 }
-                file.close();
+                _win->draw(title.text);
+                for (auto obj : score) {
+                    _win->draw(obj->text);
+                }
             }
-            _win->draw(title.text);
-            for (auto obj : score) {
-                _win->draw(obj->text);
-            }
+            game_loop();
         }
-        game_loop();
+        if (_game != NULL) {
+            game = _game;
+            _scenario = GAMEMODE;
+            game_loop();
+        }
         _win->display();
     }
     return game;  
@@ -239,7 +247,9 @@ void    Sfml::game_loop()
         _win->setFramerateLimit(5);
         _win->clear();
         loadMap();
+        game->set_game_time(loop);
         gameStatus = game->play();
+        loop++;
     }
 }
 
@@ -272,10 +282,15 @@ void    Sfml::loadMap()
         _win->draw(rect->shape);
     }
     TextObject  *score = new TextObject(5, 350);
+    TextObject  *time = new TextObject(5, 450);
     std::stringstream   ss;
     ss << (game->get_size() - 4);
     score->setText("score : " + ss.str());
+    std::stringstream   dd;
+    dd << loop;
+    time->setText("time : " + dd.str());
     _win->draw(score->text);
+    _win->draw(time->text);
     arrayMap.clear();
 }
 
@@ -345,7 +360,7 @@ void    Sfml::moveSelectLib(Sfml::Menu *lib, Sfml::Scenarios scenario)
 void    Sfml::selectGame()
 {
     if (_scenario == CHOOSEGAME) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return) {
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return) {
             std::string lib = "games/" + libGame->_libs[libGame->checkCurrentHighlighted()]->text.getString();
             void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
             init_g  *init_game = (init_g*)dlsym(handle, "init");
@@ -360,7 +375,7 @@ void    Sfml::selectGame()
 void    Sfml::menuSelect()
 {
     if (_scenario == MENU) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space) {
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return) {
             if (select->shape.getPosition().y == 100)
                 _scenario = CHOOSEGAME;
             if (select->shape.getPosition().y == 175)
@@ -381,15 +396,14 @@ void    Sfml::handleEvents()
 {
     while (_win->pollEvent(_event)) {
         _win->setKeyRepeatEnabled(false);
+        selectGame();
+        menuSelect();
         setUserName();
         stop();
         moveSelect();
         moveSelectLib(libMenu, CHOOSELIB);
         moveSelectLib(libGame, CHOOSEGAME);
-        menuSelect();
-        selectGame();
         returnToMenu();
-        set_direc();
         required_actions();
     }
 }
@@ -397,13 +411,16 @@ void    Sfml::handleEvents()
 std::string Sfml::setUserName()
 {
     if (_scenario == USERINPUT) {
-        if (_event.type == sf::Event::TextEntered) {
+        if (_event.type == sf::Event::TextEntered && _event.text.unicode != 13) {
             if (_event.text.unicode == 8)
                 _userName = _userName.substr(0, _userName.size() - 1);
-            else
+            else 
                 _userName += _event.text.unicode;
         }
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return)
+        // if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return)
+            // if (_event.type == sf::Event::KeyReleased)
+            // sleep(0);
+        if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return)
             _scenario = MENU;
     }
     return _userName;

@@ -7,49 +7,79 @@
 
 #include "Sdl.hpp"
 
-Sdl::Sdl()
+Sdl::Sdl() : _scene(USERINPUT), _text("")
 {
 }
 
 Sdl::~Sdl()
 {
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(surface);
-    TTF_CloseFont(font);
-    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(_win);
-    TTF_Quit();
+    SDL_DestroyRenderer(_render);
     SDL_Quit();
 }
 
 void    Sdl::init()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
-    //SDL_WM_SetCaption("SDL Test", "SDL Test");
     _win = SDL_CreateWindow("Sdl - Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820, 580, SDL_WINDOW_ALLOW_HIGHDPI);
-    TTF_Init();
-    renderer = SDL_CreateRenderer(_win, -1, 0);
-    font = TTF_OpenFont("./assets/font.ttf", 25);
-    color = { 255, 255, 255};
-    surface = TTF_RenderText_Solid(font, "Hello SDL2", color);
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    _render = SDL_CreateRenderer(_win, -1, 0);
+    _intro = new TextSDL(_win, {255, 0, 0}, "Welcome ", {0, 0, 0, 0}, _render);
+    _textInput = new TextSDL(_win, {255, 0, 0}, "        ", {100, 0, 0, 0}, _render);
+    _libchoose = new TextSDL(_win, {255, 255, 255}, "Choose a graphical Library : ", {0, 50, 0, 0}, _render);
+    _gamechoose = new TextSDL(_win, {255, 255, 255}, "Choose a game : ", {0, 100, 0, 0}, _render);
 }
 
-IGameModule *      Sdl::start(IGameModule *game)
+IGameModule*      Sdl::start(IGameModule *game)
 {
-    int texW = 0;
-    int texH = 0;
-    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-    SDL_Rect dstrect = { 0, 0, texW, texH };
-    
     while (isClosed != true) {
-        SDL_RenderCopy(renderer, texture,NULL,&dstrect);
-        SDL_RenderPresent(renderer);
-         while (SDL_PollEvent(&_event)) {
+        while (SDL_PollEvent(&_event)) {
             stop();
+            handleTextInput();
+            handleKeyboardEvent();
+        }
+        if (_scene == USERINPUT) {
+            _intro->draw(_render);
+            _textInput->draw(_render);
+            SDL_StartTextInput();
+        }
+        if (_scene == CHOOSELIB) {
+            _libchoose->draw(_render);
+        }
+        if (_scene == CHOOSEGAME) {
+            _gamechoose->draw(_render);
+        }
+        SDL_RenderPresent(_render);
+    }
+}
+
+void    Sdl::clear(SDL_Color color)
+{
+    SDL_SetRenderDrawColor(_render, color.r, color.g, color.b, color.a);
+    SDL_RenderClear(_render);
+}
+
+void    Sdl::handleTextInput()
+{
+    if (_scene == USERINPUT)
+        if (_event.type == SDL_TEXTINPUT) {
+            _text += _event.text.text;
+            _textInput = new TextSDL(_win, {255,0,0}, _text, {100, 0, 0, 0}, _render);
+        }
+}
+
+void    Sdl::handleKeyboardEvent()
+{
+    if (_scene == USERINPUT) {
+        if (_event.type == SDL_KEYDOWN && _event.key.keysym.scancode == SDL_SCANCODE_RETURN)
+            SDL_StopTextInput();
+        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_RETURN)
+            _scene = CHOOSELIB;
+    }
+    if (_scene == CHOOSELIB) {
+        if (_event.type == SDL_KEYDOWN && _event.key.keysym.scancode == SDL_SCANCODE_RETURN) {
+            _scene = CHOOSEGAME;
         }
     }
-    //menu con nombre, libreria y juego    
 }
 
 void    Sdl::stop()
