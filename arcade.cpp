@@ -33,6 +33,8 @@ int main(int ac, char **av)
             return 84;
         }
         init_t  *init_lib = (init_t*)dlsym(handle, "init");
+        if (dlerror() != NULL)
+            return 84;
         IDisplayModule  *display = init_lib();
         display->init();
         game = display->start(game);
@@ -45,7 +47,7 @@ int main(int ac, char **av)
         }
     } else {
         printUsage();
-        //return 84;
+        return 84;
     }
     return 0;
 }
