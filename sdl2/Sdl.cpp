@@ -7,7 +7,7 @@
 
 #include "Sdl.hpp"
 
-Sdl::Sdl() : _scene(USERINPUT), graphLib(""), isClosed(false)
+Sdl::Sdl() : _scene(USERINPUT), graphLib(""), isClosed(false), gameStatus(true)
 {
 }
 
@@ -26,7 +26,7 @@ void    Sdl::init()
     _intro = new TextSDL({255, 0, 0}, "Welcome ", {0, 0, 0, 0}, _render);
     _introInput = new TextSDL({255, 0, 0}, "", {100, 0, 0, 0}, _render);
     _libchoose = new TextSDL({255, 255, 255}, "Choose a graphical Library : ", {0, 50, 0, 0}, _render);
-    _gamechoose = new TextSDL({255, 255, 255}, "Choose a game : ", {0, 100, 0, 0}, _render);
+    _gamechoose = new TextSDL({255, 255, 255}, "Choose game : ", {0, 100, 0, 0}, _render);
     libNames = getLibName("./lib");
     for (std::vector<std::string>::iterator it = libNames.begin(); it != libNames.end(); ++it) {
         int i = ((it - libNames.begin()) + 1) * 10;
@@ -38,7 +38,16 @@ void    Sdl::init()
         int i = ((it - gameNames.begin()) + 1) * 10;
         _gameOptions.push_back(new TextSDL({255, 255, 255}, *it, {0, 120 + (i * 2), 0, 0}, _render));
     }
-    _gameInput = new TextSDL({0, 0, 255}, "", {200, 100, 0, 0}, _render);
+    _gameInput = new TextSDL({0, 0, 255}, "", {180, 100, 0, 0}, _render);
+    std::ifstream   file("scores.txt");
+    std::string str;
+    if (file.is_open()) {
+        for (int i = 0; std::getline(file, str); i++) {
+            int o = 25 * (i + 1);
+            _scores.push_back(new TextSDL({255,255,255}, str, {300, o, 0, 0}, _render, 20));
+        }
+        file.close();
+    }
 }
 
 IGameModule*      Sdl::start(IGameModule *game)
@@ -48,7 +57,7 @@ IGameModule*      Sdl::start(IGameModule *game)
             stop();
             handleTextInput(USERINPUT, _introInput, {100, 0, 0, 0});
             handleTextInput(CHOOSELIB, _libInput, {380, 50, 0, 0});
-            handleTextInput(CHOOSEGAME, _gameInput, {200, 100, 0, 0});
+            handleTextInput(CHOOSEGAME, _gameInput, {180, 100, 0, 0});
             handleKeyboardEvent();
             required_actions();
         }
@@ -64,22 +73,24 @@ IGameModule*      Sdl::start(IGameModule *game)
                 _introInput->draw(_render);
                 _libchoose->draw(_render);
                 _libInput->draw(_render);
-                for (auto obj : _libOptions) {
+                for (auto obj : _libOptions)
                     obj->draw(_render);
-                }
                 SDL_StartTextInput();
             }
             if (_scene == CHOOSEGAME) {
                 clear({0,0,0});
                 _intro->draw(_render);
                 _introInput->draw(_render);
-                _libchoose->draw(_render);
+                _libInput->set(_libInput->_input, {0, 50, 0, 0}, _render);
                 _libInput->draw(_render);
                 _gamechoose->draw(_render);
                 _gameInput->draw(_render);
-                for (auto obj : _gameOptions) {
+                for (auto obj : _gameOptions)
                     obj->draw(_render);
-                }
+                TextSDL scoreTitle({255,255,255}, "Scores", {300, 0, 0, 0}, _render);
+                scoreTitle.draw(_render);
+                for (auto obj : _scores)
+                    obj->draw(_render);
                 SDL_StartTextInput();
             }
             game_loop();
@@ -124,10 +135,6 @@ void    Sdl::handleKeyboardEvent()
     }
     if (_scene == CHOOSEGAME) {
         if (_event.type == SDL_KEYUP) {
-            if (_event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                _libInput->_input = "";
-                _scene = CHOOSELIB;
-            }
             if (_event.key.keysym.scancode == SDL_SCANCODE_RETURN && _gameInput->_input != "") {
                 std::string lib = "games/lib_arcade_" + _gameInput->_input + ".so";
                 void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
@@ -155,9 +162,11 @@ void    Sdl::stop()
 bool    Sdl::required_actions()
 {
     if (_scene == GAMEMODE) {
+        RestartGame();
         NextLib();
         PrevLib();
         NextGame();
+        PrevGame();
         set_direc();
     }
     return true;
@@ -166,11 +175,20 @@ bool    Sdl::required_actions()
 void    Sdl::game_loop()
 {
     if (_scene == GAMEMODE) {
+        if (gameStatus == false) {
+            std::ofstream   file("scores.txt", std::fstream::app);
+            if (file.is_open()) {
+                file << _introInput->_input << " " << (_game->get_size() - 4) << "\n";
+                file.close();
+            }
+            isClosed = true;
+            SDL_Quit();
+        }
         clear({0, 0, 0});
         loadMap();
         SDL_Delay(150);
         _game->set_game_time(loop);
-        _game->play();
+        gameStatus = _game->play();
         loop++;
     }
 }
@@ -297,6 +315,13 @@ void    Sdl::PrevLib()
         graphLib = lib;
         isClosed = true;
         SDL_Quit();
+    }
+}
+
+void    Sdl::RestartGame()
+{
+    if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_R) {
+        _game->init();
     }
 }
 

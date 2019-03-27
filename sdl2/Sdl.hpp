@@ -68,6 +68,7 @@ public:
     void    PrevLib();
     void    NextGame();
     void    PrevGame();
+    void    RestartGame();
 
     int strlendelim(const char *str, char delim) {
         int i = 0;
@@ -102,7 +103,10 @@ protected:
     IGameModule *_game;
     std::vector<RectSDL*>   arrayMap;
 
+    std::vector<TextSDL*>   _scores;
+
     std::string graphLib;
+    bool gameStatus;
 
 
 private:

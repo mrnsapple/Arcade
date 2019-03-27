@@ -22,16 +22,16 @@ public:
     std::string _str;
     std::string _input;
 
-    TextSDL(SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render) {
+    TextSDL(SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render, int fontSize = 25) {
         _input = "";
         _color = color;
-        set(str, rect, render);
+        set(str, rect, render, fontSize);
     }
 
-    void    set(std::string str, SDL_Rect rect, SDL_Renderer *render)
+    void    set(std::string str, SDL_Rect rect, SDL_Renderer *render, int fontSize = 25)
     {
         TTF_Init();
-        font = TTF_OpenFont("./assets/font.ttf", 25);
+        font = TTF_OpenFont("./assets/font.ttf", fontSize);
         setText(str, render);
         setPosition(rect.x, rect.y);
         setSize(rect.w, rect.h);        
