@@ -155,6 +155,7 @@ void    Sdl::stop()
 bool    Sdl::required_actions()
 {
     NextLib();
+    PrevLib();
     set_direc();
     return true;
 }
@@ -245,6 +246,23 @@ void    Sdl::NextLib()
             SDL_Quit();
         }
     }
+}
+
+void    Sdl::PrevLib()
+{
+    if (_scene == GAMEMODE) {
+        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_J) {
+            auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
+            int num = std::distance(libNames.begin(), it);
+            num -= 1;
+            if (num > 0)
+                num = libNames.size() - 1;
+            std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
+            graphLib = lib;
+            isClosed = true;
+            SDL_Quit();
+        }
+    }    
 }
 
 std::string Sdl::get_graph_lib()

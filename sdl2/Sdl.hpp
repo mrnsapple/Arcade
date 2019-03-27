@@ -65,6 +65,7 @@ public:
     void    loadMap();
     void    set_direc();
     void    NextLib();
+    void    PrevLib();
 
     int strlendelim(const char *str, char delim) {
         int i = 0;
