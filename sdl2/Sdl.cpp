@@ -7,7 +7,7 @@
 
 #include "Sdl.hpp"
 
-Sdl::Sdl() : _scene(USERINPUT), graphLib("")
+Sdl::Sdl() : _scene(USERINPUT), graphLib(""), isClosed(false)
 {
 }
 
@@ -85,7 +85,6 @@ IGameModule*      Sdl::start(IGameModule *game)
             game_loop();
         }
         if (game != NULL) {
-            // std::cout << "here" << std::endl;
             _game = game;
             _scene = GAMEMODE;
             game_loop();
