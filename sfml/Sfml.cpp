@@ -417,9 +417,6 @@ std::string Sfml::setUserName()
             else 
                 _userName += _event.text.unicode;
         }
-        // if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Return)
-            // if (_event.type == sf::Event::KeyReleased)
-            // sleep(0);
         if (_event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Return)
             _scenario = MENU;
     }

@@ -20,14 +20,21 @@ public:
     SDL_Texture *texture;
     SDL_Rect    dstrect;
     std::string _str;
+    std::string _input;
 
-    TextSDL(SDL_Window *_win, SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render) {
+    TextSDL(SDL_Color color, std::string str, SDL_Rect rect, SDL_Renderer *render) {
+        _input = "";
+        _color = color;
+        set(str, rect, render);
+    }
+
+    void    set(std::string str, SDL_Rect rect, SDL_Renderer *render)
+    {
         TTF_Init();
         font = TTF_OpenFont("./assets/font.ttf", 25);
-        _color = color;
         setText(str, render);
         setPosition(rect.x, rect.y);
-        setSize(rect.w, rect.h);
+        setSize(rect.w, rect.h);        
     }
     
     void    setText(std::string str, SDL_Renderer *render) {
