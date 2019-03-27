@@ -59,6 +59,9 @@ IGameModule*      Sdl::start(IGameModule *game)
                 SDL_StartTextInput();
             }
             if (_scene == CHOOSELIB) {
+                clear({0,0,0});
+                _intro->draw(_render);
+                _introInput->draw(_render);
                 _libchoose->draw(_render);
                 _libInput->draw(_render);
                 for (auto obj : _libOptions) {
@@ -120,12 +123,25 @@ void    Sdl::handleKeyboardEvent()
         }
     }
     if (_scene == CHOOSEGAME) {
-        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_RETURN && _gameInput->_input != "") {
-            void    *handle = dlopen("games/lib_arcade_nibbler.so", RTLD_LAZY);
-            init_g  *init_game = (init_g*)dlsym(handle, "init");
-            _game = init_game();
-            _game->init();
-            _scene = GAMEMODE;
+        if (_event.type == SDL_KEYUP) {
+            if (_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                _libInput->_input = "";
+                _scene = CHOOSELIB;
+            }
+            if (_event.key.keysym.scancode == SDL_SCANCODE_RETURN && _gameInput->_input != "") {
+                std::string lib = "games/lib_arcade_" + _gameInput->_input + ".so";
+                void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+                if (!handle) {
+                    _gameInput->_input = "ERROR";
+                    _gameInput->set(_gameInput->_input, {200, 100, 0, 0}, _render);
+                    _gameInput->_input = "";
+                } else {
+                    init_g  *init_game = (init_g*)dlsym(handle, "init");
+                    _game = init_game();
+                    _game->init();
+                    _scene = GAMEMODE;
+                }
+            }
         }
     }
 }
@@ -138,6 +154,7 @@ void    Sdl::stop()
 
 bool    Sdl::required_actions()
 {
+    NextLib();
     set_direc();
     return true;
 }
@@ -171,7 +188,7 @@ void    Sdl::loadMap()
                     arrayMap.push_back(new RectSDL({0, 255, 255}, {x, y, 20, 20}));
                 if (*c == '$')
                     arrayMap.push_back(new RectSDL({0, 255, 0}, {x, y, 20, 20}));
-                
+
                 if (*c == 'o')
                     arrayMap.push_back(new RectSDL({255, 255, 255}, {x, y, 20, 20}));                
                 if (*c == 'C')
@@ -196,7 +213,7 @@ void    Sdl::loadMap()
 void    Sdl::set_direc()
 {
     if (_scene == GAMEMODE) {
-        if (_event.type == SDL_KEYDOWN) {
+        if (_event.type == SDL_KEYUP) {
             if (_event.key.keysym.scancode == SDL_SCANCODE_UP)
                 _game->set_dir('t');
             if (_event.key.keysym.scancode == SDL_SCANCODE_DOWN)
@@ -205,13 +222,21 @@ void    Sdl::set_direc()
                 _game->set_dir('l');
             if (_event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
                 _game->set_dir('r');
+            if (_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                _gameInput->_input = "";
+                _scene = CHOOSEGAME;
+            }
         }
     }
 }
 
-void    Sdl::initialize_values()
+void    Sdl::NextLib()
 {
-
+    if (_scene == GAMEMODE) {
+        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_L) {
+            
+        }
+    }
 }
 
 std::string Sdl::get_graph_lib()

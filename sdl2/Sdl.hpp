@@ -32,7 +32,7 @@ public:
     void stop();
     bool required_actions();
     void game_loop();
-    void initialize_values();
+    void initialize_values() {}
     std::string get_graph_lib();
 
     void    handleTextInput(scene _scen, TextSDL *text, SDL_Rect rect);
@@ -49,15 +49,31 @@ public:
         dirent  *pent = NULL;
 
         pdir = opendir(path.c_str());
-        while (pent = readdir(pdir))
-        if (endsWith(pent->d_name, ".so"))
-            vec.push_back(pent->d_name);
+        while (pent = readdir(pdir)) {
+            if (endsWith(pent->d_name, ".so")) {
+                std::string str = pent->d_name;
+                str = str.substr(str.find("lib_arcade_") + 11);
+                str = str.substr(0, strlendelim(str.c_str(), '.'));
+                vec.push_back(str);
+            }
+        }
         closedir(pdir);
-        return vec;    
+        return vec;
     }
 
     void    loadMap();
     void    set_direc();
+    void    NextLib();
+
+    int strlendelim(const char *str, char delim) {
+        int i = 0;
+        
+        for (i = 0; str[i] != '\0'; i++) {
+            if (str[i] == delim)
+                return i;
+        }
+        return i;
+    }
 
 protected:
     SDL_Window *_win;
