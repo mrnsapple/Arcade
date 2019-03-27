@@ -66,6 +66,8 @@ public:
     void    set_direc();
     void    NextLib();
     void    PrevLib();
+    void    NextGame();
+    void    PrevGame();
 
     int strlendelim(const char *str, char delim) {
         int i = 0;

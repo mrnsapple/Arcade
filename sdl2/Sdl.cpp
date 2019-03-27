@@ -124,7 +124,7 @@ void    Sdl::handleKeyboardEvent()
     }
     if (_scene == CHOOSEGAME) {
         if (_event.type == SDL_KEYUP) {
-            if (_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+            if (_event.key.keysym.scancode == SDL_SCANCODE_Q) {
                 _libInput->_input = "";
                 _scene = CHOOSELIB;
             }
@@ -148,15 +148,18 @@ void    Sdl::handleKeyboardEvent()
 
 void    Sdl::stop()
 {
-    if (_event.type == SDL_QUIT)
+    if (_event.type == SDL_QUIT || (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
         isClosed = true;
 }
 
 bool    Sdl::required_actions()
 {
-    NextLib();
-    PrevLib();
-    set_direc();
+    if (_scene == GAMEMODE) {
+        NextLib();
+        PrevLib();
+        NextGame();
+        set_direc();
+    }
     return true;
 }
 
@@ -189,9 +192,13 @@ void    Sdl::loadMap()
                     arrayMap.push_back(new RectSDL({0, 255, 255}, {x, y, 20, 20}));
                 if (*c == '$')
                     arrayMap.push_back(new RectSDL({0, 255, 0}, {x, y, 20, 20}));
-
+        
+                if (*c == '!')
+                    arrayMap.push_back(new RectSDL({128,0,128}, {x, y, 20, 20}));
                 if (*c == 'o')
                     arrayMap.push_back(new RectSDL({255, 255, 255}, {x, y, 20, 20}));                
+                if (*c == 'O')
+                    arrayMap.push_back(new RectSDL({255,165,0}, {x, y, 20, 20}));
                 if (*c == 'C')
                     arrayMap.push_back(new RectSDL({255, 255, 0}, {x, y, 20, 20}));
             }
@@ -213,56 +220,84 @@ void    Sdl::loadMap()
 
 void    Sdl::set_direc()
 {
-    if (_scene == GAMEMODE) {
-        if (_event.type == SDL_KEYUP) {
-            if (_event.key.keysym.scancode == SDL_SCANCODE_UP)
-                _game->set_dir('t');
-            if (_event.key.keysym.scancode == SDL_SCANCODE_DOWN)
-                _game->set_dir('b');
-            if (_event.key.keysym.scancode == SDL_SCANCODE_LEFT)
-                _game->set_dir('l');
-            if (_event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
-                _game->set_dir('r');
-            if (_event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-                _gameInput->_input = "";
-                _scene = CHOOSEGAME;
-            }
+    if (_event.type == SDL_KEYUP) {
+        if (_event.key.keysym.scancode == SDL_SCANCODE_UP)
+            _game->set_dir('t');
+        if (_event.key.keysym.scancode == SDL_SCANCODE_DOWN)
+            _game->set_dir('b');
+        if (_event.key.keysym.scancode == SDL_SCANCODE_LEFT)
+            _game->set_dir('l');
+        if (_event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+            _game->set_dir('r');
+        if (_event.key.keysym.scancode == SDL_SCANCODE_Q) {
+            _gameInput->_input = "";
+            _scene = CHOOSEGAME;
         }
+    }
+}
+
+void    Sdl::NextGame()
+{
+    if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_X) {
+        auto it = std::find(gameNames.begin(), gameNames.end(), _gameInput->_input);
+        int num = std::distance(gameNames.begin(), it);
+        num += 1;
+        if (num > gameNames.size() - 1)
+            num = 0;
+        std::string lib = "games/lib_arcade_" + gameNames[num] + ".so";
+        void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+        init_g  *init_game = (init_g*)dlsym(handle, "init");
+        _game = init_game();
+        _gameInput->_input = gameNames[num];
+        _game->init();
+    }
+}
+
+void    Sdl::PrevGame()
+{
+    if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_Z) {
+        auto it = std::find(gameNames.begin(), gameNames.end(), _gameInput->_input);
+        int num = std::distance(gameNames.begin(), it);
+        num -= 1;
+        if (num > 0)
+            num = gameNames.size() - 1;
+        std::string lib = "games/lib_arcade_" + gameNames[num] + ".so";
+        void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+        init_g  *init_game = (init_g*)dlsym(handle, "init");
+        _game = init_game();
+        _gameInput->_input = gameNames[num];
+        _game->init();
     }
 }
 
 void    Sdl::NextLib()
 {
-    if (_scene == GAMEMODE) {
-        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_L) {
-            auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
-            int num = std::distance(libNames.begin(), it);
-            num += 1;
-            if (num > libNames.size() - 1)
-                num = 0;
-            std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
-            graphLib = lib;
-            isClosed = true;
-            SDL_Quit();
-        }
+    if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_L) {
+        auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
+        int num = std::distance(libNames.begin(), it);
+        num += 1;
+        if (num > libNames.size() - 1)
+            num = 0;
+        std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
+        graphLib = lib;
+        isClosed = true;
+        SDL_Quit();
     }
 }
 
 void    Sdl::PrevLib()
 {
-    if (_scene == GAMEMODE) {
-        if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_J) {
-            auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
-            int num = std::distance(libNames.begin(), it);
-            num -= 1;
-            if (num > 0)
-                num = libNames.size() - 1;
-            std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
-            graphLib = lib;
-            isClosed = true;
-            SDL_Quit();
-        }
-    }    
+    if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_J) {
+        auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
+        int num = std::distance(libNames.begin(), it);
+        num -= 1;
+        if (num > 0)
+            num = libNames.size() - 1;
+        std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
+        graphLib = lib;
+        isClosed = true;
+        SDL_Quit();
+    }
 }
 
 std::string Sdl::get_graph_lib()

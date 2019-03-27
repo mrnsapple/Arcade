@@ -305,7 +305,7 @@ void    Sfml::set_direc()
             game->set_dir('l');
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
             game->set_dir('r');
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape) {
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Q) {
             _scenario = CHOOSEGAME;
             // game = NULL;
         }
@@ -315,7 +315,7 @@ void    Sfml::set_direc()
 void    Sfml::returnToMenu()
 {
     if (_scenario == CHOOSEGAME || _scenario == CHOOSELIB || _scenario == SCORES) {
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Q)
             _scenario = MENU;
     }
 }
@@ -390,7 +390,7 @@ void    Sfml::menuSelect()
 
 void    Sfml::stop()
 {
-    if (_event.type == sf::Event::Closed)
+    if (_event.type == sf::Event::Closed ||( _event.type == sf::Event::KeyReleased && _event.key.code == sf::Keyboard::Escape) )
         _win->close();
 }
 
