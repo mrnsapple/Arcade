@@ -27,15 +27,15 @@ void    Sdl::init()
     _introInput = new TextSDL({255, 0, 0}, "", {100, 0, 0, 0}, _render);
     _libchoose = new TextSDL({255, 255, 255}, "Choose a graphical Library : ", {0, 50, 0, 0}, _render);
     _gamechoose = new TextSDL({255, 255, 255}, "Choose a game : ", {0, 100, 0, 0}, _render);
-    std::vector<std::string> names = getLibName("./lib");
-    for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); ++it) {
-        int i = ((it - names.begin()) + 1) * 10;
+    libNames = getLibName("./lib");
+    for (std::vector<std::string>::iterator it = libNames.begin(); it != libNames.end(); ++it) {
+        int i = ((it - libNames.begin()) + 1) * 10;
         _libOptions.push_back(new TextSDL({255, 255, 255}, *it, {0, 70 + (i * 2), 0, 0}, _render));
     }
     _libInput = new TextSDL({0, 255, 0}, "", {380, 50, 0, 0}, _render);
-    names = getLibName("./games");
-    for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); ++it) {
-        int i = ((it - names.begin()) + 1) * 10;
+    gameNames = getLibName("./games");
+    for (std::vector<std::string>::iterator it = gameNames.begin(); it != gameNames.end(); ++it) {
+        int i = ((it - gameNames.begin()) + 1) * 10;
         _gameOptions.push_back(new TextSDL({255, 255, 255}, *it, {0, 120 + (i * 2), 0, 0}, _render));
     }
     _gameInput = new TextSDL({0, 0, 255}, "", {200, 100, 0, 0}, _render);
@@ -44,15 +44,15 @@ void    Sdl::init()
 IGameModule*      Sdl::start(IGameModule *game)
 {
     while (isClosed != true) {
+        while (SDL_PollEvent(&_event)) {
+            stop();
+            handleTextInput(USERINPUT, _introInput, {100, 0, 0, 0});
+            handleTextInput(CHOOSELIB, _libInput, {380, 50, 0, 0});
+            handleTextInput(CHOOSEGAME, _gameInput, {200, 100, 0, 0});
+            handleKeyboardEvent();
+            required_actions();
+        }
         if (game == NULL) {
-            while (SDL_PollEvent(&_event)) {
-                stop();
-                handleTextInput(USERINPUT, _introInput, {100, 0, 0, 0});
-                handleTextInput(CHOOSELIB, _libInput, {380, 50, 0, 0});
-                handleTextInput(CHOOSEGAME, _gameInput, {200, 100, 0, 0});
-                handleKeyboardEvent();
-                required_actions();
-            }
             if (_scene == USERINPUT) {
                 _intro->draw(_render);
                 _introInput->draw(_render);
@@ -85,6 +85,7 @@ IGameModule*      Sdl::start(IGameModule *game)
             game_loop();
         }
         if (game != NULL) {
+            // std::cout << "here" << std::endl;
             _game = game;
             _scene = GAMEMODE;
             game_loop();
@@ -234,7 +235,15 @@ void    Sdl::NextLib()
 {
     if (_scene == GAMEMODE) {
         if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_L) {
-            
+            auto it = std::find(libNames.begin(), libNames.end(), "sdl2");
+            int num = std::distance(libNames.begin(), it);
+            num += 1;
+            if (num > libNames.size() - 1)
+                num = 0;
+            std::string lib = "lib/lib_arcade_" + libNames[num] + ".so";
+            graphLib = lib;
+            isClosed = true;
+            SDL_Quit();
         }
     }
 }

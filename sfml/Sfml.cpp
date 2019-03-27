@@ -305,8 +305,10 @@ void    Sfml::set_direc()
             game->set_dir('l');
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
             game->set_dir('r');
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape) {
             _scenario = CHOOSEGAME;
+            // game = NULL;
+        }
     }
 }
 

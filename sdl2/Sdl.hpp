@@ -14,6 +14,7 @@
 #include "TextSDL.hpp"
 #include "RectSDL.hpp"
 #include "../IGameModule.hpp"
+#include <algorithm>
 
 class Sdl : public IDisplayModule {
 public:
@@ -87,10 +88,12 @@ protected:
 
     TextSDL *_libchoose;
     TextSDL *_libInput;
+    std::vector<std::string>    libNames;
     std::vector<TextSDL*>   _libOptions;
 
     TextSDL *_gamechoose;
     TextSDL *_gameInput;
+    std::vector<std::string>    gameNames;
     std::vector<TextSDL*>   _gameOptions;
 
     IGameModule *_game;
