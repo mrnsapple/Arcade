@@ -53,16 +53,10 @@ void    Sdl::init()
 IGameModule*      Sdl::start(IGameModule *game)
 {
     while (isClosed != true) {
-        while (SDL_PollEvent(&_event)) {
-            stop();
-            handleTextInput(USERINPUT, _introInput, {100, 0, 0, 0});
-            handleTextInput(CHOOSELIB, _libInput, {380, 50, 0, 0});
-            handleTextInput(CHOOSEGAME, _gameInput, {180, 100, 0, 0});
-            handleKeyboardEvent();
-            required_actions();
-        }
+        handleEvents();
         if (game == NULL) {
             if (_scene == USERINPUT) {
+                clear({0,0,0});
                 _intro->draw(_render);
                 _introInput->draw(_render);
                 SDL_StartTextInput();
@@ -111,6 +105,18 @@ void    Sdl::clear(SDL_Color color)
     SDL_RenderClear(_render);
 }
 
+void    Sdl::handleEvents()
+{
+    while (SDL_PollEvent(&_event)) {
+        required_actions();
+        stop();
+        handleTextInput(USERINPUT, _introInput, {100, 0, 0, 0});
+        handleTextInput(CHOOSELIB, _libInput, {380, 50, 0, 0});
+        handleTextInput(CHOOSEGAME, _gameInput, {180, 100, 0, 0});
+        handleKeyboardEvent();
+    }
+}
+
 void    Sdl::handleTextInput(Sdl::scene _scen, TextSDL *text, SDL_Rect rect)
 {
     if (_scene == _scen) {
@@ -125,22 +131,50 @@ void    Sdl::handleKeyboardEvent()
 {
     if (_scene == USERINPUT) {
         if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_RETURN) {
-            _scene = CHOOSELIB;
+            if (_introInput->_input == "") {
+                _introInput->set("Please fill the input", {100, 0, 0, 0}, _render);
+                _introInput->_input = "";
+            }
+            else
+                _scene = CHOOSELIB;
         }
     }
+    handleChooseLibEvents();
+    handleChooseGameEvents();
+    
+}
+
+void    Sdl::handleChooseLibEvents()
+{
     if (_scene == CHOOSELIB) {
         if (_event.type == SDL_KEYUP && _event.key.keysym.scancode == SDL_SCANCODE_RETURN && _libInput->_input != "") {
-            _scene = CHOOSEGAME;
+            if (_libInput->_input == "sdl2")
+                _scene = CHOOSEGAME;
+            else {
+                std::string lib = "lib/lib_arcade_" + _libInput->_input + ".so";
+                void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
+                if (!handle) {
+                    _libInput->set("ERROR TRY AGAIN", {380, 50, 0, 0}, _render);
+                    _libInput->_input = "";
+                } else {
+                    graphLib = lib;
+                    isClosed = true;
+                    SDL_Quit();
+                }
+            }
         }
     }
+}
+
+void    Sdl::handleChooseGameEvents()
+{
     if (_scene == CHOOSEGAME) {
         if (_event.type == SDL_KEYUP) {
             if (_event.key.keysym.scancode == SDL_SCANCODE_RETURN && _gameInput->_input != "") {
                 std::string lib = "games/lib_arcade_" + _gameInput->_input + ".so";
                 void    *handle = dlopen(lib.c_str(), RTLD_LAZY);
                 if (!handle) {
-                    _gameInput->_input = "ERROR";
-                    _gameInput->set(_gameInput->_input, {200, 100, 0, 0}, _render);
+                    _gameInput->set("ERROR!!!", {180, 100, 0, 0}, _render);
                     _gameInput->_input = "";
                 } else {
                     init_g  *init_game = (init_g*)dlsym(handle, "init");
@@ -175,7 +209,12 @@ bool    Sdl::required_actions()
 void    Sdl::game_loop()
 {
     if (_scene == GAMEMODE) {
+        SDL_Delay(175);
+        clear({0, 0 , 0});
+        loadMap();
+        _game->set_game_time(loop);
         if (gameStatus == false) {
+            SDL_Delay(0);
             std::ofstream   file("scores.txt", std::fstream::app);
             if (file.is_open()) {
                 file << _introInput->_input << " " << (_game->get_size() - 4) << "\n";
@@ -184,10 +223,6 @@ void    Sdl::game_loop()
             isClosed = true;
             SDL_Quit();
         }
-        clear({0, 0, 0});
-        loadMap();
-        SDL_Delay(150);
-        _game->set_game_time(loop);
         gameStatus = _game->play();
         loop++;
     }
@@ -227,10 +262,10 @@ void    Sdl::loadMap()
     }
     std::stringstream   ss;
     ss << (_game->get_size() - 4);
-    TextSDL score({255, 255, 255}, "score : " + ss.str(), {0, 400, 0, 0}, _render);
+    TextSDL score({255, 255, 255}, "Score : " + ss.str(), {0, 400, 0, 0}, _render);
     std::stringstream   dd;
     dd << loop;
-    TextSDL time({255, 255, 255}, "time : " + dd.str(), {0, 450, 0, 0}, _render);    
+    TextSDL time({255, 255, 255}, "Time : " + dd.str(), {0, 450, 0, 0}, _render);    
     score.draw(_render);
     time.draw(_render);
     arrayMap.clear();
@@ -238,7 +273,7 @@ void    Sdl::loadMap()
 
 void    Sdl::set_direc()
 {
-    if (_event.type == SDL_KEYUP) {
+    if (_event.type == SDL_KEYDOWN) {
         if (_event.key.keysym.scancode == SDL_SCANCODE_UP)
             _game->set_dir('t');
         if (_event.key.keysym.scancode == SDL_SCANCODE_DOWN)
@@ -247,6 +282,8 @@ void    Sdl::set_direc()
             _game->set_dir('l');
         if (_event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
             _game->set_dir('r');
+    }
+    if (_event.type == SDL_KEYUP) {    
         if (_event.key.keysym.scancode == SDL_SCANCODE_Q) {
             _gameInput->_input = "";
             _scene = CHOOSEGAME;

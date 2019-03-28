@@ -271,24 +271,27 @@ void    Sfml::loadMap()
                 if (*c == '<')
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Cyan));
                 
+                if (*c == '!')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color(20, 40, 100, 255)));
                 if (*c == 'o')
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::White));
+                if (*c == 'O')
+                    arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Magenta));
                 if (*c == 'C')
                     arrayMap.push_back(new RectObject(25 * (c - it->begin()), 25 * (it - map.begin()), sf::Color::Yellow));
             }
         }
     }
-    for (auto rect : arrayMap) {
+    for (auto rect : arrayMap)
         _win->draw(rect->shape);
-    }
     TextObject  *score = new TextObject(5, 350);
     TextObject  *time = new TextObject(5, 450);
     std::stringstream   ss;
     ss << (game->get_size() - 4);
-    score->setText("score : " + ss.str());
+    score->setText("Score : " + ss.str());
     std::stringstream   dd;
     dd << loop;
-    time->setText("time : " + dd.str());
+    time->setText("Time : " + dd.str());
     _win->draw(score->text);
     _win->draw(time->text);
     arrayMap.clear();

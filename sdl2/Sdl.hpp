@@ -36,8 +36,11 @@ public:
     void initialize_values() {}
     std::string get_graph_lib();
 
+    void    handleEvents();
     void    handleTextInput(scene _scen, TextSDL *text, SDL_Rect rect);
     void    handleKeyboardEvent();
+    void    handleChooseLibEvents();
+    void    handleChooseGameEvents();
     void    clear(SDL_Color color);
     
     static bool endsWith(const std::string& str, const std::string& suffix) {
