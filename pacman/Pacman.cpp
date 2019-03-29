@@ -95,7 +95,7 @@ void    Pacman::move_bot(int x, int y)
 
 bool    its_not_character(std::vector<std::string> _map, int y, int x)
 {
-    std::string str = "#C$!q";
+    std::string str = "#C$!q|";
 
     for (auto a : str) {
         if (_map[y][x] == a)
@@ -178,13 +178,18 @@ void    Pacman::number_map_to_map()
 
 void    Pacman::move_left(int x, int y)
 { 
+    
     if (_map[y][x - 1] == 'o' || _map[y][x - 1] == 'O')
         _size++;
     if (_map[y][x - 1] == 'O')
         _time_to_eat = 0;
     if (_map[y][x - 1] == '!')
         _size += 10;
-    _map[y][x - 1] = 'C';
+    
+    if (_map[y][x - 1] == '|')
+        _map[y][18] = 'C';
+    else
+        _map[y][x - 1] = 'C';
     _map[y][x] = ' ';
 }
 
@@ -257,7 +262,7 @@ bool    Pacman::know_head(int x, int y)
         
     }
     if (_dir == 'b') {
-        if (_map[y + 1][x] != '#' && _map[y + 1][x] != '$')
+        if (_map[y + 1][x] != '#' && _map[y + 1][x] != '$'&& _map[y + 1][x] != '|')
             move_bot(x, y);
         else if (_map[y + 1][x] == '$')
             return false;
@@ -265,7 +270,7 @@ bool    Pacman::know_head(int x, int y)
             return true;
     }
     if (_dir == 't') {
-        if (_map[y - 1][x] != '#' && _map[y - 1][x] != '$')
+        if (_map[y - 1][x] != '#' && _map[y - 1][x] != '$' && _map[y - 1][x] != '|')
             move_top(x, y);
         else if (_map[y - 1][x] == '$')
             return false;
