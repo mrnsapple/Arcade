@@ -187,7 +187,7 @@ void    Pacman::move_left(int x, int y)
         _size += 10;
     
     if (_map[y][x - 1] == '|')
-        _map[y][18] = 'C';
+        _map[y][17] = 'C';
     else
         _map[y][x - 1] = 'C';
     _map[y][x] = ' ';
@@ -206,7 +206,10 @@ void    Pacman::move_rigth(int x, int y)
         _time_to_eat = 0;
     if (_map[y][x + 1] == '!')
         _size += 10;
-    _map[y][x + 1] = 'C';
+    if (_map[y][x + 1] == '|')
+        _map[y][2] = 'C';
+    else
+        _map[y][x + 1] = 'C';
     _map[y][x] = ' ';
 }
 void    Pacman::time_to_eat_stuff()
