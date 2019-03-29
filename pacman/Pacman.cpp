@@ -75,7 +75,7 @@ void    Pacman::move_top(int x, int y)
 }
 int     Pacman::get_size(void)
 {
-    return _time_to_eat + 4;
+    //return _time_to_eat + 4;
     return _size;
     
 }

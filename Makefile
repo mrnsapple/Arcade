@@ -43,6 +43,9 @@ core	:	$(OBJ)
 games	:	$(GAMESOBJ)
 	mkdir -p games
 	g++ -shared -o games/lib_arcade_nibbler.so Nibbler.o 
+	#g++ -shared -o games/lib_arcade_qix.so Nibbler.o 
+	#g++ -shared -o games/lib_arcade_centipede.so Nibbler.o 
+	#g++ -shared -o games/lib_arcade_solarfox.so Nibbler.o 
 	g++ -shared -o games/lib_arcade_pacman.so Pacman.o
 
 graphicals	:	$(LIBOBJ)

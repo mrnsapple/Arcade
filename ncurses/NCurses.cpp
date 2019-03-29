@@ -316,15 +316,12 @@ bool    NCurses::required_actions()
             _game_name = "nibbler";
         inside_get_game();
     }
-    if (_key_press == 'j' || _key_press == 'l') { // Change game
-        if (strcmp(_graphic_lib.c_str(), "lib/lib_arcade_ncurses.so") == 0)
-            _graphic_lib = "lib/lib_arcade_sfml.so";
-        else if (strcmp(_graphic_lib.c_str(), "lib/lib_arcade_sfml.so") == 0)
-            _graphic_lib = "lib/lib_arcade_ncurses.so";
-        else
-            _graphic_lib = "lib/lib_arcade_sfml.so";
+    if (_key_press == 'l')
+        _graphic_lib = "lib/lib_arcade_sdl2.so";
+    if (_key_press == 'j')
+        _graphic_lib = "lib/lib_arcade_sfml.so";
+    if (_key_press == 'j' || _key_press == 'l') // Change game
         return false;
-    }
     return true;
 }
 
