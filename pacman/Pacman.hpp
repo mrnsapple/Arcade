@@ -32,7 +32,7 @@ public:
     std::vector<std::string> get_number_map();
     bool move_ghost(int gost_y, int gost_x, int y, int x);
     void    initialize_values();
-    void    set_game_time(int time);
+    int    get_game_time();
     void    time_to_eat_stuff();
 
 protected:

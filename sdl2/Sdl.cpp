@@ -212,7 +212,6 @@ void    Sdl::game_loop()
         SDL_Delay(175);
         clear({0, 0 , 0});
         loadMap();
-        _game->set_game_time(loop);
         if (gameStatus == false) {
             SDL_Delay(0);
             std::ofstream   file("scores.txt", std::fstream::app);
@@ -224,7 +223,6 @@ void    Sdl::game_loop()
             SDL_Quit();
         }
         gameStatus = _game->play();
-        loop++;
     }
 }
 
@@ -264,7 +262,7 @@ void    Sdl::loadMap()
     ss << (_game->get_size() - 4);
     TextSDL score({255, 255, 255}, "Score : " + ss.str(), {0, 400, 0, 0}, _render);
     std::stringstream   dd;
-    dd << loop;
+    dd << _game->get_game_time();
     TextSDL time({255, 255, 255}, "Time : " + dd.str(), {0, 450, 0, 0}, _render);    
     score.draw(_render);
     time.draw(_render);

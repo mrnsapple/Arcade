@@ -11,6 +11,7 @@ Nibbler::Nibbler()
 {
     _dir = 'l';
     _size = 4;
+    _game_time = 0;
 }
 
 Nibbler::~Nibbler()
@@ -33,6 +34,7 @@ void    Nibbler::initialize_values()
     _number_map.clear();
     _dir = 'l';
     _size = 4;
+
     // END INITIALIZE VAR
 }
 
@@ -91,13 +93,17 @@ void    Nibbler::move_bot(int x, int y)
 
 std::vector<std::string> move_number_map(std::vector<std::string> _number_map)
 {
+    static int count = 0;
     int random_val_x;
     int random_val_y;
 
-    srand(time(0)); 
-    random_val_y = rand() % _number_map.size() - 1;
-    srand(time(0) + 300); 
-    random_val_x = rand() % (_number_map[0]).size() - 1;
+    count++;
+    srand(time(0) * count); 
+    random_val_y = rand() % _number_map.size() - 2;
+    srand(time(0) + 300 * count); 
+    random_val_x = rand() % (_number_map[0]).size() - 2;
+    if (random_val_x > 11 || random_val_x < 1 || random_val_y > 11 || random_val_y < 1)
+        return (move_number_map(_number_map));
     if (_number_map[random_val_y][random_val_x] == ' ')
         _number_map[random_val_y][random_val_x] = '$';
     else
@@ -194,6 +200,7 @@ bool    Nibbler::know_head(int x, int y)
 
 bool    Nibbler::play(void)
 {
+    _game_time++;
     for (int y = 0; y < _map.size(); y++)
         for (int x = 0; x < (_map[y]).size(); x++) {
             if (_map[y][x] == '<' && _number_map[y][x] != '1')
@@ -206,7 +213,7 @@ bool    Nibbler::play(void)
     return true;
 }
 
-void    Nibbler::set_game_time(int time)
+int    Nibbler::get_game_time()
 {
-    _game_time = time;
+    return (_game_time);// = time;
 }

@@ -28,7 +28,7 @@ public:
     virtual     int     get_size() = 0;
     virtual     bool move_ghost(int gost_y, int gost_x, int y, int x) = 0;
     virtual void    initialize_values() = 0;
-    virtual void    set_game_time(int time) = 0;
+    virtual int    get_game_time() = 0;
 
 protected:
 private:

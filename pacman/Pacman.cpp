@@ -12,6 +12,7 @@ Pacman::Pacman() : _time_to_eat(20)
     hasInit = false;
     _dir = 't';
     _size = 4;
+    _game_time = 0;
 }
 
 Pacman::~Pacman()
@@ -94,7 +95,7 @@ void    Pacman::move_bot(int x, int y)
 
 bool    its_not_character(std::vector<std::string> _map, int y, int x)
 {
-    std::string str = "#C$!";
+    std::string str = "#C$!q";
 
     for (auto a : str) {
         if (_map[y][x] == a)
@@ -277,6 +278,7 @@ bool    Pacman::know_head(int x, int y)
 
 bool    Pacman::play(void)
 {
+    _game_time++;
     for (int y = 0; y < _map.size(); y++)
         for (int x = 0; x < (_map[y]).size(); x++) {
             if (_map[y][x] == 'C')
@@ -288,8 +290,8 @@ bool    Pacman::play(void)
     return true;
 }
 
-void    Pacman::set_game_time(int time)
+int    Pacman::get_game_time()
 {
-    _game_time = time;
+    return _game_time;// = time;
 }
 

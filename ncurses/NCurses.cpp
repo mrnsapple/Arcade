@@ -89,6 +89,11 @@ void    NCurses::print_map(void)
         wprintw(stdscr, a.c_str());
         wprintw(stdscr, "\n");
     }
+    /*for (std::string a : _number_map) {
+    
+        wprintw(stdscr, a.c_str());
+        wprintw(stdscr, "\n");
+    }*/
     wprintw(stdscr, "Score: ");
     wprintw(stdscr, (std::to_string(_game->get_size() - 4)).c_str());
     wprintw(stdscr, "\n");
@@ -243,16 +248,15 @@ void delay(unsigned int mseconds)
 
 void    NCurses::game_loop()
 {
-    for (loop = loop; loop >= 0; loop++) {
+    for (int loop = 0; loop >= 0;loop++) {
         my_refresh();
         print_map();
-        wprintw(stdscr,"Time : %d\n", loop);
+        wprintw(stdscr,"Time : %d\n", _game->get_game_time());
         //wprintw(stdscr, "key:press:%d, %3d, %c\n",_key_press, _key_press, _key_press);
         //delay(500000);                        
         get_keypad_not_wait();
         set_direc();
         sleep(1);
-        _game->set_game_time(loop);
         if (required_actions() == false)
            loop = -2;
         if(_game->play() == false ) {

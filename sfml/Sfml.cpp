@@ -67,7 +67,7 @@ void    Sfml::PrevGame()
             init_g  *init_game = (init_g*)dlsym(handle, "init");
             game = init_game();
             _gameLib = lib.substr(lib.find("/") + 1);
-            game->init();            
+            game->init();      
         }
     }
 }
@@ -247,9 +247,7 @@ void    Sfml::game_loop()
         _win->setFramerateLimit(5);
         _win->clear();
         loadMap();
-        game->set_game_time(loop);
         gameStatus = game->play();
-        loop++;
     }
 }
 
@@ -290,7 +288,8 @@ void    Sfml::loadMap()
     ss << (game->get_size() - 4);
     score->setText("Score : " + ss.str());
     std::stringstream   dd;
-    dd << loop;
+
+    dd << game->get_game_time();
     time->setText("Time : " + dd.str());
     _win->draw(score->text);
     _win->draw(time->text);
