@@ -265,10 +265,12 @@ void    NCurses::game_loop()
 IGameModule     *NCurses::start(IGameModule *game)
 {
     if (game == NULL) {
-        //get_name();
-        //my_refresh();
-        //if (get_lib() == false)
-        //    return NULL;
+        get_name();
+        my_refresh();
+        if (get_lib() == false) {
+            this->stop(); 
+            return NULL;
+        }
         get_game();
         if (_game == NULL) {
             stop();
@@ -286,8 +288,9 @@ IGameModule     *NCurses::start(IGameModule *game)
 
 void    NCurses::stop()
 {
-     std::ofstream   file("scores.txt", std::fstream::app);
-    if (file.is_open()) {
+    std::ofstream   file("scores.txt", std::fstream::app);
+    
+    if (_game && strcmp(_user_name.c_str(), "") != 0 && file.is_open()) {
         file << _user_name << " " << (_game->get_size() - 4) << "\n";
         file.close();
     }
